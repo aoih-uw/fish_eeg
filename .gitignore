@@ -1,6 +1,9 @@
 # Data Directory
 data/
 
+# Files to ignore
+hydrolagusColliei_8_data.npz
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
