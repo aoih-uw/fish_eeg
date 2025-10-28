@@ -1,6 +1,14 @@
 # fish_eeg
 Let's use different analysis and visualization tools to find interesting patterns of responses in my fish EEG dataset.
 
+# Authors
+
+**Michael James**
+University of Washington
+Civil and Environmental Engineering - PhD Student  - adv. Jim Thomson; Kristin Zeiden
+[Environmental Fluid Mechanics Group](http://depts.washington.edu/uwefm/wordpress/)
+[mkj29@uw.edu](mailto:mkj29@uw.edu)
+
 # Information about "data" structure
 
 Data is a collection of python dictionaries.
