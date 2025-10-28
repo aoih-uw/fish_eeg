@@ -3,6 +3,15 @@ Let's use different analysis and visualization tools to find interesting pattern
 
 # Authors
 
+** Aoi Hunsaker **
+University of Washington
+
+Psychology - PhD Student  - adv. Joseph Sisneros; Andrew Brown
+
+www.sisneroslab.org
+
+[aoih@uw.edu](mailto:aoih@uw.edu)
+
 **Michael James**
 
 University of Washington
