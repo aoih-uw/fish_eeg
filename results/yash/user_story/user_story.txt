@@ -1,0 +1,1 @@
+The user is Jamie. Jamie is interested in fish and hearing. Jamie is new to the field and would like to learn about fish and how they hear. He wants to have an easy website that explores fish hearing datasets that is very easy to interact with. Ram is somewhat familiar with data science and knows about analysis methods like PCA, ICA, NMF etc, but knows nothing about fish!!
