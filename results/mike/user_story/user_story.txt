@@ -12,3 +12,8 @@ Joe is one of Aoi's advisors.
 Joe will use the code to do further research on other fish in the Puget Sound. 
 Joe wants a code base that is clearly documented, and can be used by the lab after Aoi graduates
 Joe is very technical. 
+
+Milford is an oil tycoon. 
+Milford will use this dataset to see if his oil rig in the Puget sound will have an adverse effect on the spotted ratfish... for legal purposes. 
+Milford wants results that help show his oil rig won't hurt the environment.
+Milford is a businessman, and leaves the technical things to the grunts. 
