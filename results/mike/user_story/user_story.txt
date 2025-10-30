@@ -1,1 +1,9 @@
-Aoi is a graduate PhD student in Psychology at University of Washington. Aoi will use this code base to publish research on a spotted ratfish. Aoi wants a code base that is clear for the audience and shows scientific achievement. Aoi is pretty technical and has been coding for this project prior to this class. 
+Aoi is a graduate PhD student in Psychology at University of Washington. 
+Aoi will use this code base to publish research on a spotted ratfish. 
+Aoi wants a code base that is clear for the audience and shows scientific achievement. 
+Aoi is pretty technical and has been coding for this project prior to this class. 
+
+Sarah is a curious wildlife advocate. 
+Sarah uses the code base to get an idea of what this field of research looks like. 
+Sarah wants to know what the data means for the spotted ratfish population in the Puget Sound. 
+Sarah is not technical. 
