@@ -1,0 +1,1 @@
+Aoi is a graduate PhD student in Psychology at University of Washington. Aoi will use this code base to publish research on a spotted ratfish. Aoi wants a code base that is clear for the audience and shows scientific achievement. Aoi is pretty technical and has been coding for this project prior to this class. 
