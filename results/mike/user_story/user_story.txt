@@ -7,3 +7,8 @@ Sarah is a curious wildlife advocate.
 Sarah uses the code base to get an idea of what this field of research looks like. 
 Sarah wants to know what the data means for the spotted ratfish population in the Puget Sound. 
 Sarah is not technical. 
+
+Joe is one of Aoi's advisors. 
+Joe will use the code to do further research on other fish in the Puget Sound. 
+Joe wants a code base that is clearly documented, and can be used by the lab after Aoi graduates
+Joe is very technical. 
