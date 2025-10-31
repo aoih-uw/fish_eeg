@@ -1,0 +1,11 @@
+Bobby Hill is a student in CSE 583.
+Bobby Hill wants to learn about what the other student's in their class did for their and share a fun fact to their friends afterward. 
+Bobby Hill needs jargon to be defined and visuals to facilitate their understanding to extract that fun fact.
+Bobby Hill is a public health masters student.
+
+Rick is a undergrad researcher in Aoi lab. Rick is in charge of testing the code. Rick needs the code to be readable with lots of markdown comments
+and easily access the scripts online. Rick is new to the team, and has minimal MATLAB background and may need extra assistance.
+
+Murble is a PhD student in the same department as the project lead Aoi. Murble wants to know about the research Aoi does so they can engage in pleasant small talk at a upcoming
+department event. Murble needs jargon to be defined, and have papers referenced in Aoi's presentation so they can on their own time learn more deeply
+about Aoi's research. Murble also does neuroscience research but in birds studying the visual system.
