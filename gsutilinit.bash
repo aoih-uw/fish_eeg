@@ -1,3 +1,9 @@
+echo "Making data folder if not already made"
+mkdir -p data
+echo "Changing to data dir"
+cd data
+
+
 echo "Downloading gsutil for importing google cloud files"
 curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-x86_64.tar.gz
 echo "Unpacking linux installation"
@@ -6,4 +12,3 @@ echo "Add gsutil CLI to path"
 ./google-cloud-sdk/install.sh
 echo "Initialize gsutil"
 ./google-cloud-sdk/bin/gcloud init
-
