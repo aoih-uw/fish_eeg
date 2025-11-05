@@ -49,15 +49,22 @@ def spec_wav_psd(filename, nperseg=1024, window='hann'):
         data = np.mean(data, axis=1)
 
     # Compute Power Spectral Density using Welch’s method
-    f, psd = welch(data, fs=fs, window=window, nperseg=nperseg)
+    f, psd = welch(data, fs=fs, window=window, nperseg=nperseg) # Power / Hz
+
+    # Convert PSD to Power 
+    df = f[1]-f[0] 
+    power = psd * df # Power
+
+    # Reference for SPL [dB re 1 µPa]
+    pref = 1e-6
 
     # Convert to dB scale
-    psd_db = 10 * np.log10(psd)
+    power_db = 10 * np.log10(power / (pref**2)) # dB re 1 µPa
 
-    return f, psd_db
+    return f, power_db
 
 # Function to plot spectra and freq/amp pairs
-def plot_psd(path_to_data, wav_file, f, psd_db, freq_amp_table):
+def plot_psd(path_to_data, wav_file, f, power_db, freq_amp_table):
     """
     Plots observed ambient noise against fisheeg noise
 
@@ -86,15 +93,18 @@ def plot_psd(path_to_data, wav_file, f, psd_db, freq_amp_table):
 
     # Create the plot
     plt.figure(figsize=(8, 5))
-    plt.plot(f, psd_db, 'b-', label='PSD (dB/Hz)')
+    plt.plot(f, power_db, 'b-', label='Observed Acoustic Data')
 
     # Add frequency-amplitude points
     plt.plot(freq_amp_table[:, 0], freq_amp_table[:, 1], 'ko', label='fish_eeg')
 
+    # Set xlim 0 2000
+    plt.xlim((0, 2000))
+
     # Add title, labels, legend
     plt.title(base_name)
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('PSD (dB/Hz)')
+    plt.xlabel('Frequency [Hz]')
+    plt.ylabel('SPL [dB re 1 µPa]')
     plt.legend()
     plt.grid(True)
 
@@ -124,16 +134,9 @@ for wav_file in wav_files:
     filepath = os.path.join(path_to_data, wav_file)
     print(f"Processing: {wav_file}")
 
-    f, psd_db = spec_wav_psd(filepath, nperseg=1024, window='hann')
+    f, power_db = spec_wav_psd(filepath, nperseg=1024, window='hann')
 
-    plot_psd(path_to_data, wav_file, f, psd_db, freq_amp_table)
-
-
-
-
-    # save_path = os.path.join(path_to_data, )
-    # plt.savefig(save_path, dpi=300)
-    # print(f"Saved combined PSD plot to {save_path}")
+    plot_psd(path_to_data, wav_file, f, power_db, freq_amp_table)
 
 
 
