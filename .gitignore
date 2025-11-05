@@ -1,5 +1,6 @@
 # Data Directory
 data/
+deps/
 
 # Files to ignore
 hydrolagusColliei_8_data.npz

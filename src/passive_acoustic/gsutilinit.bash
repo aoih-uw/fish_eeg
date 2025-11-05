@@ -1,7 +1,6 @@
-echo "Making data folder if not already made"
-mkdir -p data
-echo "Changing to data dir"
-cd data
+echo "Changing to deps dir"
+cd ../..
+cd deps/
 
 
 echo "Downloading gsutil for importing google cloud files"

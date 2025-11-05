@@ -1,6 +1,7 @@
 echo "Make sure to run gsutilinit.bash first"
-sleep 3
+sleep 2
 echo "Pulling Acoustic data..."
+cd ../..
 cd data
 echo "Moving to separate data folder"
 mkdir -p PAcoustic
