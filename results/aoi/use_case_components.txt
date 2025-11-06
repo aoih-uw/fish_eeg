@@ -1,0 +1,35 @@
+Use Cases
+Use case: Understanding data analysis tutorial on our website
+Actors: Researcher / student
+Goal: To guid ethe user step by step through the process of analyzing fish eeg data so that they can understand and replicate analysis data
+System: The internet (website hosted on internet)
+Stakeholder: Reasearcher / student / me
+Precondition: Needs a computer with internet access and a screen to see the visuals of the website
+Triggers: I tell them about the website, or they find the website on the internet via a link on my blog/google search
+Basic flow: Click on website link, scroll through the page, interact with website buttons, sliders etc. learning about the method/experiment as they go thorugh the webpage contents
+Exceptions: Website is down or inaccessible, internet connection is lost
+Assumptions: That the user has basic familiarity with using a computer and navigating a webpage. That the user has a basic familiarity with scientific concepts (neurons etc.)
+
+Use case: Playing audio files on our website
+Actors: Researcher / student
+Goal: To allow the user to hear the stimuli used in the experiment and the auditory responses of the animal recorded from the electrodes
+System: The internet (website hosted on internet)
+Stakeholder: Reasearcher / student / me
+Precondition: Needs a computer with internet access and a screen to see the visuals of the website, specifically the buttons, and then also speakers to output the audio files
+Triggers: The play button is inviting clicks via colors/animation
+Basic flow: Click on website link, scroll through the page, interact with website buttons, sliders etc. learning about the method/experiment as they go thorugh the webpage contents
+Exceptions: Website is down or inaccessible, internet connection is lost
+Assumptions: That the user has basic familiarity with using a computer, and speakers, and navigating a webpage. That the user has a basic familiarity with scientific concepts (neurons etc.)
+
+Components
+1. Homepage
+2. Audio player controls
+3. Interactive sliders on page to do live filtering of data
+4. Audio file management
+5. Tutorial content management
+6. Error handling for missing files/broken links
+7. D3 javascript pacakge
+
+
+
+
