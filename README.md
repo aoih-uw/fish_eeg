@@ -37,3 +37,28 @@ Included in a single stimulus combination dictionary are the following:
 3. period_len: ignore for now
 4. ch1, ch2, ch3, ch4: The actual electrode signals from 4 separate electrodes
 	shape = (number of trials, number of samples) 
+
+# Repository Folder Structure
+
+## src 
+"source code" 
+Contains all code for running programs. Each subdir represents a different process and contains a README for functions specific to that process. 
+
+## deps
+"dependencies" (.gitignored)
+Storage location for auxillary programs that are not contained within conda or python. 
+
+## data 
+"data" (.gitignored)
+Location for users to store their data used in this repo. 
+
+## docs 
+"documentation"
+Location of pdfs and other documents which provide contextual information to the repository. 
+
+## analysis
+"analysis"
+Location of jupyter notebooks which explore different analysis methods (not to be used in production)
+
+## results
+Final location of src products and project deliverables
