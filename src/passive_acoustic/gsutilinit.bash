@@ -1,4 +1,8 @@
 echo "Changing to deps dir"
+# Get the directory where this script itself lives
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd $SCRIPT_DIR
+
 cd ../..
 cd deps/
 
