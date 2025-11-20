@@ -22,8 +22,14 @@ description = "The Fish EEG project package"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-	"numpy>=1.25",
-    "pandas>=2.1",
+	"numpy",
+    "pandas",
+    "altair",
+    "scipy",
+    "matplotlib",
+    "scikit-learn",
+    "PyWavelets",
+    "h5py"
 ] 
 classifiers = [
     "Programming Language :: Python :: 3",
