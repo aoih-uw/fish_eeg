@@ -1,0 +1,22 @@
+[build-system]
+requires = [
+    "hatchling>=1.27.0"
+]
+buil-backend = "hatchling.build"
+
+[project]
+name = "fish_eeg"
+version = "0.0.0"
+description = "The Fish EEG project package"
+readme - "README.md"
+requires-python = ">=3.10"
+dependencies = [
+	"numpy>=1.25",
+    "pandas>=2.1",
+] 
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+license = {file = "LICENSE"}
