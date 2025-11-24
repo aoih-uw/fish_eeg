@@ -12,12 +12,37 @@
     #vis.vega-embed details summary {
       position: relative;
     }
+
+    .description-container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    .description-container h1 {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .description-container p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 10px;
+    }
   </style>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5.20.1"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
+  <div class="description-container">
+  <h1>Individual Subject 95% Confidence Intervals by Stimulus Frequency and Amplitude</h1>
+  <p>This visualization displays the 95% confidence intervals for auditory evoked potential responses from individual spotted ratfish (<i>Hydrolagus colliei</i>) subjects across different stimulus frequencies (55-880 Hz) and amplitudes.</p>
+  <p>Each panel represents a different frequency, with separate traces for each subject and test repetition. The shaded areas represent the 95% confidence intervals, with lines connecting the midpoints. The dashed horizontal line at zero provides a reference for determining statistical significance in the auditory response, allowing comparison of individual variability in responses across subjects.</p>
+  </div>
   <div id="vis"></div>
   <script>
     (function(vegaEmbed) {

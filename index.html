@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analysis Charts</title>
+    <title>Analysis Charts - Documentation</title>
     <style>
         * {
             margin: 0;
@@ -13,129 +13,186 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f6f6f6;
             min-height: 100vh;
-            padding: 20px;
+            color: #333;
+            line-height: 1.6;
         }
         
         .header {
             background: white;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #e1e4e8;
+            padding: 30px 40px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
         }
         
         .logo {
-            width: 80px;
-            height: 80px;
+            width: 120px;
+            height: 120px;
             object-fit: contain;
         }
         
         .header-content h1 {
-            color: #2d3748;
+            color: #24292e;
             font-size: 2.5em;
             margin-bottom: 5px;
+            font-weight: 600;
         }
         
         .tagline {
-            color: #718096;
+            color: #586069;
             font-size: 1.1em;
+            font-weight: 400;
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 40px;
         }
         
-        .intro {
+        .section {
             background: white;
-            border-radius: 12px;
-            padding: 25px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
         }
         
-        .intro p {
-            color: #4a5568;
-            font-size: 1.1em;
-            line-height: 1.6;
+        .section h2 {
+            color: #24292e;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e1e4e8;
+            font-weight: 600;
+        }
+        
+        .section h3 {
+            color: #24292e;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .section p {
+            color: #586069;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        
+        .section ul {
+            margin-left: 25px;
+            color: #586069;
+        }
+        
+        .section li {
+            margin-bottom: 8px;
+        }
+
+        .section ol {
+            margin-left: 25px;
+            color: #586069;
+        }
+        
+        .section ol li {
+            margin-bottom: 8px;
         }
         
         .charts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
+            gap: 20px;
         }
         
         .chart-card {
             background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 25px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
         
         .chart-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            border-color: #0366d6;
+            box-shadow: 0 3px 8px rgba(3, 102, 214, 0.1);
         }
         
         .card-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
+            font-size: 2.5em;
+            margin-bottom: 12px;
         }
         
-        .chart-card h2 {
-            color: #2d3748;
-            font-size: 1.5em;
+        .chart-card h3 {
+            color: #24292e;
+            font-size: 1.3em;
             margin-bottom: 10px;
+            margin-top: 0;
+            font-weight: 600;
         }
         
         .chart-card p {
-            color: #718096;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            color: #586069;
+            margin-bottom: 15px;
         }
         
         .card-link {
             display: inline-block;
-            color: #667eea;
+            color: #0366d6;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1em;
-            transition: color 0.3s ease;
+            font-weight: 500;
+            font-size: 1em;
+            transition: color 0.2s ease;
         }
         
         .card-link:hover {
-            color: #764ba2;
+            color: #0256c7;
+            text-decoration: underline;
         }
         
         .footer {
             background: white;
-            border-radius: 12px;
-            padding: 20px;
+            border-top: 1px solid #e1e4e8;
+            padding: 25px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
         }
         
         .footer p {
-            color: #718096;
+            color: #586069;
+            font-size: 0.95em;
+        }
+        
+        code {
+            background: #f6f8fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #24292e;
         }
         
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
                 text-align: center;
+                padding: 20px;
+            }
+            
+            .logo {
+                width: 100px;
+                height: 100px;
             }
             
             .header-content h1 {
                 font-size: 2em;
+            }
+            
+            .container {
+                padding: 20px;
             }
             
             .charts-grid {
@@ -154,29 +211,68 @@
     </header>
     
     <main class="container">
-        <section class="intro">
+        <section class="section">
+            <h2>Charts</h2>
             <p>Access your statistical analysis charts and confidence interval visualizations below.</p>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="card-icon">📊</div>
+                    <h3>Per Subject 95% CIs</h3>
+                    <p>Individual confidence intervals of auditory responses for each subject in the analysis</p>
+                    <a href="analysis/plots/summary_plots/95CI_all.html" class="card-link">View Chart →</a>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="card-icon">📈</div>
+                    <h3>Median 95% CIs</h3>
+                    <p>Median 95% CIs of auditory responses across all subjects</p>
+                    <a href="analysis/plots/summary_plots/95CI_median.html" class="card-link">View Chart →</a>
+                </div>
+
+                <div class="chart-card">
+                    <div class="card-icon">📈</div>
+                    <h3>ICA Weights</h3>
+                    <p>ICA weight values by electrode channel and stimulus type</p>
+                    <a href="analysis/plots/summary_plots/ICAweights.html" class="card-link">View Chart →</a>
+                </div>
+            </div>
         </section>
         
-        <section class="charts-grid">
-            <div class="chart-card">
-                <div class="card-icon">📊</div>
-                <h2>Per Subject 95% CIs</h2>
-                <p>Individual confidence intervals for each subject in the analysis</p>
-                <a href="analysis/plots/summary_plots/95CI_all.html" class="card-link">View Chart →</a>
-            </div>
+        <section class="section">
+            <h2>The Problem We Aim to Solve</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        </section>
+        
+        <section class="section">
+            <h2>Functional Specification</h2>
             
-            <div class="chart-card">
-                <div class="card-icon">📈</div>
-                <h2>95% CIs</h2>
-                <p>Median confidence intervals across all subjects</p>
-                <a href="analysis/plots/summary_plots/95CI_median.html" class="card-link">View Chart →</a>
-            </div>
+            <h3>Background</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            
+            <h3>User Profile</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            
+            <h3>Data Sources</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            
+            <h3>Use Cases</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+        </section>
+        
+        <section class="section">
+            <h2>Component Specification</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            
+            <h3>Interactions to Accomplish Use Cases</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            
+            <h3>Preliminary Plan</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         </section>
     </main>
     
     <footer class="footer">
-        <p>&copy; 2024 Analysis Dashboard</p>
+        <p>&copy; 2024 Analysis Dashboard - Documentation</p>
     </footer>
 </body>
 </html>
