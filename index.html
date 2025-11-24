@@ -50,7 +50,7 @@
         .info-section {
             background: white;
             border-bottom: 1px solid #e1e4e8;
-            padding: 30px 40px;
+            padding: 20px 40px;
         }
 
         .info-grid {
@@ -58,23 +58,23 @@
             margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
+            gap: 20px;
         }
 
         .info-card {
             background: #f6f8fa;
             border: 1px solid #e1e4e8;
             border-radius: 6px;
-            padding: 20px;
+            padding: 15px;
         }
 
         .info-card h2 {
             color: #24292e;
-            font-size: 1.3em;
-            margin-bottom: 15px;
+            font-size: 1.1em;
+            margin-bottom: 10px;
             font-weight: 600;
             border-bottom: 1px solid #e1e4e8;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
         }
 
         .info-card ul {
@@ -85,14 +85,16 @@
 
         .info-card li {
             color: #586069;
-            padding: 6px 0;
-            font-size: 0.95em;
+            padding: 4px 0;
+            font-size: 0.9em;
         }
 
         .info-card .label {
             color: #24292e;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-top: 10px;
+            margin-bottom: 3px;
+            font-size: 0.95em;
         }
         
         .container {
@@ -252,7 +254,11 @@
             }
 
             .info-section {
-                padding: 20px;
+                padding: 15px 20px;
+            }
+
+            .info-card {
+                padding: 12px;
             }
         }
     </style>
@@ -284,12 +290,12 @@
                 <ul>
                     <li>CSE 583</li>
                 </ul>
-                <p class="label" style="margin-top: 15px;">Professors</p>
+                <p class="label">Professors</p>
                 <ul>
                     <li>Bryna Hazelton</li>
                     <li>Dave Beck</li>
                 </ul>
-                <p class="label" style="margin-top: 15px;">Teaching Assistants</p>
+                <p class="label">Teaching Assistants</p>
                 <ul>
                     <li>Ian Quah</li>
                     <li>Elli Anastasia Beres</li>
@@ -297,7 +303,8 @@
             </div>
         </div>
     </section>
-        
+
+    <main class="container">
         <section class="section">
             <h2>The Problem We Aim to Solve</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
@@ -329,9 +336,7 @@
             <h3>Preliminary Plan</h3>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         </section>
-    </main>
 
-    <main class="container">
         <section class="section">
             <h2>Results Data Visualization</h2>
             <p>Here are our exemplar data visualizations that demonstrate the auditory capabilities of the spotted ratfish and features of the project analysis pipeline.</p>
@@ -358,6 +363,7 @@
                 </div>
             </div>
         </section>
+    </main>
     
     <footer class="footer">
         <p>&copy; 2025 Fish Auditory EEG Dashboard - Do not use data without permission</p>
