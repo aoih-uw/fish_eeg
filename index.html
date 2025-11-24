@@ -5,48 +5,178 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analysis Charts</title>
     <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        h1 {
-            color: #333;
-        }
-        .chart-links {
-            list-style: none;
+        * {
+            margin: 0;
             padding: 0;
-        }
-        .chart-links li {
-            margin: 15px 0;
-        }
-        .chart-links a {
-            color: #0066cc;
-            text-decoration: none;
-            font-size: 18px;
-        }
-        .chart-links a:hover {
-            text-decoration: underline;
-        }
-        .logo {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 100px;
+            box-sizing: border-box;
         }
         
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+        
+        .header-content h1 {
+            color: #2d3748;
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+        
+        .tagline {
+            color: #718096;
+            font-size: 1.1em;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .intro {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .intro p {
+            color: #4a5568;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .chart-card h2 {
+            color: #2d3748;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .chart-card p {
+            color: #718096;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .card-link {
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+        
+        .card-link:hover {
+            color: #764ba2;
+        }
+        
+        .footer {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .footer p {
+            color: #718096;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header-content h1 {
+                font-size: 2em;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <img src="ratfish_animation.gif" alt="Ratfish" class="logo">
-    <h1>Analysis Charts</h1>
-    <p>View the summary plots below:</p>
+    <header class="header">
+        <img src="ratfish_animation.gif" alt="Ratfish" class="logo">
+        <div class="header-content">
+            <h1>Analysis Charts</h1>
+            <p class="tagline">Comprehensive Data Visualization Dashboard</p>
+        </div>
+    </header>
     
-    <ul class="chart-links">
-        <li><a href="analysis/plots/summary_plots/95CI_all.html">Per Subject 95% CIs</a></li>
-        <li><a href="analysis/plots/summary_plots/95CI_median.html">95% CIs</a></li>
-    </ul>
+    <main class="container">
+        <section class="intro">
+            <p>Access your statistical analysis charts and confidence interval visualizations below.</p>
+        </section>
+        
+        <section class="charts-grid">
+            <div class="chart-card">
+                <div class="card-icon">📊</div>
+                <h2>Per Subject 95% CIs</h2>
+                <p>Individual confidence intervals for each subject in the analysis</p>
+                <a href="analysis/plots/summary_plots/95CI_all.html" class="card-link">View Chart →</a>
+            </div>
+            
+            <div class="chart-card">
+                <div class="card-icon">📈</div>
+                <h2>95% CIs</h2>
+                <p>Median confidence intervals across all subjects</p>
+                <a href="analysis/plots/summary_plots/95CI_median.html" class="card-link">View Chart →</a>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="footer">
+        <p>&copy; 2024 Analysis Dashboard</p>
+    </footer>
 </body>
 </html>
