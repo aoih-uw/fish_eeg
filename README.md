@@ -1,7 +1,11 @@
 # fish_eeg
+## Website Link
+https://aoih-uw.github.io/fish_eeg/
+
+## Description
 Let's use different analysis and visualization tools to find interesting patterns of responses in my fish EEG dataset.
 
-# Authors
+## Authors
 
 **Aoi Hunsaker**
 University of Washington
@@ -22,7 +26,7 @@ Civil and Environmental Engineering - PhD Student  - adv. Jim Thomson; Kristin Z
 
 [mkj29@uw.edu](mailto:mkj29@uw.edu)
 
-# Information about "data" structure
+## Information about "data" structure
 
 Data is a collection of python dictionaries.
 
@@ -38,25 +42,25 @@ Included in a single stimulus combination dictionary are the following:
 4. ch1, ch2, ch3, ch4: The actual electrode signals from 4 separate electrodes
 	shape = (number of trials, number of samples) 
 
-# Repository Folder Structure
+## Repository Folder Structure
 
-## src 
+### src 
 "source code" 
 Contains all code for running programs. Each subdir represents a different process and contains a README for functions specific to that process. 
 
-## deps
+### deps
 "dependencies" (.gitignored)
 Storage location for auxillary programs that are not contained within conda or python. 
 
-## data 
+### data 
 "data" (.gitignored)
 Location for users to store their data used in this repo. 
 
-## docs 
+### docs 
 "documentation"
 Location of pdfs and other documents which provide contextual information to the repository. 
 
-## analysis
+### analysis
 "analysis"
 Location of jupyter notebooks which explore different analysis methods (not to be used in production)
 
