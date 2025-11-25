@@ -282,7 +282,7 @@
                 <h2>Project Members</h2>
                 <ul>
                     <li>Aoi Hunsaker - Department of Psychology, Neural Systems and Behavior PhD Program</li>
-                    <li>Christopher Tritt - [Department Name], [Program Name]</li>
+                    <li>Christopher Tritt - Department of Urban Design & Planning, Master of Urban Planning</li>
                     <li>Michael James - [Department Name], [Program Name]</li>
                     <li>Yash Sonthalia - [Department Name], [Program Name]</li>
                 </ul>
@@ -309,34 +309,34 @@
     <main class="container">
         <section class="section">
             <h2>The Problem We Aim to Solve</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>This project analyzes auditory evoked potentials (AEPs) in Hydrolagus colliei (spotted ratfish) by processing multi-channel electrophysiological recordings. The analysis focuses on detecting the double-frequency response to acoustic stimuli, which helps us understand how fish respond to auditory stimuli at different frequencies and amplitudes. Using ICA-based denoising, bootstrapping, and SNR calculations, we can identify significant neural responses and determine auditory thresholds in these fascinating cartilaginous fish.</p>
         </section>
         
         <section class="section">
             <h2>Functional Specification</h2>
             
             <h3>Background</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <p>The analysis pipeline processes EEG data from spotted ratfish (Hydrolagus colliei) to understand their auditory capabilities. The pipeline uses advanced signal processing techniques including Independent Component Analysis (ICA) for denoising, bootstrap statistical methods for confidence estimation, and FFT-based frequency domain analysis to detect neural responses at double the stimulus frequency.</p>
             
             <h3>User Profile</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            <p>This pipeline is designed for neuroscience researchers studying auditory evoked potentials in fish species. Users should have familiarity with electrophysiological recordings, basic signal processing concepts, and understanding of frequency domain analysis. The system processes MATLAB .mat files containing multi-channel recordings and produces statistical visualizations and confidence interval data.</p>
             
             <h3>Data Sources</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>The system processes multi-channel electrophysiological recordings stored in MATLAB .mat files. Input data includes trials organized by stimulus frequency (Hz) and amplitude (dB), recorded across 4 electrode channels (ch1-ch4) at a sampling frequency of 22,050 Hz. The analysis includes data from 7 subjects: one control (deadFish) and six ratfish specimens (hydrolagusColliei_4 through hydrolagusColliei_9).</p>
             
             <h3>Use Cases</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+            <p>Researchers can use this pipeline to: (1) Identify significant auditory responses by calculating 95% confidence intervals for SNR differences between stimulus-on and stimulus-off periods, (2) Determine auditory thresholds across different frequencies and amplitudes, (3) Compare responses across multiple subjects to understand population-level auditory capabilities, and (4) Visualize ICA component weights to understand which electrode channels capture the strongest responses.</p>
         </section>
         
         <section class="section">
             <h2>Component Specification</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            <p>The analysis pipeline consists of multiple integrated components: data loading and cleaning modules that read .mat files and remove artifacts based on RMS thresholds; signal processing components including bandpass filtering (70-1400 Hz) and ICA-based denoising; statistical analysis tools that perform bootstrap resampling (100 iterations) and calculate 95% confidence intervals; and visualization components that generate interactive HTML charts and high-resolution PNG exports using Altair.</p>
             
             <h3>Interactions to Accomplish Use Cases</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>The workflow progresses sequentially: (1) Data loading extracts trials organized by frequency and amplitude, (2) Artifact rejection removes noisy trials exceeding 3 standard deviations, (3) Bandpass filtering reduces out-of-range frequencies, (4) ICA separates independent signal components and weights them by SNR, (5) Period separation splits data into prestim and stimresp windows accounting for system latency, (6) Bootstrap analysis generates statistical distributions, and (7) Visualization exports create interactive and static charts showing confidence intervals, ICA weights, and response comparisons.</p>
             
             <h3>Preliminary Plan</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <p>Key parameters include a sampling frequency of 22,050 Hz, system latency of 2,118 samples (~96 ms), artifact threshold of mean + 3 standard deviations, 100 bootstrap iterations, and an SNR window of ±100 Hz around the double-frequency response. The pipeline focuses on the second harmonic (2f) of the stimulus frequency, excluding artifact frequencies (60 Hz harmonics, fundamental, and 2f) from noise floor calculations. Significant responses are identified when the 95% confidence interval of the SNR difference between stimulus-on and stimulus-off periods excludes zero.</p>
         </section>
 
         <section class="section">
