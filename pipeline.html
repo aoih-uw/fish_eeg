@@ -9,40 +9,249 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-  <nav class="menu-bar bg-white border-b border-slate-200 px-6 py-4 flex gap-6">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-4 focus:bg-white focus:text-slate-900">Skip to main content</a>
+  <nav class="menu-bar bg-white border-b border-slate-200 px-6 py-4 flex gap-6" role="navigation" aria-label="Main navigation">
     <a href="index.html" class="font-semibold" style="color:#32006e">Home</a>
     <a href="overview.html" class="text-slate-700">Overview</a>
     <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
     <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
     <a href="team.html" class="text-slate-700">Team & Course</a>
+    <a href="repo.html" class="text-slate-700">Repository Info</a>
   </nav>
-  <main class="max-w-5xl mx-auto py-10 px-4">
-    <h1 class="text-2xl font-bold mb-6">Analysis Pipeline</h1>
-    <div class="grid gap-4 md:grid-cols-3">
-      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <h3 class="font-medium text-slate-900 mb-1">1. Data Loading</h3>
-        <p class="text-sm text-slate-600">Trials parsed from MATLAB .mat structured as (frequency, amplitude) across four EEG channels.</p>
+  <main id="main-content" class="max-w-5xl mx-auto py-10 px-4">
+    <h1 class="text-3xl font-bold mb-6" style="color:#32006e">Analysis Pipeline</h1>
+    <p class="text-slate-700 mb-6">This pipeline processes auditory evoked potential (AEP) data through multiple stages to detect neural responses at the double-frequency (2f) of acoustic stimuli.</p>
+    
+    <div class="mb-8 bg-slate-50 border border-slate-200 rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-3" style="color:#32006e">Key Parameters Summary</h2>
+      <div class="grid md:grid-cols-2 gap-4 text-sm">
+        <div>
+          <p class="text-slate-700"><strong>Sampling Rate:</strong> 22,050 Hz</p>
+          <p class="text-slate-700"><strong>System Latency:</strong> 2,118 samples (~96 ms)</p>
+          <p class="text-slate-700"><strong>Channels:</strong> ch1, ch2, ch3, ch4</p>
+          <p class="text-slate-700"><strong>Bandpass Range:</strong> 70-1400 Hz</p>
+        </div>
+        <div>
+          <p class="text-slate-700"><strong>Artifact Threshold:</strong> mean + 3×SD RMS</p>
+          <p class="text-slate-700"><strong>Bootstrap Iterations:</strong> 100</p>
+          <p class="text-slate-700"><strong>SNR Window:</strong> ±100 Hz around 2f</p>
+          <p class="text-slate-700"><strong>Significance:</strong> 95% CI excludes 0</p>
+        </div>
       </div>
-      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <h3 class="font-medium text-slate-900 mb-1">2. Cleaning</h3>
-        <p class="text-sm text-slate-600">Artifact rejection using RMS &gt; mean + 3×SD. Channel trial counts balanced post-filter.</p>
-      </div>
-      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <h3 class="font-medium text-slate-900 mb-1">3. Bandpass Filter</h3>
-        <p class="text-sm text-slate-600">70–1400 Hz passband removes irrelevant and low-frequency noise.</p>
-      </div>
-      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <h3 class="font-medium text-slate-900 mb-1">4. ICA Denoising</h3>
-        <p class="text-sm text-slate-600">Components ranked by 2f SNR; weighted reconstruction preserves phase alignment.</p>
-      </div>
-      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <h3 class="font-medium text-slate-900 mb-1">5. Period Separation</h3>
-        <p class="text-sm text-slate-600">Latency-adjusted segmentation into prestim (OFF) and stimresp (ON) windows.</p>
-      </div>
-      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <h3 class="font-medium text-slate-900 mb-1">6. Bootstrap & CI</h3>
-        <p class="text-sm text-slate-600">100 resamples; 95% CI of (stimresp − prestim) SNR used for significance at 2f.</p>
-      </div>
+    </div>
+    
+    <div class="space-y-6">
+      <!-- Step 1: Data Loading -->
+      <details class="bg-white border border-slate-200 rounded-lg shadow-sm" open>
+        <summary class="cursor-pointer p-5 font-semibold text-slate-900 hover:bg-slate-50">
+          <span style="color:#32006e">1. Data Loading</span>
+        </summary>
+        <div class="px-5 pb-5 border-t border-slate-200">
+          <p class="text-slate-700 mb-3 mt-3">Reads MATLAB .mat files and extracts trials organized by frequency and amplitude combinations across 4 EEG channels.</p>
+          <pre class="bg-slate-900 text-slate-100 rounded p-4 text-sm overflow-x-auto"><code># Load data from MATLAB files
+subjid = 'hydrolagusColliei_4'
+data, freq_amp_table = read_data(subjid)
+
+# Data structure: dictionary with (frequency, amplitude) keys
+# Example: data.item()[100, 115]
+# Returns: {'filename': str, 'ch1': array, 'ch2': array, 
+#           'ch3': array, 'ch4': array}
+# Shape per channel: (number_of_trials, number_of_samples)</code></pre>
+          <p class="text-xs text-slate-500 mt-2"><strong>Output:</strong> Dictionary organized by (frequency, amplitude) with multi-channel trial data</p>
+        </div>
+      </details>
+
+      <!-- Step 2: Artifact Rejection -->
+      <details class="bg-white border border-slate-200 rounded-lg shadow-sm">
+        <summary class="cursor-pointer p-5 font-semibold text-slate-900 hover:bg-slate-50">
+          <span style="color:#32006e">2. Artifact Rejection & Cleaning</span>
+        </summary>
+        <div class="px-5 pb-5 border-t border-slate-200">
+          <p class="text-slate-700 mb-3 mt-3">Removes trials with excessive RMS (root mean square) values that indicate artifacts. Trial counts are balanced across channels after filtering.</p>
+          <pre class="bg-slate-900 text-slate-100 rounded p-4 text-sm overflow-x-auto"><code># Remove artifacts based on RMS threshold
+cleaned_data = remove_artefacts(data)
+
+# Process:
+# 1. Calculate RMS for each trial
+# 2. Compute threshold: mean_rms + 3 * std_rms
+# 3. Remove trials where RMS > threshold
+# 4. Balance trial counts across all channels</code></pre>
+          <p class="text-xs text-slate-500 mt-2"><strong>Output:</strong> Cleaned dataset with artifacts removed and balanced trial counts</p>
+        </div>
+      </details>
+
+      <!-- Step 3: Stimulus Selection -->
+      <details class="bg-white border border-slate-200 rounded-lg shadow-sm">
+        <summary class="cursor-pointer p-5 font-semibold text-slate-900 hover:bg-slate-50">
+          <span style="color:#32006e">3. Stimulus Selection</span>
+        </summary>
+        <div class="px-5 pb-5 border-t border-slate-200">
+          <p class="text-slate-700 mb-3 mt-3">Selects specific frequency and amplitude combination for analysis from the cleaned dataset.</p>
+          <pre class="bg-slate-900 text-slate-100 rounded p-4 text-sm overflow-x-auto"><code># Select specific stimulus condition
+myfreq = 360  # Hz
+myamp = 135   # dB
+dataset_index = 0
+
+current_cond = select_stimulus(cleaned_data, myfreq, myamp, dataset_index)
+
+# Returns trials for the specified frequency-amplitude pair</code></pre>
+          <p class="text-xs text-slate-500 mt-2"><strong>Output:</strong> Data subset for specific frequency/amplitude combination</p>
+        </div>
+      </details>
+
+      <!-- Step 4: Bandpass Filter -->
+      <details class="bg-white border border-slate-200 rounded-lg shadow-sm">
+        <summary class="cursor-pointer p-5 font-semibold text-slate-900 hover:bg-slate-50">
+          <span style="color:#32006e">4. Bandpass Filtering</span>
+        </summary>
+        <div class="px-5 pb-5 border-t border-slate-200">
+          <p class="text-slate-700 mb-3 mt-3">Applies bandpass filter (70-1400 Hz) to remove low-frequency noise and frequencies outside the auditory range of interest.</p>
+          <pre class="bg-slate-900 text-slate-100 rounded p-4 text-sm overflow-x-auto"><code># Apply bandpass filter
+low, high = 70, 1400  # Hz
+fs = 22050  # Sampling frequency
+
+filt_data = bandpass(current_cond, low, high, fs)
+
+# Removes:
+# - Low frequency drift (< 70 Hz)
+# - High frequency noise (> 1400 Hz)
+# - Preserves auditory response range</code></pre>
+          <p class="text-xs text-slate-500 mt-2"><strong>Output:</strong> Filtered data with noise reduced outside 70-1400 Hz range</p>
+        </div>
+      </details>
+
+      <!-- Step 5: ICA Denoising -->
+      <details class="bg-white border border-slate-200 rounded-lg shadow-sm">
+        <summary class="cursor-pointer p-5 font-semibold text-slate-900 hover:bg-slate-50">
+          <span style="color:#32006e">5. ICA Denoising</span>
+        </summary>
+        <div class="px-5 pb-5 border-t border-slate-200">
+          <p class="text-slate-700 mb-3 mt-3">Independent Component Analysis separates signal into independent components, ranks them by SNR at double-frequency (2f), and reconstructs the signal using weighted components.</p>
+          <pre class="bg-slate-900 text-slate-100 rounded p-4 text-sm overflow-x-auto"><code># Reshape data for ICA
+channel_keys = ['ch1', 'ch2', 'ch3', 'ch4']
+period_keys = ['prestim', 'stimresp']
+
+reshaped_data = reshape_the_data(filt_data, channel_keys, period_keys)
+
+# Perform ICA and rank components by 2f SNR
+ica_results = perform_ICA(reshaped_data, channel_keys)
+
+# Weight components by their SNR at double-frequency
+# Reconstruct signal emphasizing components with strong 2f response
+weighted_reconstruction = apply_ica_weights(ica_results)
+
+# This preserves phase relationships while reducing noise</code></pre>
+          <p class="text-xs text-slate-500 mt-2"><strong>Output:</strong> Denoised signal with enhanced double-frequency response</p>
+        </div>
+      </details>
+
+      <!-- Step 6: Period Separation -->
+      <details class="bg-white border border-slate-200 rounded-lg shadow-sm">
+        <summary class="cursor-pointer p-5 font-semibold text-slate-900 hover:bg-slate-50">
+          <span style="color:#32006e">6. Period Separation</span>
+        </summary>
+        <div class="px-5 pb-5 border-t border-slate-200">
+          <p class="text-slate-700 mb-3 mt-3">Separates data into prestimulus (stimulus OFF) and stimulus response (stimulus ON) periods, accounting for system latency.</p>
+          <pre class="bg-slate-900 text-slate-100 rounded p-4 text-sm overflow-x-auto"><code># Separate into prestim and stimresp periods
+latency = 2118  # samples (~96 ms at 22050 Hz)
+
+separated_data = separate_periods(
+    recon_restruct_data, 
+    current_cond, 
+    period_keys, 
+    channel_keys, 
+    latency
+)
+
+# prestim: baseline neural activity (stimulus OFF)
+# stimresp: neural response during stimulus (stimulus ON)
+# Latency adjustment ensures accurate temporal alignment</code></pre>
+          <p class="text-xs text-slate-500 mt-2"><strong>Output:</strong> Data split into prestim and stimresp periods with latency correction</p>
+        </div>
+      </details>
+
+      <!-- Step 7: FFT Analysis -->
+      <details class="bg-white border border-slate-200 rounded-lg shadow-sm">
+        <summary class="cursor-pointer p-5 font-semibold text-slate-900 hover:bg-slate-50">
+          <span style="color:#32006e">7. FFT & Frequency Domain Analysis</span>
+        </summary>
+        <div class="px-5 pb-5 border-t border-slate-200">
+          <p class="text-slate-700 mb-3 mt-3">Converts time-domain signals to frequency domain using Fast Fourier Transform to identify response at double-frequency.</p>
+          <pre class="bg-slate-900 text-slate-100 rounded p-4 text-sm overflow-x-auto"><code># Perform FFT on separated periods
+weighted_ffts = compute_fft(separated_data, channel_keys, period_keys)
+
+# Collapse across channels
+collapsed_dict = collapse_channels(
+    weighted_ffts, 
+    period_keys, 
+    channel_keys
+)
+
+# Analyze magnitude at 2f (double the stimulus frequency)
+# This is where neural phase-locking to the stimulus appears</code></pre>
+          <p class="text-xs text-slate-500 mt-2"><strong>Output:</strong> Frequency-domain representation showing power at each frequency bin</p>
+        </div>
+      </details>
+
+      <!-- Step 8: Bootstrap Analysis -->
+      <details class="bg-white border border-slate-200 rounded-lg shadow-sm">
+        <summary class="cursor-pointer p-5 font-semibold text-slate-900 hover:bg-slate-50">
+          <span style="color:#32006e">8. Bootstrap Resampling & Statistical Testing</span>
+        </summary>
+        <div class="px-5 pb-5 border-t border-slate-200">
+          <p class="text-slate-700 mb-3 mt-3">Generates 100 bootstrap resamples to create distribution of FFT magnitudes, then calculates 95% confidence intervals for SNR difference.</p>
+          <pre class="bg-slate-900 text-slate-100 rounded p-4 text-sm overflow-x-auto"><code># Bootstrap analysis (100 iterations)
+n_iterations = 100
+bootstrap_means, bootstrap_stds = calculate_bootstrap(
+    collapsed_dict, 
+    period_keys, 
+    channel_keys, 
+    n_iterations=n_iterations
+)
+
+# Select double-frequency bin (2f ± 100 Hz window)
+window_size = 100  # Hz
+doub_freq_dict = select_doub_freq_bin(
+    bootstrap_means, 
+    weighted_freq_vec, 
+    period_keys, 
+    myfreq, 
+    window_size=window_size
+)
+
+# Calculate 95% CI of (stimresp - prestim) SNR
+diff_CI_results = calculate_diff_CI(doub_freq_dict, 'SNR')
+
+# If CI excludes 0, response is statistically significant</code></pre>
+          <p class="text-xs text-slate-500 mt-2"><strong>Output:</strong> 95% confidence interval for SNR difference; significant if CI excludes zero</p>
+        </div>
+      </details>
+
+      <!-- Step 9: Visualization -->
+      <details class="bg-white border border-slate-200 rounded-lg shadow-sm">
+        <summary class="cursor-pointer p-5 font-semibold text-slate-900 hover:bg-slate-50">
+          <span style="color:#32006e">9. Visualization & Export</span>
+        </summary>
+        <div class="px-5 pb-5 border-t border-slate-200">
+          <p class="text-slate-700 mb-3 mt-3">Generates interactive plots and exports results to CSV files for further analysis.</p>
+          <pre class="bg-slate-900 text-slate-100 rounded p-4 text-sm overflow-x-auto"><code># Generate visualizations using Altair
+import altair as alt
+
+# Create interactive charts:
+# - 95% Confidence Intervals (all subjects)
+# - Median 95% CIs across subjects
+# - ICA weights by channel and frequency
+
+# Export to HTML and PNG
+chart.save('analysis/plots/summary_plots/95CI_all.html')
+chart.save('analysis/plots/summary_plots/95CI_all.png', scale_factor=3)
+
+# Export data to CSV
+ci_data.to_csv('analysis/CI_csv/{subjid}/{subjid}_{freq}Hz_{amp}dB_CI_0.csv')
+weights_data.to_csv('analysis/weights_csv/{subjid}/{subjid}_{freq}Hz_{amp}dB_weights.csv')</code></pre>
+          <p class="text-xs text-slate-500 mt-2"><strong>Output:</strong> Interactive HTML plots, high-resolution PNG images, and CSV data files</p>
+        </div>
+      </details>
     </div>
   </main>
 </body>
