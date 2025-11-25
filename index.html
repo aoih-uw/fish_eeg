@@ -1,374 +1,317 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analysis Charts - Documentation</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fish Auditory EEG Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f6f6f6;
-            min-height: 100vh;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .header {
-            background: white;
-            border-bottom: 1px solid #e1e4e8;
-            padding: 30px 40px;
-            display: flex;
-            align-items: center;
-            gap: 25px;
-        }
-        
-        .logo {
-            width: 200px;
-            height: 200px;
-            object-fit: contain;
-        }
-        
-        .header-content h1 {
-            color: #24292e;
-            font-size: 2.5em;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-        
-        .tagline {
-            color: #586069;
-            font-size: 1.1em;
-            font-weight: 400;
-        }
-
-        .info-section {
-            background: white;
-            border-bottom: 1px solid #e1e4e8;
-            padding: 20px 40px;
-        }
-
-        .info-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .info-card {
-            background: #f6f8fa;
-            border: 1px solid #e1e4e8;
-            border-radius: 6px;
-            padding: 15px;
-        }
-
-        .info-card h2 {
-            color: #24292e;
-            font-size: 1.1em;
-            margin-bottom: 10px;
-            font-weight: 600;
-            border-bottom: 1px solid #e1e4e8;
-            padding-bottom: 6px;
-        }
-
-        .info-card ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .info-card li {
-            color: #586069;
-            padding: 4px 0;
-            font-size: 0.9em;
-        }
-
-        .info-card.authors li {
-            font-size: 1.17em;
-        }
-
-        .info-card .label {
-            color: #24292e;
-            font-weight: 600;
-            margin-top: 10px;
-            margin-bottom: 3px;
-            font-size: 0.95em;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px;
-        }
-        
-        .section {
-            background: white;
-            border: 1px solid #e1e4e8;
-            border-radius: 6px;
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-        
-        .section h2 {
-            color: #24292e;
-            font-size: 1.8em;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e1e4e8;
-            font-weight: 600;
-        }
-        
-        .section h3 {
-            color: #24292e;
-            font-size: 1.3em;
-            margin-top: 25px;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-        
-        .section p {
-            color: #586069;
-            font-size: 1em;
-            margin-bottom: 15px;
-        }
-        
-        .section ul {
-            margin-left: 25px;
-            color: #586069;
-        }
-        
-        .section li {
-            margin-bottom: 8px;
-        }
-
-        .section ol {
-            margin-left: 25px;
-            color: #586069;
-        }
-        
-        .section ol li {
-            margin-bottom: 8px;
-        }
-        
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .chart-card {
-            background: white;
-            border: 1px solid #e1e4e8;
-            border-radius: 6px;
-            padding: 25px;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-        
-        .chart-card:hover {
-            border-color: #0366d6;
-            box-shadow: 0 3px 8px rgba(3, 102, 214, 0.1);
-        }
-        
-        .card-icon {
-            font-size: 2.5em;
-            margin-bottom: 12px;
-        }
-        
-        .chart-card h3 {
-            color: #24292e;
-            font-size: 1.3em;
-            margin-bottom: 10px;
-            margin-top: 0;
-            font-weight: 600;
-        }
-        
-        .chart-card p {
-            color: #586069;
-            margin-bottom: 15px;
-        }
-        
-        .card-link {
-            display: inline-block;
-            color: #0366d6;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1em;
-            transition: color 0.2s ease;
-        }
-        
-        .card-link:hover {
-            color: #0256c7;
-            text-decoration: underline;
-        }
-        
-        .footer {
-            background: white;
-            border-top: 1px solid #e1e4e8;
-            padding: 25px;
-            text-align: center;
-            margin-top: 40px;
-        }
-        
-        .footer p {
-            color: #586069;
-            font-size: 0.95em;
-        }
-        
-        code {
-            background: #f6f8fa;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            color: #24292e;
-        }
-        
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                text-align: center;
-                padding: 20px;
-            }
-            
-            .logo {
-                width: 100px;
-                height: 100px;
-            }
-            
-            .header-content h1 {
-                font-size: 2em;
-            }
-            
-            .container {
-                padding: 20px;
-            }
-            
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .info-section {
-                padding: 15px 20px;
-            }
-
-            .info-card {
-                padding: 12px;
-            }
-        }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
+        /* Fallback styles since @apply requires Tailwind build step */
+        .tab-trigger[aria-selected="true"] { background-color:#ffffff; color:#0f172a; box-shadow:0 1px 2px rgba(0,0,0,0.05); }
+        .tab-trigger[aria-selected="false"] { color:#475569; }
     </style>
 </head>
-<body>
-    <header class="header">
-        <img src="ratfish_animation.gif" alt="Ratfish" class="logo">
-        <div class="header-content">
-            <h1>Fish Auditory EEG Analysis Project</h1>
-            <p class="tagline">Description of our CSE 583 project design and results from analysis pipeline</p>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <!-- Header -->
+    <header class="border-b border-slate-200 bg-white/80 dark:bg-slate-900/80 backdrop-blur transition-colors">
+        <div class="mx-auto max-w-7xl px-6 py-6 flex items-center justify-between gap-6">
+            <div class="flex flex-col">
+                <h1 class="text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-slate-100 tracking-tight">Fish Auditory EEG Analysis</h1>
+                <p class="text-slate-600 dark:text-slate-400 text-sm">Hydrolagus colliei auditory evoked potential (AEP) pipeline</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <button id="themeToggle" class="rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 shadow-sm hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Toggle dark mode">🌙 Dark</button>
+                <button id="printBtn" class="rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 shadow-sm hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500" aria-label="Print page">🖨 Print</button>
+                <img src="ratfish_animation.gif" alt="Ratfish animation" class="hidden md:block h-24 w-24 object-contain" />
+            </div>
         </div>
     </header>
-    
-    <section class="info-section">
-        <div class="info-grid">
-            <div class="info-card authors">
-                <h2>Project Members</h2>
-                <ul>
-                    <li>Aoi Hunsaker - Department of Psychology, Neural Systems and Behavior PhD Program</li>
-                    <li>Christopher Tritt - Department of Urban Design & Planning, Master of Urban Planning</li>
-                    <li>Michael James - [Department Name], [Program Name]</li>
-                    <li>Yash Sonthalia - [Department Name], [Program Name]</li>
-                </ul>
-            </div>
-            
-            <div class="info-card">
-                <h2>Course Information</h2>
-                    <li>CSE 583</li>
-                </ul>
-                <p class="label">Professors</p>
-                <ul>
-                    <li>Bryna Hazelton</li>
-                    <li>Dave Beck</li>
-                </ul>
-                <p class="label">Teaching Assistants</p>
-                <ul>
-                    <li>Ian Quah</li>
-                    <li>Elli Anastasia Beres</li>
-                </ul>
-            </div>
+
+    <main class="mx-auto max-w-7xl px-6 py-10 space-y-10">
+        <!-- Overview & Controls Row -->
+        <div class="grid gap-6 md:grid-cols-3">
+            <section class="md:col-span-2 bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <h2 class="text-lg font-semibold text-slate-900 mb-3">Project Overview</h2>
+                <p class="text-slate-700 leading-relaxed">We analyze auditory evoked potentials (AEPs) in <em>Hydrolagus colliei</em> using a multi-stage electrophysiological pipeline. The workflow detects double-frequency (2f) neural responses to acoustic stimuli across frequency (Hz) and amplitude (dB) conditions, leveraging ICA-based denoising, RMS artifact rejection, bandpass filtering (70–1400 Hz), bootstrap resampling, and SNR estimation around ±100 Hz of the second harmonic.</p>
+                <div class="mt-4 grid sm:grid-cols-2 gap-4">
+                    <div class="rounded-lg bg-slate-50 border border-slate-200 p-4">
+                        <p class="text-xs font-medium tracking-wide text-slate-600 uppercase">Key Parameters</p>
+                        <ul class="mt-2 text-sm text-slate-700 space-y-1">
+                            <li><span class="font-medium">Sampling Rate:</span> 22,050 Hz</li>
+                            <li><span class="font-medium">Latency:</span> 2,118 samples (~96 ms)</li>
+                            <li><span class="font-medium">Channels:</span> ch1–ch4</li>
+                            <li><span class="font-medium">Bootstrap:</span> 100 iterations</li>
+                            <li><span class="font-medium">SNR Window:</span> ±100 Hz around 2f</li>
+                        </ul>
+                    </div>
+                    <div class="rounded-lg bg-slate-50 border border-slate-200 p-4">
+                        <p class="text-xs font-medium tracking-wide text-slate-600 uppercase">Significance Criteria</p>
+                        <ul class="mt-2 text-sm text-slate-700 space-y-1">
+                            <li>95% CI of (stimresp − prestim) excludes 0</li>
+                            <li>2f bins weighted by ICA SNR</li>
+                            <li>Noise floor excludes fundamental & 60 Hz harmonics</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-5">
+                <h2 class="text-lg font-semibold text-slate-900">Subjects & Filters</h2>
+                <label class="block text-sm font-medium text-slate-700 mb-1" for="subjectSelect">Select Subject</label>
+                <select id="subjectSelect" class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="all">All (Aggregate)</option>
+                    <option value="hydrolagusColliei_4">hydrolagusColliei_4</option>
+                    <option value="hydrolagusColliei_5">hydrolagusColliei_5</option>
+                    <option value="hydrolagusColliei_6">hydrolagusColliei_6</option>
+                    <option value="hydrolagusColliei_7">hydrolagusColliei_7</option>
+                    <option value="hydrolagusColliei_8">hydrolagusColliei_8</option>
+                    <option value="hydrolagusColliei_9">hydrolagusColliei_9</option>
+                </select>
+                <p class="text-xs text-slate-600">Dead fish control excluded from visual summaries. Certain artifact frequencies (50 Hz, 385 Hz) and amplitudes (145–150 dB) are filtered.</p>
+                <div class="text-xs text-slate-500">Pipeline stages: Load → Clean (RMS) → Filter → ICA → Period Split → FFT → Bootstrap → CI/SNR.</div>
+            </section>
         </div>
-    </section>
 
-    <main class="container">
-        <section class="section">
-            <h2>The Problem We Aim to Solve</h2>
-            <p>This project analyzes auditory evoked potentials (AEPs) in Hydrolagus colliei (spotted ratfish) by processing multi-channel electrophysiological recordings. The analysis focuses on detecting the double-frequency response to acoustic stimuli, which helps us understand how fish respond to auditory stimuli at different frequencies and amplitudes. Using ICA-based denoising, bootstrapping, and SNR calculations, we can identify significant neural responses and determine auditory thresholds in these fascinating cartilaginous fish.</p>
-        </section>
-        
-        <section class="section">
-            <h2>Functional Specification</h2>
-            
-            <h3>Background</h3>
-            <p>The analysis pipeline processes EEG data from spotted ratfish (Hydrolagus colliei) to understand their auditory capabilities. The pipeline uses advanced signal processing techniques including Independent Component Analysis (ICA) for denoising, bootstrap statistical methods for confidence estimation, and FFT-based frequency domain analysis to detect neural responses at double the stimulus frequency.</p>
-            
-            <h3>User Profile</h3>
-            <p>This pipeline is designed for neuroscience researchers studying auditory evoked potentials in fish species. Users should have familiarity with electrophysiological recordings, basic signal processing concepts, and understanding of frequency domain analysis. The system processes MATLAB .mat files containing multi-channel recordings and produces statistical visualizations and confidence interval data.</p>
-            
-            <h3>Data Sources</h3>
-            <p>The system processes multi-channel electrophysiological recordings stored in MATLAB .mat files. Input data includes trials organized by stimulus frequency (Hz) and amplitude (dB), recorded across 4 electrode channels (ch1-ch4) at a sampling frequency of 22,050 Hz. The analysis includes data from 7 subjects: one control (deadFish) and six ratfish specimens (hydrolagusColliei_4 through hydrolagusColliei_9).</p>
-            
-            <h3>Use Cases</h3>
-            <p>Researchers can use this pipeline to: (1) Identify significant auditory responses by calculating 95% confidence intervals for SNR differences between stimulus-on and stimulus-off periods, (2) Determine auditory thresholds across different frequencies and amplitudes, (3) Compare responses across multiple subjects to understand population-level auditory capabilities, and (4) Visualize ICA component weights to understand which electrode channels capture the strongest responses.</p>
-        </section>
-        
-        <section class="section">
-            <h2>Component Specification</h2>
-            <p>The analysis pipeline consists of multiple integrated components: data loading and cleaning modules that read .mat files and remove artifacts based on RMS thresholds; signal processing components including bandpass filtering (70-1400 Hz) and ICA-based denoising; statistical analysis tools that perform bootstrap resampling (100 iterations) and calculate 95% confidence intervals; and visualization components that generate interactive HTML charts and high-resolution PNG exports using Altair.</p>
-            
-            <h3>Interactions to Accomplish Use Cases</h3>
-            <p>The workflow progresses sequentially: (1) Data loading extracts trials organized by frequency and amplitude, (2) Artifact rejection removes noisy trials exceeding 3 standard deviations, (3) Bandpass filtering reduces out-of-range frequencies, (4) ICA separates independent signal components and weights them by SNR, (5) Period separation splits data into prestim and stimresp windows accounting for system latency, (6) Bootstrap analysis generates statistical distributions, and (7) Visualization exports create interactive and static charts showing confidence intervals, ICA weights, and response comparisons.</p>
-            
-            <h3>Preliminary Plan</h3>
-            <p>Key parameters include a sampling frequency of 22,050 Hz, system latency of 2,118 samples (~96 ms), artifact threshold of mean + 3 standard deviations, 100 bootstrap iterations, and an SNR window of ±100 Hz around the double-frequency response. The pipeline focuses on the second harmonic (2f) of the stimulus frequency, excluding artifact frequencies (60 Hz harmonics, fundamental, and 2f) from noise floor calculations. Significant responses are identified when the 95% confidence interval of the SNR difference between stimulus-on and stimulus-off periods excludes zero.</p>
+        <!-- Pipeline Cards -->
+        <section>
+            <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center justify-between">Analysis Pipeline <button id="pipelineToggle" class="text-xs font-medium px-2 py-1 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-500">Collapse</button></h2>
+            <div id="pipelinePanels" class="grid gap-4 md:grid-cols-3">
+                <details class="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm" open>
+                    <summary class="cursor-pointer list-none flex items-center justify-between"><h3 class="font-medium text-slate-900 dark:text-slate-100">1. Data Loading</h3><span class="text-xs text-slate-500 group-open:hidden">Expand</span><span class="text-xs text-slate-500 hidden group-open:inline">Collapse</span></summary>
+                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Trials parsed from MATLAB .mat structured as (frequency, amplitude) across four EEG channels.</p>
+                </details>
+                <details class="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm" open>
+                    <summary class="cursor-pointer list-none flex items-center justify-between"><h3 class="font-medium text-slate-900 dark:text-slate-100">2. Cleaning</h3><span class="text-xs text-slate-500 group-open:hidden">Expand</span><span class="text-xs text-slate-500 hidden group-open:inline">Collapse</span></summary>
+                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Artifact rejection using RMS &gt; mean + 3×SD. Channel trial counts balanced post-filter.</p>
+                </details>
+                <details class="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm" open>
+                    <summary class="cursor-pointer list-none flex items-center justify-between"><h3 class="font-medium text-slate-900 dark:text-slate-100">3. Bandpass Filter</h3><span class="text-xs text-slate-500 group-open:hidden">Expand</span><span class="text-xs text-slate-500 hidden group-open:inline">Collapse</span></summary>
+                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">70–1400 Hz passband removes irrelevant and low-frequency noise.</p>
+                </details>
+                <details class="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm" open>
+                    <summary class="cursor-pointer list-none flex items-center justify-between"><h3 class="font-medium text-slate-900 dark:text-slate-100">4. ICA Denoising</h3><span class="text-xs text-slate-500 group-open:hidden">Expand</span><span class="text-xs text-slate-500 hidden group-open:inline">Collapse</span></summary>
+                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Components ranked by 2f SNR; weighted reconstruction preserves phase alignment.</p>
+                </details>
+                <details class="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm" open>
+                    <summary class="cursor-pointer list-none flex items-center justify-between"><h3 class="font-medium text-slate-900 dark:text-slate-100">5. Period Separation</h3><span class="text-xs text-slate-500 group-open:hidden">Expand</span><span class="text-xs text-slate-500 hidden group-open:inline">Collapse</span></summary>
+                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Latency-adjusted segmentation into prestim (OFF) and stimresp (ON) windows.</p>
+                </details>
+                <details class="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm" open>
+                    <summary class="cursor-pointer list-none flex items-center justify-between"><h3 class="font-medium text-slate-900 dark:text-slate-100">6. Bootstrap & CI</h3><span class="text-xs text-slate-500 group-open:hidden">Expand</span><span class="text-xs text-slate-500 hidden group-open:inline">Collapse</span></summary>
+                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">100 resamples; 95% CI of (stimresp − prestim) SNR used for significance at 2f.</p>
+                </details>
+            </div>
         </section>
 
-        <section class="section">
-            <h2>Results Data Visualization</h2>
-            <p>Here are our exemplar data visualizations that demonstrate the auditory capabilities of the spotted ratfish and features of the project analysis pipeline.</p>
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <div class="card-icon">📊</div>
-                    <h3>Per Subject 95% CIs</h3>
-                    <p>Individual confidence intervals of auditory responses for each subject in the analysis</p>
-                    <a href="analysis/plots/summary_plots/95CI_all.html" class="card-link">View Chart →</a>
+        <!-- Tabs / Charts -->
+        <section>
+            <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-4">Visual Summaries</h2>
+            <!-- New summary stats bar -->
+            <div class="grid gap-3 sm:grid-cols-4 mb-5">
+                <div class="rounded-lg border border-slate-200 bg-white p-3 flex flex-col"><span class="text-xs uppercase tracking-wide text-slate-500">Subjects</span><span class="text-sm font-semibold text-slate-800">6 active</span></div>
+                <div class="rounded-lg border border-slate-200 bg-white p-3 flex flex-col"><span class="text-xs uppercase tracking-wide text-slate-500">Freq Range</span><span class="text-sm font-semibold text-slate-800">50–400+ Hz</span></div>
+                <div class="rounded-lg border border-slate-200 bg-white p-3 flex flex-col"><span class="text-xs uppercase tracking-wide text-slate-500">Amp Range</span><span class="text-sm font-semibold text-slate-800">70–145 dB*</span></div>
+                <div class="rounded-lg border border-slate-200 bg-white p-3 flex flex-col"><span class="text-xs uppercase tracking-wide text-slate-500">Focus</span><span class="text-sm font-semibold text-slate-800">Second harmonic (2f)</span></div>
+            </div>
+            <p class="text-xs text-slate-500 mb-4">* Upper amplitudes 145–150 dB filtered for artifacts; deadFish control excluded.</p>
+            <div class="space-y-4" id="visualSummaryContainer">
+                <div role="tablist" aria-label="Chart Tabs" class="flex flex-wrap gap-2">
+                    <button class="tab-trigger active-tab rounded-md px-4 py-2 text-sm font-medium bg-white border border-slate-300 shadow-sm hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500" data-target="tab-ci-all" aria-selected="true">All 95% CIs</button>
+                    <button class="tab-trigger rounded-md px-4 py-2 text-sm font-medium bg-slate-50 border border-slate-300 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500" data-target="tab-ci-median" aria-selected="false">Median 95% CIs</button>
+                    <button class="tab-trigger rounded-md px-4 py-2 text-sm font-medium bg-slate-50 border border-slate-300 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500" data-target="tab-ica" aria-selected="false">ICA Weights</button>
+                    <button class="tab-trigger rounded-md px-4 py-2 text-sm font-medium bg-slate-50 border border-slate-300 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500" data-target="tab-notes" aria-selected="false">Interpretation</button>
+                    <button class="tab-trigger rounded-md px-4 py-2 text-sm font-medium bg-slate-50 border border-slate-300 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500" data-target="tab-method" aria-selected="false">Method Notes</button>
                 </div>
-                
-                <div class="chart-card">
-                    <div class="card-icon">📈</div>
-                    <h3>Median 95% CIs</h3>
-                    <p>Median 95% CIs of auditory responses across all subjects</p>
-                    <a href="analysis/plots/summary_plots/95CI_median.html" class="card-link">View Chart →</a>
+                <div id="tab-ci-all" class="tab-panel rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-semibold text-slate-900">Per Subject 95% Confidence Intervals</h3>
+                        <span class="text-xs px-2 py-1 rounded bg-blue-50 text-blue-700 border border-blue-100">Interactive</span>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-4">Subject-level SNR difference confidence intervals across amplitude-frequency conditions. Hover points for metadata.</p>
+                      <iframe id="iframeAll" title="All 95% CI" src="analysis/plots/summary_plots/95CI_all.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200"></iframe>
                 </div>
+                <div id="tab-ci-median" class="tab-panel hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-semibold text-slate-900">Median Confidence Intervals</h3>
+                        <span class="text-xs px-2 py-1 rounded bg-purple-50 text-purple-700 border border-purple-100">Aggregate</span>
+                    </div>
+                        <p class="text-sm text-slate-600 mb-4">Median midpoints highlight overall auditory sensitivity trends while suppressing inter-subject variability.</p>
+                      <iframe id="iframeMedian" title="Median 95% CI" src="analysis/plots/summary_plots/95CI_median.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200"></iframe>
+                </div>
+                <div id="tab-ica" class="tab-panel hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-semibold text-slate-900">ICA Component Weights</h3>
+                        <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-100">Channels</span>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-4">Weighted ICA components emphasize stable 2f spectral energy. Color encodes electrode channel contributions.</p>
+                      <iframe id="iframeIca" title="ICA Weights" src="analysis/plots/summary_plots/ICAweights.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200"></iframe>
+                </div>
+                <div id="tab-notes" class="tab-panel hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <h3 class="font-semibold text-slate-900 mb-3">Interpretation Guide</h3>
+                    <ul class="list-disc pl-5 text-sm text-slate-700 space-y-2">
+                        <li><span class="font-medium">Positive midpoint:</span> Stimulus-driven neural activation at 2f.</li>
+                        <li><span class="font-medium">Wide CI:</span> Elevated variance; investigate trial rejection or component stability.</li>
+                        <li><span class="font-medium">High ICA weight:</span> Reliable spectral contribution toward 2f peak.</li>
+                        <li><span class="font-medium">Amplitude trend:</span> Helps infer detection threshold curve.</li>
+                    </ul>
+                </div>
+                <div id="tab-method" class="tab-panel hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <h3 class="font-semibold text-slate-900 mb-3">Method Notes</h3>
+                    <p class="text-sm text-slate-700 mb-2">Bootstrap (n=100) yields non-parametric CI on (stimresp − prestim) SNR at the second harmonic. Noise floor excludes artifact harmonics (fundamental & 60 Hz multiples) for conservative contrast.</p>
+                    <p class="text-sm text-slate-700">ICA preserves temporal phase while isolating frequency-specific energy, enabling robust SNR weighting and reconstruction before FFT aggregation.</p>
+                </div>
+            </div>
+        </section>
 
-                <div class="chart-card">
-                    <div class="card-icon">📉</div>
-                    <h3>ICA Weights</h3>
-                    <p>ICA weight values by electrode channel and stimulus type</p>
-                    <a href="analysis/plots/summary_plots/ICAweights.html" class="card-link">View Chart →</a>
+        <!-- People / Attribution -->
+        <section>
+            <h2 class="text-xl font-semibold text-slate-900 mb-4">Team & Course</h2>
+            <div class="grid gap-4 md:grid-cols-2">
+                <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <h3 class="font-medium text-slate-900 mb-2">Project Members</h3>
+                    <ul class="text-sm text-slate-700 space-y-1">
+                        <li><span class="font-medium">Aoi Hunsaker:</span> Psychology / Neural Systems & Behavior PhD</li>
+                        <li><span class="font-medium">Christopher Tritt:</span> Urban Design & Planning / MUP</li>
+                        <li><span class="font-medium">Michael James:</span> Contributor</li>
+                        <li><span class="font-medium">Yash Sonthalia:</span> Contributor</li>
+                    </ul>
+                </div>
+                <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <h3 class="font-medium text-slate-900 mb-2">Course & Support</h3>
+                    <ul class="text-sm text-slate-700 space-y-1">
+                        <li><span class="font-medium">Course:</span> CSE 583</li>
+                        <li><span class="font-medium">Professors:</span> Bryna Hazelton, Dave Beck</li>
+                        <li><span class="font-medium">TAs:</span> Ian Quah, Elli Anastasia Beres</li>
+                    </ul>
                 </div>
             </div>
         </section>
     </main>
-    
-    <footer class="footer">
-        <p>&copy; 2025 Fish Auditory EEG Dashboard - Do not use data without permission</p>
+
+    <footer class="mt-10 border-t border-slate-200 bg-white/60 backdrop-blur">
+        <div class="mx-auto max-w-7xl px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex flex-col items-center justify-center order-last md:order-none md:flex-row md:gap-4 w-full md:w-auto">
+                <img src="ratfish_animation.gif" alt="Spotted ratfish animation" class="h-24 w-24 object-contain" />
+                <p class="text-sm font-medium text-slate-700 dark:text-slate-300 mt-3 md:mt-0">Thank you to the Spotted Ratfish!</p>
+            </div>
+            <p class="text-xs text-slate-600">&copy; 2025 Fish Auditory EEG Dashboard. Do not use data without permission.</p>
+            <p class="text-xs text-slate-500">Second harmonic (2f) focused analysis • Non-parametric CI approach</p>
+        </div>
     </footer>
+
+    <script>
+        // Simple tab switching
+        const triggers = document.querySelectorAll('.tab-trigger');
+        const panels = document.querySelectorAll('.tab-panel');
+        triggers.forEach(btn => {
+            btn.addEventListener('click', () => {
+                triggers.forEach(b => b.setAttribute('aria-selected', 'false'));
+                panels.forEach(p => p.classList.add('hidden'));
+                btn.setAttribute('aria-selected', 'true');
+                const target = document.getElementById(btn.dataset.target);
+                if (target) target.classList.remove('hidden');
+            });
+        });
+
+        // Subject selection placeholder logic (extend with dynamic charts later)
+        const subjectSelect = document.getElementById('subjectSelect');
+        const iframeAll = document.getElementById('iframeAll');
+        const iframeMedian = document.getElementById('iframeMedian');
+        const iframeIca = document.getElementById('iframeIca');
+        const SUBJECT_BASE_PATHS = [
+            // Ordered guesses for where subject-specific plots may live.
+            // Adjust or extend these patterns as files become available.
+            (s) => `analysis/plots/${s}/95CI_all.html`,
+            (s) => `analysis/plots/${s}/95CI_median.html`,
+            (s) => `analysis/plots/${s}/ICAweights.html`,
+            // Fallback to summary_plots if specific not found
+        ];
+        const AGGREGATE_PATHS = {
+            all: {
+                all: 'analysis/plots/summary_plots/95CI_all.html',
+                median: 'analysis/plots/summary_plots/95CI_median.html',
+                ica: 'analysis/plots/summary_plots/ICAweights.html'
+            }
+        };
+
+        async function probe(url) {
+            try {
+                const res = await fetch(url, { method: 'HEAD' });
+                return res.ok;
+            } catch { return false; }
+        }
+
+        async function setSubjectCharts(subj) {
+            if (subj === 'all') {
+                iframeAll.src = AGGREGATE_PATHS.all.all;
+                iframeMedian.src = AGGREGATE_PATHS.all.median;
+                iframeIca.src = AGGREGATE_PATHS.all.ica;
+                return;
+            }
+            // Attempt subject-specific paths; graceful fallback.
+            const specificAll = `analysis/plots/${subj}/95CI_all.html`;
+            const specificMedian = `analysis/plots/${subj}/95CI_median.html`;
+            const specificIca = `analysis/plots/${subj}/ICAweights.html`;
+            iframeAll.src = (await probe(specificAll)) ? specificAll : AGGREGATE_PATHS.all.all;
+            iframeMedian.src = (await probe(specificMedian)) ? specificMedian : AGGREGATE_PATHS.all.median;
+            iframeIca.src = (await probe(specificIca)) ? specificIca : AGGREGATE_PATHS.all.ica;
+        }
+        subjectSelect.addEventListener('change', () => {
+            const val = subjectSelect.value;
+            setSubjectCharts(val);
+        });
+
+        // Dark mode toggle & persistence
+        const themeToggle = document.getElementById('themeToggle');
+        const rootHtml = document.documentElement;
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                rootHtml.classList.add('dark');
+                themeToggle.textContent = '☀️ Light';
+            } else {
+                rootHtml.classList.remove('dark');
+                themeToggle.textContent = '🌙 Dark';
+            }
+        }
+        const storedTheme = localStorage.getItem('theme_pref');
+        applyTheme(storedTheme || 'light');
+        themeToggle.addEventListener('click', () => {
+            const next = rootHtml.classList.contains('dark') ? 'light' : 'dark';
+            localStorage.setItem('theme_pref', next);
+            applyTheme(next);
+        });
+
+        // Print button
+        const printBtn = document.getElementById('printBtn');
+        printBtn.addEventListener('click', () => window.print());
+
+        // Pipeline collapse toggle
+        const pipelineToggle = document.getElementById('pipelineToggle');
+        const pipelinePanels = document.getElementById('pipelinePanels');
+        let pipelineCollapsed = false;
+        pipelineToggle.addEventListener('click', () => {
+            pipelineCollapsed = !pipelineCollapsed;
+            pipelinePanels.querySelectorAll('details').forEach(d => {
+                if (pipelineCollapsed) { d.removeAttribute('open'); }
+                else { d.setAttribute('open', ''); }
+            });
+            pipelineToggle.textContent = pipelineCollapsed ? 'Expand All' : 'Collapse';
+        });
+
+        // Initial subject setting
+        setSubjectCharts(subjectSelect.value);
+    </script>
+    <style>
+        /* Print-friendly adjustments */
+        @media print {
+            #themeToggle, #printBtn, #pipelineToggle, .tab-trigger { display: none !important; }
+            header, footer { background: white !important; box-shadow: none !important; }
+            iframe { height: 380px !important; }
+            body { background: white !important; }
+        }
+    </style>
 </body>
 </html>
