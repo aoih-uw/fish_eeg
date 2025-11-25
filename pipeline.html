@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analysis Pipeline - Fish Auditory EEG Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }</style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+  <nav class="bg-white border-b border-slate-200 px-6 py-4 flex gap-6">
+    <a href="index.html" class="font-semibold text-blue-700">Home</a>
+    <a href="overview.html" class="text-slate-700">Overview</a>
+    <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
+    <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
+    <a href="team.html" class="text-slate-700">Team & Course</a>
+  </nav>
+  <main class="max-w-5xl mx-auto py-10 px-4">
+    <h1 class="text-2xl font-bold mb-6">Analysis Pipeline</h1>
+    <div class="grid gap-4 md:grid-cols-3">
+      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 class="font-medium text-slate-900 mb-1">1. Data Loading</h3>
+        <p class="text-sm text-slate-600">Trials parsed from MATLAB .mat structured as (frequency, amplitude) across four EEG channels.</p>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 class="font-medium text-slate-900 mb-1">2. Cleaning</h3>
+        <p class="text-sm text-slate-600">Artifact rejection using RMS &gt; mean + 3×SD. Channel trial counts balanced post-filter.</p>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 class="font-medium text-slate-900 mb-1">3. Bandpass Filter</h3>
+        <p class="text-sm text-slate-600">70–1400 Hz passband removes irrelevant and low-frequency noise.</p>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 class="font-medium text-slate-900 mb-1">4. ICA Denoising</h3>
+        <p class="text-sm text-slate-600">Components ranked by 2f SNR; weighted reconstruction preserves phase alignment.</p>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 class="font-medium text-slate-900 mb-1">5. Period Separation</h3>
+        <p class="text-sm text-slate-600">Latency-adjusted segmentation into prestim (OFF) and stimresp (ON) windows.</p>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 class="font-medium text-slate-900 mb-1">6. Bootstrap & CI</h3>
+        <p class="text-sm text-slate-600">100 resamples; 95% CI of (stimresp − prestim) SNR used for significance at 2f.</p>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

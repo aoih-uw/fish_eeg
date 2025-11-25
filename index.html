@@ -16,191 +16,40 @@
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-    <!-- Header -->
-    <header class="border-b border-slate-200 bg-white/80 dark:bg-slate-900/80 backdrop-blur transition-colors">
-        <div class="mx-auto max-w-7xl px-6 py-6 flex items-center justify-between gap-6">
-            <div class="flex flex-col">
-                <h1 class="text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-slate-100 tracking-tight">Fish Auditory EEG Analysis</h1>
-                <p class="text-slate-600 dark:text-slate-400 text-sm">Hydrolagus colliei auditory evoked potential (AEP) pipeline</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <button id="themeToggle" class="rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 shadow-sm hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Toggle dark mode">🌙 Dark</button>
-                <button id="printBtn" class="rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 shadow-sm hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500" aria-label="Print page">🖨 Print</button>
-                <img src="ratfish_animation.gif" alt="Ratfish animation" class="hidden md:block h-24 w-24 object-contain" />
-            </div>
-        </div>
-    </header>
-
-    <main class="mx-auto max-w-7xl px-6 py-10 space-y-10">
-        <!-- Overview & Controls Row -->
-        <div class="grid gap-6 md:grid-cols-3">
-            <section class="md:col-span-2 bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-                <h2 class="text-lg font-semibold text-slate-900 mb-3">Project Overview</h2>
-                <p class="text-slate-700 leading-relaxed">We analyze auditory evoked potentials (AEPs) in <em>Hydrolagus colliei</em> using a multi-stage electrophysiological pipeline. The workflow detects double-frequency (2f) neural responses to acoustic stimuli across frequency (Hz) and amplitude (dB) conditions, leveraging ICA-based denoising, RMS artifact rejection, bandpass filtering (70–1400 Hz), bootstrap resampling, and SNR estimation around ±100 Hz of the second harmonic.</p>
-                <div class="mt-4 grid sm:grid-cols-2 gap-4">
-                    <div class="rounded-lg bg-slate-50 border border-slate-200 p-4">
-                        <p class="text-xs font-medium tracking-wide text-slate-600 uppercase">Key Parameters</p>
-                        <ul class="mt-2 text-sm text-slate-700 space-y-1">
-                            <li><span class="font-medium">Sampling Rate:</span> 22,050 Hz</li>
-                            <li><span class="font-medium">Latency:</span> 2,118 samples (~96 ms)</li>
-                            <li><span class="font-medium">Channels:</span> ch1–ch4</li>
-                            <li><span class="font-medium">Bootstrap:</span> 100 iterations</li>
-                            <li><span class="font-medium">SNR Window:</span> ±100 Hz around 2f</li>
-                        </ul>
-                    </div>
-                    <div class="rounded-lg bg-slate-50 border border-slate-200 p-4">
-                        <p class="text-xs font-medium tracking-wide text-slate-600 uppercase">Significance Criteria</p>
-                        <ul class="mt-2 text-sm text-slate-700 space-y-1">
-                            <li>95% CI of (stimresp − prestim) excludes 0</li>
-                            <li>2f bins weighted by ICA SNR</li>
-                            <li>Noise floor excludes fundamental & 60 Hz harmonics</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-            <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-5">
-                <h2 class="text-lg font-semibold text-slate-900">Subjects & Filters</h2>
-                <label class="block text-sm font-medium text-slate-700 mb-1" for="subjectSelect">Select Subject</label>
-                <select id="subjectSelect" class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="all">All (Aggregate)</option>
-                    <option value="hydrolagusColliei_4">hydrolagusColliei_4</option>
-                    <option value="hydrolagusColliei_5">hydrolagusColliei_5</option>
-                    <option value="hydrolagusColliei_6">hydrolagusColliei_6</option>
-                    <option value="hydrolagusColliei_7">hydrolagusColliei_7</option>
-                    <option value="hydrolagusColliei_8">hydrolagusColliei_8</option>
-                    <option value="hydrolagusColliei_9">hydrolagusColliei_9</option>
-                </select>
-                <p class="text-xs text-slate-600">Dead fish control excluded from visual summaries. Certain artifact frequencies (50 Hz, 385 Hz) and amplitudes (145–150 dB) are filtered.</p>
-                <div class="text-xs text-slate-500">Pipeline stages: Load → Clean (RMS) → Filter → ICA → Period Split → FFT → Bootstrap → CI/SNR.</div>
-            </section>
-        </div>
-
-        <!-- Pipeline Cards -->
-        <section>
-            <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center justify-between">Analysis Pipeline <button id="pipelineToggle" class="text-xs font-medium px-2 py-1 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-500">Collapse</button></h2>
-            <div id="pipelinePanels" class="grid gap-4 md:grid-cols-3">
-                <details class="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm" open>
-                    <summary class="cursor-pointer list-none flex items-center justify-between"><h3 class="font-medium text-slate-900 dark:text-slate-100">1. Data Loading</h3><span class="text-xs text-slate-500 group-open:hidden">Expand</span><span class="text-xs text-slate-500 hidden group-open:inline">Collapse</span></summary>
-                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Trials parsed from MATLAB .mat structured as (frequency, amplitude) across four EEG channels.</p>
-                </details>
-                <details class="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm" open>
-                    <summary class="cursor-pointer list-none flex items-center justify-between"><h3 class="font-medium text-slate-900 dark:text-slate-100">2. Cleaning</h3><span class="text-xs text-slate-500 group-open:hidden">Expand</span><span class="text-xs text-slate-500 hidden group-open:inline">Collapse</span></summary>
-                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Artifact rejection using RMS &gt; mean + 3×SD. Channel trial counts balanced post-filter.</p>
-                </details>
-                <details class="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm" open>
-                    <summary class="cursor-pointer list-none flex items-center justify-between"><h3 class="font-medium text-slate-900 dark:text-slate-100">3. Bandpass Filter</h3><span class="text-xs text-slate-500 group-open:hidden">Expand</span><span class="text-xs text-slate-500 hidden group-open:inline">Collapse</span></summary>
-                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">70–1400 Hz passband removes irrelevant and low-frequency noise.</p>
-                </details>
-                <details class="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm" open>
-                    <summary class="cursor-pointer list-none flex items-center justify-between"><h3 class="font-medium text-slate-900 dark:text-slate-100">4. ICA Denoising</h3><span class="text-xs text-slate-500 group-open:hidden">Expand</span><span class="text-xs text-slate-500 hidden group-open:inline">Collapse</span></summary>
-                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Components ranked by 2f SNR; weighted reconstruction preserves phase alignment.</p>
-                </details>
-                <details class="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm" open>
-                    <summary class="cursor-pointer list-none flex items-center justify-between"><h3 class="font-medium text-slate-900 dark:text-slate-100">5. Period Separation</h3><span class="text-xs text-slate-500 group-open:hidden">Expand</span><span class="text-xs text-slate-500 hidden group-open:inline">Collapse</span></summary>
-                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Latency-adjusted segmentation into prestim (OFF) and stimresp (ON) windows.</p>
-                </details>
-                <details class="group rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm" open>
-                    <summary class="cursor-pointer list-none flex items-center justify-between"><h3 class="font-medium text-slate-900 dark:text-slate-100">6. Bootstrap & CI</h3><span class="text-xs text-slate-500 group-open:hidden">Expand</span><span class="text-xs text-slate-500 hidden group-open:inline">Collapse</span></summary>
-                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">100 resamples; 95% CI of (stimresp − prestim) SNR used for significance at 2f.</p>
-                </details>
-            </div>
-        </section>
-
-        <!-- Tabs / Charts -->
-        <section>
-            <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-4">Visual Summaries</h2>
-            <!-- New summary stats bar -->
-            <div class="grid gap-3 sm:grid-cols-4 mb-5">
-                <div class="rounded-lg border border-slate-200 bg-white p-3 flex flex-col"><span class="text-xs uppercase tracking-wide text-slate-500">Subjects</span><span class="text-sm font-semibold text-slate-800">6 active</span></div>
-                <div class="rounded-lg border border-slate-200 bg-white p-3 flex flex-col"><span class="text-xs uppercase tracking-wide text-slate-500">Freq Range</span><span class="text-sm font-semibold text-slate-800">50–400+ Hz</span></div>
-                <div class="rounded-lg border border-slate-200 bg-white p-3 flex flex-col"><span class="text-xs uppercase tracking-wide text-slate-500">Amp Range</span><span class="text-sm font-semibold text-slate-800">70–145 dB*</span></div>
-                <div class="rounded-lg border border-slate-200 bg-white p-3 flex flex-col"><span class="text-xs uppercase tracking-wide text-slate-500">Focus</span><span class="text-sm font-semibold text-slate-800">Second harmonic (2f)</span></div>
-            </div>
-            <p class="text-xs text-slate-500 mb-4">* Upper amplitudes 145–150 dB filtered for artifacts; deadFish control excluded.</p>
-            <div class="space-y-4" id="visualSummaryContainer">
-                <div role="tablist" aria-label="Chart Tabs" class="flex flex-wrap gap-2">
-                    <button class="tab-trigger active-tab rounded-md px-4 py-2 text-sm font-medium bg-white border border-slate-300 shadow-sm hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500" data-target="tab-ci-all" aria-selected="true">All 95% CIs</button>
-                    <button class="tab-trigger rounded-md px-4 py-2 text-sm font-medium bg-slate-50 border border-slate-300 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500" data-target="tab-ci-median" aria-selected="false">Median 95% CIs</button>
-                    <button class="tab-trigger rounded-md px-4 py-2 text-sm font-medium bg-slate-50 border border-slate-300 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500" data-target="tab-ica" aria-selected="false">ICA Weights</button>
-                    <button class="tab-trigger rounded-md px-4 py-2 text-sm font-medium bg-slate-50 border border-slate-300 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500" data-target="tab-notes" aria-selected="false">Interpretation</button>
-                    <button class="tab-trigger rounded-md px-4 py-2 text-sm font-medium bg-slate-50 border border-slate-300 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500" data-target="tab-method" aria-selected="false">Method Notes</button>
-                </div>
-                <div id="tab-ci-all" class="tab-panel rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-semibold text-slate-900">Per Subject 95% Confidence Intervals</h3>
-                        <span class="text-xs px-2 py-1 rounded bg-blue-50 text-blue-700 border border-blue-100">Interactive</span>
-                    </div>
-                    <p class="text-sm text-slate-600 mb-4">Subject-level SNR difference confidence intervals across amplitude-frequency conditions. Hover points for metadata.</p>
-                      <iframe id="iframeAll" title="All 95% CI" src="analysis/plots/summary_plots/95CI_all.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200"></iframe>
-                </div>
-                <div id="tab-ci-median" class="tab-panel hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-semibold text-slate-900">Median Confidence Intervals</h3>
-                        <span class="text-xs px-2 py-1 rounded bg-purple-50 text-purple-700 border border-purple-100">Aggregate</span>
-                    </div>
-                        <p class="text-sm text-slate-600 mb-4">Median midpoints highlight overall auditory sensitivity trends while suppressing inter-subject variability.</p>
-                      <iframe id="iframeMedian" title="Median 95% CI" src="analysis/plots/summary_plots/95CI_median.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200"></iframe>
-                </div>
-                <div id="tab-ica" class="tab-panel hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-semibold text-slate-900">ICA Component Weights</h3>
-                        <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-100">Channels</span>
-                    </div>
-                    <p class="text-sm text-slate-600 mb-4">Weighted ICA components emphasize stable 2f spectral energy. Color encodes electrode channel contributions.</p>
-                      <iframe id="iframeIca" title="ICA Weights" src="analysis/plots/summary_plots/ICAweights.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200"></iframe>
-                </div>
-                <div id="tab-notes" class="tab-panel hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <h3 class="font-semibold text-slate-900 mb-3">Interpretation Guide</h3>
-                    <ul class="list-disc pl-5 text-sm text-slate-700 space-y-2">
-                        <li><span class="font-medium">Positive midpoint:</span> Stimulus-driven neural activation at 2f.</li>
-                        <li><span class="font-medium">Wide CI:</span> Elevated variance; investigate trial rejection or component stability.</li>
-                        <li><span class="font-medium">High ICA weight:</span> Reliable spectral contribution toward 2f peak.</li>
-                        <li><span class="font-medium">Amplitude trend:</span> Helps infer detection threshold curve.</li>
-                    </ul>
-                </div>
-                <div id="tab-method" class="tab-panel hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <h3 class="font-semibold text-slate-900 mb-3">Method Notes</h3>
-                    <p class="text-sm text-slate-700 mb-2">Bootstrap (n=100) yields non-parametric CI on (stimresp − prestim) SNR at the second harmonic. Noise floor excludes artifact harmonics (fundamental & 60 Hz multiples) for conservative contrast.</p>
-                    <p class="text-sm text-slate-700">ICA preserves temporal phase while isolating frequency-specific energy, enabling robust SNR weighting and reconstruction before FFT aggregation.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- People / Attribution -->
-        <section>
-            <h2 class="text-xl font-semibold text-slate-900 mb-4">Team & Course</h2>
-            <div class="grid gap-4 md:grid-cols-2">
-                <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                    <h3 class="font-medium text-slate-900 mb-2">Project Members</h3>
-                    <ul class="text-sm text-slate-700 space-y-1">
-                        <li><span class="font-medium">Aoi Hunsaker:</span> Psychology / Neural Systems & Behavior PhD</li>
-                        <li><span class="font-medium">Christopher Tritt:</span> Urban Design & Planning / MUP</li>
-                        <li><span class="font-medium">Michael James:</span> Contributor</li>
-                        <li><span class="font-medium">Yash Sonthalia:</span> Contributor</li>
-                    </ul>
-                </div>
-                <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                    <h3 class="font-medium text-slate-900 mb-2">Course & Support</h3>
-                    <ul class="text-sm text-slate-700 space-y-1">
-                        <li><span class="font-medium">Course:</span> CSE 583</li>
-                        <li><span class="font-medium">Professors:</span> Bryna Hazelton, Dave Beck</li>
-                        <li><span class="font-medium">TAs:</span> Ian Quah, Elli Anastasia Beres</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 flex gap-6">
+      <a href="index.html" class="font-semibold text-blue-700">Home</a>
+      <a href="overview.html" class="text-slate-700">Overview</a>
+      <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
+      <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
+      <a href="team.html" class="text-slate-700">Team & Course</a>
+    </nav>
+    <main class="max-w-2xl mx-auto py-16 px-4 text-center">
+      <img src="ratfish_animation.gif" alt="Spotted ratfish animation" class="mx-auto h-32 w-32 object-contain mb-6" />
+      <h1 class="text-3xl font-bold mb-4">Welcome to the Fish Auditory EEG Dashboard</h1>
+      <p class="text-lg text-slate-700 mb-8">Explore our project sections using the menu above.</p>
+      <div class="grid gap-6 md:grid-cols-2 mt-8">
+        <a href="overview.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+          <h2 class="text-xl font-semibold text-blue-700 mb-2">Project Overview</h2>
+          <p class="text-slate-600">Background, goals, and key parameters of the auditory EEG analysis pipeline.</p>
+        </a>
+        <a href="pipeline.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+          <h2 class="text-xl font-semibold text-blue-700 mb-2">Analysis Pipeline</h2>
+          <p class="text-slate-600">Step-by-step breakdown of the data processing and analysis workflow.</p>
+        </a>
+        <a href="visuals.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+          <h2 class="text-xl font-semibold text-blue-700 mb-2">Visual Summaries</h2>
+          <p class="text-slate-600">Interactive charts and summary statistics from the analysis results.</p>
+        </a>
+        <a href="team.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+          <h2 class="text-xl font-semibold text-blue-700 mb-2">Team & Course</h2>
+          <p class="text-slate-600">Meet the project team and see course information and acknowledgments.</p>
+        </a>
+      </div>
+      <div class="mt-10">
+        <p class="text-sm text-slate-500">&copy; 2025 Fish Auditory EEG Dashboard. Data citation: Hunsaker, A., Brown, A., Sisneros, J., James, M., Tritt, C., Sonthalia, Y. (2025). Fish Auditory EEG Analysis Dataset. University of Washington. <a href="https://github.com/aoih-uw/fish_eeg" class="underline text-blue-600" target="_blank" rel="noopener">https://github.com/aoih-uw/fish_eeg</a></p>
+        <p class="text-sm text-slate-700 mt-2">Thank you to the Spotted Ratfish</p>
+      </div>
     </main>
-
-    <footer class="mt-10 border-t border-slate-200 bg-white/60 backdrop-blur">
-        <div class="mx-auto max-w-7xl px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex flex-col items-center justify-center order-last md:order-none md:flex-row md:gap-4 w-full md:w-auto">
-                <img src="ratfish_animation.gif" alt="Spotted ratfish animation" class="h-24 w-24 object-contain" />
-                <p class="text-sm font-medium text-slate-700 dark:text-slate-300 mt-3 md:mt-0">Thank you to the Spotted Ratfish!</p>
-            </div>
-            <p class="text-xs text-slate-600">&copy; 2025 Fish Auditory EEG Dashboard. Do not use data without permission.</p>
-            <p class="text-xs text-slate-500">Second harmonic (2f) focused analysis • Non-parametric CI approach</p>
-        </div>
-    </footer>
 
     <script>
         // Simple tab switching
@@ -264,30 +113,6 @@
             setSubjectCharts(val);
         });
 
-        // Dark mode toggle & persistence
-        const themeToggle = document.getElementById('themeToggle');
-        const rootHtml = document.documentElement;
-        function applyTheme(theme) {
-            if (theme === 'dark') {
-                rootHtml.classList.add('dark');
-                themeToggle.textContent = '☀️ Light';
-            } else {
-                rootHtml.classList.remove('dark');
-                themeToggle.textContent = '🌙 Dark';
-            }
-        }
-        const storedTheme = localStorage.getItem('theme_pref');
-        applyTheme(storedTheme || 'light');
-        themeToggle.addEventListener('click', () => {
-            const next = rootHtml.classList.contains('dark') ? 'light' : 'dark';
-            localStorage.setItem('theme_pref', next);
-            applyTheme(next);
-        });
-
-        // Print button
-        const printBtn = document.getElementById('printBtn');
-        printBtn.addEventListener('click', () => window.print());
-
         // Pipeline collapse toggle
         const pipelineToggle = document.getElementById('pipelineToggle');
         const pipelinePanels = document.getElementById('pipelinePanels');
@@ -305,13 +130,13 @@
         setSubjectCharts(subjectSelect.value);
     </script>
     <style>
-        /* Print-friendly adjustments */
-        @media print {
-            #themeToggle, #printBtn, #pipelineToggle, .tab-trigger { display: none !important; }
-            header, footer { background: white !important; box-shadow: none !important; }
-            iframe { height: 380px !important; }
-            body { background: white !important; }
-        }
+    /* Print-friendly adjustments */
+    @media print {
+      #themeToggle, #pipelineToggle, .tab-trigger, header, footer, #subjectSelect, .rounded-lg.border.border-slate-200.bg-white.p-3.flex.flex-col, .text-xs.text-slate-500.mb-4 { display: none !important; }
+      #visualSummaryContainer { margin: 0 !important; padding: 0 !important; box-shadow: none !important; background: white !important; }
+      iframe { height: 380px !important; }
+      body { background: white !important; }
+    }
     </style>
 </body>
 </html>
