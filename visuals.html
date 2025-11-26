@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visual Summaries - Fish Auditory EEG Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Encode+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-4 focus:bg-white focus:text-slate-900">Skip to main content</a>
+  <nav class="menu-bar bg-white border-b border-slate-200 px-6 py-4 flex gap-6" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="font-semibold" style="color:#32006e">Home</a>
+    <a href="overview.html" class="text-slate-700">Overview</a>
+    <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
+    <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
+    <a href="team.html" class="text-slate-700">Team & Course</a>
+    <a href="repo.html" class="text-slate-700">Repository Info</a>
+  </nav>
+  <main id="main-content" class="max-w-5xl mx-auto py-10 px-4">
+    <h1 class="text-3xl font-bold mb-6" style="color:#32006e">Visual Summaries</h1>
+    
+    <!-- Chart Controls & Filters -->
+    <div class="mb-6 bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
+      <h2 class="text-lg font-semibold mb-3" style="color:#32006e">Chart Controls & Filters</h2>
+      <div class="grid md:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Subject Filter</label>
+          <select id="subjectFilter" class="w-full border border-slate-300 rounded px-3 py-2 text-sm">
+            <option value="all">All Subjects</option>
+            <option value="hydrolagusColliei_4">Subject 4</option>
+            <option value="hydrolagusColliei_5">Subject 5</option>
+            <option value="hydrolagusColliei_6">Subject 6</option>
+            <option value="hydrolagusColliei_7">Subject 7</option>
+            <option value="hydrolagusColliei_8">Subject 8</option>
+            <option value="hydrolagusColliei_9">Subject 9</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Frequency Range (Hz)</label>
+          <select id="freqFilter" class="w-full border border-slate-300 rounded px-3 py-2 text-sm">
+            <option value="all">All Frequencies</option>
+            <option value="55-100">55-100 Hz</option>
+            <option value="100-200">100-200 Hz</option>
+            <option value="200-400">200-400 Hz</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Amplitude Range (dB)</label>
+          <select id="ampFilter" class="w-full border border-slate-300 rounded px-3 py-2 text-sm">
+            <option value="all">All Amplitudes</option>
+            <option value="70-100">70-100 dB</option>
+            <option value="100-120">100-120 dB</option>
+            <option value="120-145">120-145 dB</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">View Mode</label>
+          <select id="viewMode" class="w-full border border-slate-300 rounded px-3 py-2 text-sm">
+            <option value="locked">Locked (Accessible)</option>
+            <option value="interactive">Interactive</option>
+            <option value="comparison">Side-by-Side Comparison</option>
+          </select>
+        </div>
+      </div>
+      <div class="mt-4 flex gap-2 flex-wrap">
+        <button onclick="resetChartView()" class="px-4 py-2 bg-slate-600 text-white rounded hover:bg-slate-700 text-sm transition">🔄 Reset View</button>
+        <button onclick="toggleDataTable()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm transition">📊 Show Data Table</button>
+        <button onclick="exportChartData()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm transition">💾 Export Data (CSV)</button>
+        <button onclick="downloadChartImage()" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 text-sm transition">📸 Download Image</button>
+        <button onclick="toggleAnnotations()" class="px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 text-sm transition" id="annotationBtn">📌 Show Annotations</button>
+      </div>
+      <p class="text-xs text-slate-500 mt-2">💡 <strong>Accessibility Mode Active:</strong> Charts are locked in their optimal viewing position by default. Switch to "Interactive" mode to zoom and pan.</p>
+    </div>
+    
+    <!-- Comparison Tool -->
+    <div id="comparisonTool" class="hidden mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <h3 class="font-semibold text-slate-800 mb-3">Subject Comparison</h3>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">Compare Subject A:</label>
+          <select id="compareA" class="w-full border border-slate-300 rounded px-3 py-2 text-sm">
+            <option value="hydrolagusColliei_4">Subject 4</option>
+            <option value="hydrolagusColliei_5">Subject 5</option>
+            <option value="hydrolagusColliei_6">Subject 6</option>
+            <option value="hydrolagusColliei_7">Subject 7</option>
+            <option value="hydrolagusColliei_8">Subject 8</option>
+            <option value="hydrolagusColliei_9">Subject 9</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">With Subject B:</label>
+          <select id="compareB" class="w-full border border-slate-300 rounded px-3 py-2 text-sm">
+            <option value="hydrolagusColliei_5">Subject 5</option>
+            <option value="hydrolagusColliei_4">Subject 4</option>
+            <option value="hydrolagusColliei_6">Subject 6</option>
+            <option value="hydrolagusColliei_7">Subject 7</option>
+            <option value="hydrolagusColliei_8">Subject 8</option>
+            <option value="hydrolagusColliei_9">Subject 9</option>
+          </select>
+        </div>
+      </div>
+      <button onclick="loadComparison()" class="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm transition">Load Comparison</button>
+    </div>
+    
+    <section class="mb-6">
+      <h2 class="text-xl font-semibold mb-3" style="color:#32006e">Auditory Stimulus Sample</h2>
+      <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
+        <p class="text-slate-700 mb-3">Listen to an example of the auditory stimulus used in the experiments:</p>
+        <audio controls class="w-full" aria-label="Auditory stimulus sample">
+          <source src="analysis/soundeffect.wav" type="audio/wav">
+          <p class="text-slate-600 text-sm">Your browser does not support the audio element. Please use a modern browser to listen to the stimulus sample.</p>
+        </audio>
+        <p class="text-xs text-slate-500 mt-2">This audio file represents one of the stimuli presented to the ratfish during EEG recordings.</p>
+      </div>
+    </section>
+    
+    <div class="grid gap-3 sm:grid-cols-4 mb-5">
+      <div class="rounded-lg border border-slate-200 bg-white p-3 flex flex-col"><span class="text-xs uppercase tracking-wide text-slate-500">Subjects</span><span class="text-sm font-semibold text-slate-800">6 active</span></div>
+      <div class="rounded-lg border border-slate-200 bg-white p-3 flex flex-col"><span class="text-xs uppercase tracking-wide text-slate-500">Freq Range</span><span class="text-sm font-semibold text-slate-800">50–400+ Hz</span></div>
+      <div class="rounded-lg border border-slate-200 bg-white p-3 flex flex-col"><span class="text-xs uppercase tracking-wide text-slate-500">Amp Range</span><span class="text-sm font-semibold text-slate-800">70–145 dB*</span></div>
+      <div class="rounded-lg border border-slate-200 bg-white p-3 flex flex-col"><span class="text-xs uppercase tracking-wide text-slate-500">Focus</span><span class="text-sm font-semibold text-slate-800">Second harmonic (2f)</span></div>
+    </div>
+    <p class="text-xs text-slate-500 mb-4">* Upper amplitudes 145–150 dB filtered for artifacts; deadFish control excluded.</p>
+    
+    <div class="space-y-4">
+      <div class="mb-6">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-lg font-semibold" style="color:#32006e">95% Confidence Intervals - All Data</h3>
+          <div class="flex gap-2">
+            <button onclick="toggleChartLegend('iframeAll')" class="text-xs px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded" title="Toggle legend">Legend</button>
+            <span class="text-xs text-slate-500">See description below</span>
+          </div>
+        </div>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mb-3 text-sm">
+          <p class="text-slate-700"><strong>📊 Reading this chart:</strong> Each line shows the confidence interval range for neural responses. Points above zero indicate significant responses. Wider bands = more variability across trials.</p>
+        </div>
+        <div class="bg-slate-50 border border-slate-300 rounded p-3 mb-3 text-sm">
+          <p class="text-slate-600"><strong>💡 About Interactive Charts:</strong> The embedded visualizations below are interactive - hover over data points for details, zoom, and pan to explore the data (when in Interactive mode).</p>
+        </div>
+        <div class="relative">
+          <iframe id="iframeAll" title="All 95% CI" src="analysis/plots/summary_plots/95CI_all.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200 locked-chart" aria-label="Interactive chart showing 95% confidence intervals across all subjects" style="pointer-events: none;"></iframe>
+          <div class="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded">🔒 Locked View</div>
+        </div>
+        <div id="table-ci-all" class="hidden mt-3 overflow-x-auto">
+          <table class="w-full text-xs border-collapse border border-slate-300">
+            <caption class="text-sm font-semibold text-slate-800 mb-2">95% CI Data Table</caption>
+            <thead class="bg-slate-100">
+              <tr>
+                <th class="border border-slate-300 px-2 py-1">Subject</th>
+                <th class="border border-slate-300 px-2 py-1">Frequency (Hz)</th>
+                <th class="border border-slate-300 px-2 py-1">Amplitude (dB)</th>
+                <th class="border border-slate-300 px-2 py-1">Lower CI</th>
+                <th class="border border-slate-300 px-2 py-1">Upper CI</th>
+                <th class="border border-slate-300 px-2 py-1">Significant?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="6" class="border border-slate-300 px-2 py-1 text-center text-slate-500">Load data from CSV files to populate table</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="mb-6">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-lg font-semibold" style="color:#32006e">Median 95% Confidence Intervals</h3>
+          <div class="flex gap-2">
+            <button onclick="toggleChartLegend('iframeMedian')" class="text-xs px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded">Legend</button>
+            <span class="text-xs text-slate-500">See description below</span>
+          </div>
+        </div>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mb-3 text-sm">
+          <p class="text-slate-700"><strong>📊 Reading this chart:</strong> Shows the median (middle value) across all subjects. Smooths out individual variation to reveal overall trends. Compare with "All Data" chart to see consistency.</p>
+        </div>
+        <div class="relative">
+          <iframe id="iframeMedian" title="Median 95% CI" src="analysis/plots/summary_plots/95CI_median.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200 locked-chart" aria-label="Interactive chart showing median confidence intervals" style="pointer-events: none;"></iframe>
+          <div class="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded">🔒 Locked View</div>
+        </div>
+      </div>
+      
+      <div class="mb-6">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-lg font-semibold" style="color:#32006e">ICA Component Weights</h3>
+          <div class="flex gap-2">
+            <button onclick="toggleChartLegend('iframeIca')" class="text-xs px-2 py-1 bg-slate-100 hover:bg-slate-200 rounded">Legend</button>
+            <span class="text-xs text-slate-500">See description below</span>
+          </div>
+        </div>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mb-3 text-sm">
+          <p class="text-slate-700"><strong>📊 Reading this chart:</strong> Different colors = different electrode channels (ch1-ch4). Higher weights mean that channel captures more of the neural response. Helps identify optimal electrode placement.</p>
+        </div>
+        <div class="relative">
+          <iframe id="iframeIca" title="ICA Weights" src="analysis/plots/summary_plots/ICAweights.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200 locked-chart" aria-label="Interactive chart showing ICA weights by channel" style="pointer-events: none;"></iframe>
+          <div class="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded">🔒 Locked View</div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    // Chart interaction mode
+    let chartsLocked = true;
+    let annotationsVisible = false;
+    
+    // View mode selector
+    document.getElementById('viewMode').addEventListener('change', function(e) {
+      const mode = e.target.value;
+      const charts = document.querySelectorAll('.locked-chart');
+      const comparisonTool = document.getElementById('comparisonTool');
+      
+      if (mode === 'interactive') {
+        charts.forEach(chart => {
+          chart.style.pointerEvents = 'auto';
+          chart.parentElement.querySelector('.absolute').textContent = '🔓 Interactive';
+          chart.parentElement.querySelector('.absolute').classList.remove('bg-green-600');
+          chart.parentElement.querySelector('.absolute').classList.add('bg-blue-600');
+        });
+        chartsLocked = false;
+        comparisonTool.classList.add('hidden');
+      } else if (mode === 'comparison') {
+        comparisonTool.classList.remove('hidden');
+        chartsLocked = true;
+      } else {
+        charts.forEach(chart => {
+          chart.style.pointerEvents = 'none';
+          chart.parentElement.querySelector('.absolute').textContent = '🔒 Locked View';
+          chart.parentElement.querySelector('.absolute').classList.remove('bg-blue-600');
+          chart.parentElement.querySelector('.absolute').classList.add('bg-green-600');
+        });
+        chartsLocked = true;
+        comparisonTool.classList.add('hidden');
+      }
+    });
+    
+    // Reset chart view
+    function resetChartView() {
+      const iframes = ['iframeAll', 'iframeMedian', 'iframeIca'];
+      iframes.forEach(id => {
+        const iframe = document.getElementById(id);
+        iframe.src = iframe.src; // Reload iframe
+      });
+      document.getElementById('subjectFilter').value = 'all';
+      document.getElementById('freqFilter').value = 'all';
+      document.getElementById('ampFilter').value = 'all';
+      alert('✅ Charts reset to default view');
+    }
+    
+    // Toggle data table
+    let tableVisible = false;
+    function toggleDataTable() {
+      const tables = document.querySelectorAll('[id^="table-"]');
+      tableVisible = !tableVisible;
+      tables.forEach(table => {
+        table.classList.toggle('hidden');
+      });
+      event.target.textContent = tableVisible ? '📊 Hide Data Table' : '📊 Show Data Table';
+    }
+    
+    // Export chart data
+    function exportChartData() {
+      alert('📥 Downloading chart data as CSV...\n\nData files are available in:\n- analysis/CI_csv/ (confidence intervals)\n- analysis/weights_csv/ (ICA weights)\n\nClick OK to open the download folder.');
+      window.open('analysis/CI_csv/', '_blank');
+    }
+    
+    // Download chart image
+    function downloadChartImage() {
+      alert('📸 High-resolution PNG images are available in:\n\nanalysis/plots/summary_plots/\n\nFiles:\n- 95CI_all.png\n- 95CI_median.png\n- ICAweights.png\n\nClick OK to open the folder.');
+      window.open('analysis/plots/summary_plots/', '_blank');
+    }
+    
+    // Toggle annotations
+    function toggleAnnotations() {
+      annotationsVisible = !annotationsVisible;
+      const btn = document.getElementById('annotationBtn');
+      btn.textContent = annotationsVisible ? '📌 Hide Annotations' : '📌 Show Annotations';
+      
+      if (annotationsVisible) {
+        alert('📌 Annotations overlay:\n\n✓ Green markers = Significant responses (CI excludes 0)\n⚠️ Yellow markers = Near-threshold responses\n✗ Red markers = Non-significant responses\n\n(Feature in development - annotations will appear on next update)');
+      }
+    }
+    
+    // Chart help is now always visible above charts
+    
+    // Toggle chart legend
+    function toggleChartLegend(iframeId) {
+      alert('Legend controls are managed within the interactive charts. Switch to "Interactive" mode to access legend controls.');
+    }
+    
+    // Load comparison
+    function loadComparison() {
+      const subjectA = document.getElementById('compareA').value;
+      const subjectB = document.getElementById('compareB').value;
+      
+      if (subjectA === subjectB) {
+        alert('⚠️ Please select two different subjects to compare.');
+        return;
+      }
+      
+      alert(`🔬 Loading comparison:\n\nSubject A: ${subjectA}\nSubject B: ${subjectB}\n\nComparison data is available in:\nanalysis/plots/${subjectA}/\nanalysis/plots/${subjectB}/\n\n(Side-by-side view coming in next update)`);
+    }
+    
+    // Filter functionality
+    document.getElementById('subjectFilter').addEventListener('change', function() {
+      console.log('Filter by subject:', this.value);
+    });
+    
+    document.getElementById('freqFilter').addEventListener('change', function() {
+      console.log('Filter by frequency:', this.value);
+    });
+    
+    document.getElementById('ampFilter').addEventListener('change', function() {
+      console.log('Filter by amplitude:', this.value);
+    });
+  </script>
+</body>
+</html>

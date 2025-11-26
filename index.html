@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fish Auditory EEG Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Encode+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-4 focus:bg-white focus:text-slate-900">Skip to main content</a>
+    <nav class="menu-bar bg-white border-b border-slate-200 px-6 py-4 flex gap-6" role="navigation" aria-label="Main navigation">
+      <a href="index.html" class="font-semibold" style="color:#32006e">Home</a>
+      <a href="overview.html" class="text-slate-700">Overview</a>
+      <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
+      <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
+      <a href="team.html" class="text-slate-700">Team & Course</a>
+      <a href="repo.html" class="text-slate-700">Repository Info</a>
+    </nav>
+    <main id="main-content" class="max-w-2xl mx-auto py-16 px-4 text-center">
+      <!-- Dashboard Search Bar -->
+      <div class="mb-8">
+        <form id="dashboardSearchForm" class="flex items-center gap-2 justify-center">
+          <input type="text" id="dashboardSearchInput" class="flex-1 border border-slate-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#32006e]" placeholder="Search the dashboard..." aria-label="Search dashboard">
+          <button type="submit" class="px-4 py-2 rounded bg-[#32006e] text-white font-semibold hover:bg-[#22004a] transition">Search</button>
+        </form>
+        <div id="dashboardSearchResults" class="mt-2 text-sm text-slate-700"></div>
+      </div>
+      <h1 class="text-3xl font-bold mb-4" style="color:#32006e">Welcome to the Fish Auditory EEG Dashboard</h1>
+      <p class="text-lg text-slate-700 mb-4">Explore our project sections using the menu above.</p>
+      
+      <!-- Guided Tour Button -->
+      <button onclick="startGuidedTour()" class="mb-8 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
+        🎓 Start Guided Tour (Recommended for First-Time Visitors)
+      </button>
+      <div class="grid gap-6 md:grid-cols-2 mt-8">
+        <a href="overview.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+          <h2 class="text-xl font-semibold mb-2" style="color:#32006e">Project Overview</h2>
+          <p class="text-slate-600">Background, goals, and key parameters of the auditory EEG analysis pipeline.</p>
+        </a>
+        <a href="pipeline.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+          <h2 class="text-xl font-semibold mb-2" style="color:#32006e">Analysis Pipeline</h2>
+          <p class="text-slate-600">Step-by-step breakdown of the data processing and analysis workflow.</p>
+        </a>
+        <a href="visuals.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+          <h2 class="text-xl font-semibold mb-2" style="color:#32006e">Visual Summaries</h2>
+          <p class="text-slate-600">Interactive charts and summary statistics from the analysis results.</p>
+        </a>
+        <a href="team.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+          <h2 class="text-xl font-semibold mb-2" style="color:#32006e">Team & Course</h2>
+          <p class="text-slate-600">Meet the project team and see course information and acknowledgments.</p>
+        </a>
+      </div>
+      <div class="mt-10">
+        <img src="ratfish_animation.gif" alt="Spotted ratfish animation" class="mx-auto h-32 w-32 object-contain mb-4" />
+        <p class="text-sm text-slate-500">&copy; 2025 Fish Auditory EEG Dashboard. Data citation: Hunsaker, A., Brown, A., Sisneros, J., James, M., Tritt, C., Sonthalia, Y. (2025). Fish Auditory EEG Analysis Dataset. University of Washington. <a href="https://github.com/aoih-uw/fish_eeg" class="underline" style="color:#32006e" target="_blank" rel="noopener">https://github.com/aoih-uw/fish_eeg</a></p>
+        <p class="text-sm text-slate-700 mt-2">Thank you to the Spotted Ratfish</p>
+      </div>
+    </main>
+
+    <script>
+      // Dashboard search bar logic
+      const dashboardLinks = [
+        { text: 'Project Overview', url: 'overview.html' },
+        { text: 'Analysis Pipeline', url: 'pipeline.html' },
+        { text: 'Visual Summaries', url: 'visuals.html' },
+        { text: 'Team & Course', url: 'team.html' },
+        { text: 'Repository Info', url: 'repo.html' },
+        // Add more keywords/sections as needed
+      ];
+      const searchForm = document.getElementById('dashboardSearchForm');
+      if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const query = document.getElementById('dashboardSearchInput').value.trim().toLowerCase();
+          const resultsDiv = document.getElementById('dashboardSearchResults');
+          if (!query) {
+            resultsDiv.textContent = '';
+            return;
+          }
+          const results = dashboardLinks.filter(link => link.text.toLowerCase().includes(query));
+          if (results.length === 0) {
+            resultsDiv.innerHTML = '<span class="text-slate-500">No matches found.</span>';
+          } else {
+            resultsDiv.innerHTML = results.map(link => `<a href="${link.url}" class="underline text-[#32006e] mr-4">${link.text}</a>`).join(' ');
+          }
+        });
+      }
+        // ...existing code for tab switching, subject selection, etc...
+      
+      // Guided Tour functionality
+      let tourStep = 0;
+      const tourSteps = [
+        {
+          title: "Welcome to the Fish Auditory EEG Dashboard!",
+          content: "This interactive tutorial will guide you through our research on spotted ratfish hearing. Let's explore how we measure and analyze auditory responses in these fascinating fish.",
+          action: null
+        },
+        {
+          title: "Step 1: Understanding the Research",
+          content: "Start with the Overview page to learn about our methodology, key parameters, and the species we study. You'll also find a glossary of technical terms.",
+          action: () => { highlightNavLink('overview.html'); }
+        },
+        {
+          title: "Step 2: The Analysis Process",
+          content: "The Analysis Pipeline page shows our 9-step data processing workflow with code examples. Each step is explained in simple terms with technical details available.",
+          action: () => { highlightNavLink('pipeline.html'); }
+        },
+        {
+          title: "Step 3: Explore the Data",
+          content: "Visual Summaries contains interactive charts showing our results. You can filter by subject, listen to the auditory stimulus, and export data for your own use.",
+          action: () => { highlightNavLink('visuals.html'); }
+        },
+        {
+          title: "Step 4: Meet the Team",
+          content: "Learn about the researchers behind this work and the course that supported this project.",
+          action: () => { highlightNavLink('team.html'); }
+        },
+        {
+          title: "Step 5: Dive Deeper",
+          content: "The Repository Info page has downloadable resources, citation information, and details about our software engineering approach. Perfect for researchers wanting to build on our work!",
+          action: () => { highlightNavLink('repo.html'); }
+        },
+        {
+          title: "Tour Complete!",
+          content: "You're now ready to explore on your own. Use the search bar above to quickly find specific topics, or click any section in the menu to dive in. Happy exploring! 🐟",
+          action: () => { clearHighlights(); }
+        }
+      ];
+      
+      function startGuidedTour() {
+        tourStep = 0;
+        showTourStep();
+      }
+      
+      function showTourStep() {
+        const step = tourSteps[tourStep];
+        const modal = document.createElement('div');
+        modal.id = 'tourModal';
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+        modal.innerHTML = `
+          <div class="bg-white rounded-lg shadow-2xl max-w-md w-full p-6 animate-fade-in">
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-xl font-bold" style="color:#32006e">${step.title}</h3>
+              <button onclick="closeTour()" class="text-slate-400 hover:text-slate-600 text-2xl leading-none">&times;</button>
+            </div>
+            <p class="text-slate-700 mb-6">${step.content}</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-slate-500">Step ${tourStep + 1} of ${tourSteps.length}</span>
+              <div class="flex gap-2">
+                ${tourStep > 0 ? '<button onclick="previousTourStep()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded hover:bg-slate-300 transition">← Back</button>' : ''}
+                ${tourStep < tourSteps.length - 1 ? '<button onclick="nextTourStep()" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition">Next →</button>' : '<button onclick="closeTour()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">Finish ✓</button>'}
+              </div>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        if (step.action) step.action();
+      }
+      
+      function nextTourStep() {
+        tourStep++;
+        closeTourModal();
+        showTourStep();
+      }
+      
+      function previousTourStep() {
+        tourStep--;
+        closeTourModal();
+        showTourStep();
+      }
+      
+      function closeTour() {
+        closeTourModal();
+        clearHighlights();
+      }
+      
+      function closeTourModal() {
+        const modal = document.getElementById('tourModal');
+        if (modal) modal.remove();
+      }
+      
+      function highlightNavLink(page) {
+        clearHighlights();
+        const links = document.querySelectorAll('nav a');
+        links.forEach(link => {
+          if (link.getAttribute('href') === page) {
+            link.style.backgroundColor = '#fef3c7';
+            link.style.padding = '8px 12px';
+            link.style.borderRadius = '6px';
+            link.style.transition = 'all 0.3s';
+          }
+        });
+      }
+      
+      function clearHighlights() {
+        const links = document.querySelectorAll('nav a');
+        links.forEach(link => {
+          link.style.backgroundColor = '';
+          link.style.padding = '';
+          link.style.borderRadius = '';
+        });
+      }
+    </script>
+    <style>
+    /* Print-friendly adjustments */
+    @media print {
+      #themeToggle, #pipelineToggle, .tab-trigger, header, footer, #subjectSelect, .rounded-lg.border.border-slate-200.bg-white.p-3.flex.flex-col, .text-xs.text-slate-500.mb-4 { display: none !important; }
+      #visualSummaryContainer { margin: 0 !important; padding: 0 !important; box-shadow: none !important; background: white !important; }
+      iframe { height: 380px !important; }
+      body { background: white !important; }
+    }
+    </style>
+</body>
+</html>
