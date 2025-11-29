@@ -6,6 +6,11 @@ from constants import PERIOD_KEYS, METRIC_KEYS, SUBMETRIC_KEYS
 #### Dataclass for EEGDataset ####
 @dataclass
 class EEGDataset:
+    """
+    Central dataset class for the fish-eeg project. Stores all initial data
+    in this object and analysis of data appends intermediate data to this object.
+    """
+
     data: np.ndarray
     freq_amp_table: np.ndarray
     latency: int
@@ -17,7 +22,19 @@ class EEGDataset:
 
 #### I/O for data ####
 def load_data(path: str, subjid: str) -> EEGDataset:
-    ### Question from yash: Is this type of data always stored in this same filename format?
+    """
+    Loads data from the given path and returns an EEGDataset object.
+
+    Args:
+        path: The path to the data.
+        subjid: The subject ID.
+    Returns:
+        An EEGDataset object.
+
+    Example:
+        load_data(path, subjid) -> eegdataset
+    """
+
     loaded = np.load(f"{path}/{subjid}_data.npz", allow_pickle=True)
     data = loaded["data"]
     freq_amp_table = loaded["freq_amp_table"]
@@ -38,6 +55,7 @@ def load_data(path: str, subjid: str) -> EEGDataset:
     )
 
 
+#### Random helpers ####
 def subset_stimulus(data, myfreq, myamp):
     """
     Subset the data for a given frequency and amplitude.
@@ -56,3 +74,31 @@ def subset_stimulus(data, myfreq, myamp):
     current_cond = data.item()[specific_key]
 
     return current_cond
+
+
+def separate_periods(data, period_len, period_keys, channel_keys, latency):
+    separated_data = {"prestim": {}, "stimresp": {}}
+
+    for period in period_keys:
+        for channel in channel_keys:
+            if period == "prestim":
+                separated_data[period][channel] = data[channel][
+                    :, latency : latency + period_len
+                ]
+            elif period == "stimresp":
+                separated_data[period][channel] = data[channel][
+                    :, latency + period_len : latency + period_len * 2
+                ]
+
+    return separated_data
+
+
+def collapse_channels(data, period_keys, channel_keys):
+    collapsed_dict = {"prestim": None, "stimresp": None}
+    for period in period_keys:
+        tmp = []
+        for channel in channel_keys:
+            tmp.append(data[period][channel])
+        collapsed_dict[period] = np.vstack(tmp)
+
+    return collapsed_dict
