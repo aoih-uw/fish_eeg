@@ -1,7 +1,7 @@
 import numpy as np
-from utils import get_channels
-from data import EEGDataset
-from constants import sampling_frequency
+from fish_eeg.utils import get_channels
+from fish_eeg.data import EEGDataset
+from fish_eeg.constants import sampling_frequency
 
 
 class Reconstructor:
