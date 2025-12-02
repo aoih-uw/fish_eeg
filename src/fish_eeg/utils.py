@@ -1,5 +1,5 @@
 import numpy as np
-from data import EEGDataset
+from fish_eeg.data import EEGDataset
 
 
 def get_channels(eegdataset: EEGDataset) -> list[str]:
