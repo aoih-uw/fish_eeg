@@ -9,11 +9,10 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "s
 from fish_eeg.preprocess import Preprocessor
 
 
-"""
-Smoke Test
-Created: Jeffrey Jackson
-Checked: ...
-"""
+# Smoke Test
+# Created: Jeffrey Jackson
+# Checked: Michael James
+
 def test_filter_high_rms_smoke(FakeDataset, small_clean_dict):
     """Smoke test: runs without raising an exception."""
     # Preprocessor expects eegdataset.data to be a numpy object array containing a dict of coords
@@ -30,11 +29,10 @@ def test_filter_high_rms_smoke(FakeDataset, small_clean_dict):
     assert len(output) > 0
 
 
-"""
-One Shot Test
-Created: Jeffrey Jackson
-Checked: ...
-"""
+# One Shot Test
+# Created: Jeffrey Jackson
+# Checked: Michael James
+
 def test_filter_high_rms_one_trial_removed(FakeDataset, fake_channels):
     """
     Create a dataset where ONE channel has one extremely high RMS row.
@@ -54,11 +52,10 @@ def test_filter_high_rms_one_trial_removed(FakeDataset, fake_channels):
     assert result["ch1"].shape[0] == 2
 
 
-"""
-Edge Test
-Created: Jeffrey Jackson
-Checked: ...
-"""
+# Edge Test
+# Created: Jeffrey Jackson
+# Checked: Michael James
+
 def test_filter_high_rms_edge_all_removed(FakeDataset, fake_channels):
     """
     All rows exceed the RMS threshold → everything should be removed.
@@ -77,11 +74,11 @@ def test_filter_high_rms_edge_all_removed(FakeDataset, fake_channels):
         assert result[ch].shape[0] == 0
 
 
-"""
-Pattern Test
-Created: Jeffrey Jackson
-Checked: ...
-"""
+
+# Pattern Test
+# Created: Jeffrey Jackson
+# Checked: Michael James
+
 def test_filter_high_rms_pattern_known(FakeDataset):
     """
     Feed a precise known-pattern dataset where RMS is predictable.
