@@ -44,6 +44,6 @@ jobs:
       - name: Install
         run: pip install --no-deps .
 
-      # - name: Run Tests
-      #   run: |
-      #     python -m pytest --cov=fisheeg --cov-report=term-missing
+      - name: Run Tests
+        run: |
+          python -m pytest --cov=fisheeg --cov-report=term-missing
