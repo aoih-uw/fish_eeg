@@ -6,6 +6,10 @@ from fish_eeg.filters import Filter
 # ----------------------------------------------------
 # 1. SMOKE TEST
 # ----------------------------------------------------
+# tests/test_filter.py
+import numpy as np
+from fish_eeg.filters import Filter
+
 def test_smoke_bandpass_runs(fakedataset, fake_channels):
     """
     author: Michael James
@@ -13,94 +17,91 @@ def test_smoke_bandpass_runs(fakedataset, fake_channels):
     category: smoke 
     Ensure bandpass() runs with no errors.
     """
-    dictionary = {
-            "ch1": np.random.randn(6, 3),
-            "ch1_total_trials": 6,
-            "ch2": np.random.randn(4, 3),
-            "ch2_total_trials": 4,
-            "ch3": np.random.randn(10, 3),
-            "ch3_total_trials": 10,
-            "ch4": np.random.randn(4, 3),
-            "ch4_total_trials": 4,
-        }
 
-    ds = fakedataset(None)
-    rms_subsampled_data = np.array(dictionary, dtype=object)
-    f = Filter(ds)
+    # 1. Initialize Filter with the EEGDataset fixture
+    f = Filter(fakedataset)
 
-    out = f.bandpass(rms_subsampled_data, low=1, high=30, fs=100)
+    # 2. Extract the channel dictionary for testing bandpass
+    channel_dict = fakedataset.rms_subsampled_data.item()["coordA"]
 
+    # 3. Call bandpass
+    out = f.bandpass(channel_dict, low=1, high=30, fs=100)
+
+    # 4. Assertions
     assert isinstance(out, dict)
     assert set(out.keys()) == set(fake_channels)
-    return
+
+
 
 
 # ----------------------------------------------------
 # 2. ONE-SHOT TEST
 # ----------------------------------------------------
-def test_one_shot_constant_signal(FakeDataset, fake_channels):
+def test_one_shot_constant_signal(fakedataset, fake_channels):
     """
     author: Michael James
     reviewer: 
     category: one shot test
     A constant signal should produce ~zero through a bandpass filter.
     """
-    const_signal = np.ones((1, 200))
-    small_dict = {ch: const_signal for ch in fake_channels}
 
-    ds = FakeDataset()
-    ds.rms_subsampled_data = np.array(ds.data, dtype=object)
+    # Create constant signal (long enough for filtfilt)
+    n_samples = 100
+    const_signal = np.ones((1, n_samples))
+    channel_dict = {ch: const_signal for ch in fake_channels}
+
+    # Use fixture EEGDataset
+    ds = fakedataset
     f = Filter(ds)
 
-    out = f.bandpass(small_dict, low=5, high=15, fs=100)
+    # Apply bandpass (5-15 Hz)
+    out = f.bandpass(channel_dict, low=5, high=15, fs=100, order=4)
     filtered = out[fake_channels[0]]
 
+    # For a constant input, bandpass ~ zero
     assert np.allclose(filtered, 0, atol=1e-2)
-    return
 
 
 # ----------------------------------------------------
 # 3. EDGE TEST
 # ----------------------------------------------------
-def test_edge_missing_channel_pass_through(FakeDataset):
+def test_edge_missing_channel_pass_through(fakedataset):
     """
     author: Michael James
     reviewer: 
     category: edge test
     If a channel is NOT listed in get_channels(), bandpass must return it unchanged.
     """
+
     unknown_key = "not_a_channel"
-    d = {unknown_key: np.array([[1, 2, 3]])}
+    # small array with enough samples
+    d = {unknown_key: np.random.randn(1, 50)}
 
-    ds = FakeDataset(data=small_clean_dict(fake_channels))
-    ds.rms_subsampled_data = np.array(ds.data, dtype=object)
-    f = Filter(ds)
-
+    f = Filter(fakedataset)
     out = f.bandpass(d, low=1, high=30, fs=100)
 
+    # Channel not in get_channels() should remain unchanged
     assert np.array_equal(out[unknown_key], d[unknown_key])
-    return
 
 
 # ----------------------------------------------------
 # 4. PATTERN TEST
 # ----------------------------------------------------
-def test_pattern_pipeline_structure(FakeDataset, small_clean_dict):
+def test_pattern_pipeline_structure(fakedataset):
     """
     author: Michael James
     reviewer: 
     category: pattern test
     pipeline() should preserve coordinates and produce a dict-of-dicts.
     """
-    ds = FakeDataset()
-    ds.rms_subsampled_data = np.array(ds.data, dtype=object)
 
-    f = Filter(ds)
-    out_ds = f.pipeline(low=1, high=30, fs=100)
+    f = Filter(fakedataset)
+    out_ds = f.pipeline(low=1, high=30, fs=100, order=4)
 
+    # pipeline output should be stored in bandpass_data
     assert isinstance(out_ds.bandpass_data, np.ndarray)
 
+    # Extract dict-of-dicts
     bp_dict = out_ds.bandpass_data.item()
     assert list(bp_dict.keys()) == ["coordA"]
     assert isinstance(bp_dict["coordA"], dict)
-    return
