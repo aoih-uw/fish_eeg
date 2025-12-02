@@ -1,4 +1,7 @@
-# test_filter.py
+"""
+test_filter.py
+Makes 4 unit tests for testing the filter function in the fish_eeg module
+"""
 import numpy as np
 from fish_eeg.filters import Filter
 
@@ -13,7 +16,7 @@ from fish_eeg.filters import Filter
 def test_smoke_bandpass_runs(fakedataset, fake_channels):
     """
     author: Michael James
-    reviewer: 
+    reviewer: Jeff
     category: smoke 
     Ensure bandpass() runs with no errors.
     """
@@ -40,7 +43,7 @@ def test_smoke_bandpass_runs(fakedataset, fake_channels):
 def test_one_shot_constant_signal(fakedataset, fake_channels):
     """
     author: Michael James
-    reviewer: 
+    reviewer: Jeff
     category: one shot test
     A constant signal should produce ~zero through a bandpass filter.
     """
@@ -68,7 +71,7 @@ def test_one_shot_constant_signal(fakedataset, fake_channels):
 def test_edge_missing_channel_pass_through(fakedataset):
     """
     author: Michael James
-    reviewer: 
+    reviewer: Jeff
     category: edge test
     If a channel is NOT listed in get_channels(), bandpass must return it unchanged.
     """
@@ -90,7 +93,7 @@ def test_edge_missing_channel_pass_through(fakedataset):
 def test_pattern_pipeline_structure(fakedataset):
     """
     author: Michael James
-    reviewer: 
+    reviewer: Jeff
     category: pattern test
     pipeline() should preserve coordinates and produce a dict-of-dicts.
     """
