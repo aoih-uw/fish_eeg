@@ -3,7 +3,14 @@ test_filter.py
 Makes 4 unit tests for testing the filter function in the fish_eeg module
 """
 import numpy as np
+import sys
+import os
+
+# Add src/ to the import path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
+
 from fish_eeg.filters import Filter
+
 
 
 # ----------------------------------------------------
