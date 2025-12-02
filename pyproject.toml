@@ -2,6 +2,40 @@
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[project]
+name = "fish_eeg"
+version = "0.0.1"
+description = "The Fish EEG project package"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Michael James", email = "mkj29@uw.edu" },
+]
+license = { file = "LICENSE" }
+
+# Package dependencies
+dependencies = [
+    "numpy",
+    "pandas",
+    "altair",
+    "scipy",
+    "matplotlib",
+    "scikit-learn",
+    "PyWavelets",
+    "h5py",
+]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+# ----------------------------------------------------------------------
+[tool.hatch.build.targets.wheel]
+packages = ["src/fish_eeg"]
+
+# ----------------------------------------------------------------------
 [tool.hatch.build]
 include = [
     "src/fish_eeg",
@@ -12,28 +46,18 @@ exclude = [
     "tests",
 ]
 
-[project]
-name = "fish_eeg"
-authors = [
-    { name = "Michael James", email = "mkj29@uw.edu" },
-]
-version = "0.0.0"
-description = "The Fish EEG project package"
-readme = "README.md"
-requires-python = ">=3.10"
+# ----------------------------------------------------------------------
+
+[tool.hatch.envs.dev]
 dependencies = [
-	"numpy",
-    "pandas",
-    "altair",
-    "scipy",
-    "matplotlib",
-    "scikit-learn",
-    "PyWavelets",
-    "h5py"
-] 
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+    "pytest",
+    "pytest-cov",
+    "black",
+    "isort",
+    "mypy",
 ]
-license = {file = "LICENSE"}
+
+[tool.hatch.envs.dev.scripts]
+test = "pytest -q"
+lint = "black src tests && isort src tests"
+
