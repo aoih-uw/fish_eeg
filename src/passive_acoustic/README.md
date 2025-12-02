@@ -1,6 +1,6 @@
 # Read me for the loading of passive acoustic data. 
 
-This folder allows the user to load in their own passive acoustic data via NOAA's google cloud storage. 
+This folder allows the user to load in their own passive acoustic data via NOAA's google cloud storage. This provides an auxillary real world dataset to put audiograms into context. 
 
 For the setup:
 **gsutilinit.bash** - Adds the google cloud service utility to the user's CLI. This is the API used to pull down out acoustic dataset for the Puget Sound. 
