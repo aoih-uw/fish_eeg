@@ -60,4 +60,3 @@ dependencies = [
 [tool.hatch.envs.dev.scripts]
 test = "pytest -q"
 lint = "black src tests && isort src tests"
-

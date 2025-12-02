@@ -12,7 +12,7 @@ def fake_channels(monkeypatch):
 
 
 @pytest.fixture
-def FakeDataset():
+def fakedataset():
     """Minimal EEGDataset-like stub."""
 
     class _FakeDS:
