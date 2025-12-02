@@ -22,7 +22,7 @@ def test_smoke_bandpass_runs(fakedataset, fake_channels):
     f = Filter(fakedataset)
 
     # 2. Extract the channel dictionary for testing bandpass
-    channel_dict = fakedataset.rms_subsampled_data.item()["coordA"]
+    channel_dict = fakedataset.rms_subsampled_data.item()["data"]
 
     # 3. Call bandpass
     out = f.bandpass(channel_dict, low=1, high=30, fs=100)
@@ -50,7 +50,7 @@ def test_one_shot_constant_signal(fakedataset, fake_channels):
     const_signal = np.ones((1, n_samples))
     channel_dict = {ch: const_signal for ch in fake_channels}
 
-    # Use fixture EEGDataset
+    # Use fake dataset
     ds = fakedataset
     f = Filter(ds)
 
@@ -103,5 +103,5 @@ def test_pattern_pipeline_structure(fakedataset):
 
     # Extract dict-of-dicts
     bp_dict = out_ds.bandpass_data.item()
-    assert list(bp_dict.keys()) == ["coordA"]
-    assert isinstance(bp_dict["coordA"], dict)
+    assert list(bp_dict.keys()) == ["data"]
+    assert isinstance(bp_dict["data"], dict)

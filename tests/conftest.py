@@ -28,9 +28,7 @@ def fakedataset(fake_channels):
         data_dict[ch] = np.random.randn(2, 50)
     
     # Wrap in 0-d object array for using Filter
-    fakedata = np.array({"coordA": data_dict}, dtype=object)
-
-    # ADD OTHER DATA HERE
+    fakedata = np.array({"data": data_dict}, dtype=object)
 
     # Minimal freq_amp_table (please change if testing this aspect)
     fakefreq_amp_table = np.random.randn(2, 5)
@@ -48,6 +46,8 @@ def fakedataset(fake_channels):
 
     # Say the rms subsample is just data (no significant change to testing methods)
     ds.rms_subsampled_data = fakedata
+
+    # ADD ANY OTHER STRUCTURAL COMPONENTS HERE
 
     return ds
 
