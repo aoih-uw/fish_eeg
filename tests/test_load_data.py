@@ -1,7 +1,7 @@
 import numpy as np
 from dataclasses import dataclass
 from fish_eeg.data import load_data
-
+import os
 
 # 1. Smoke test
 # Author: Aoi Hunsaker
@@ -27,8 +27,6 @@ print(f"One shot test: {EEGDataset.data.shape == (4,100)}") # Old format of data
 # Purpose: Properly find empty files
 # Author: Aoi Hunsaker
 # Reviewer:
-import numpy as np
-import os
 # Create empty dataset
 os.makedirs("test_data",exist_ok=True)
 np.savez("test_data/empty_data.npz",
