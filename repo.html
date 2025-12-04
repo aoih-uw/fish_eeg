@@ -89,23 +89,21 @@
     <section class="mb-8">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Project Structure</h2>
       <pre class="bg-slate-100 border border-slate-200 rounded p-4 text-xs overflow-x-auto mb-2">fish_eeg/
-├── src/                    # Source code for all programs
-│   ├── fish_eeg/          # Main package
-│   ├── passive_acoustic/  # Acoustic data processing
-│   └── condainit/         # Conda environment setup
-├── analysis/              # Jupyter notebooks for exploration
-│   ├── CI_csv/           # Confidence interval data
-│   ├── weights_csv/      # ICA weights data
-│   └── plots/            # Generated visualizations
-├── results/              # Final deliverables and products
-│   ├── aoi/             # Aoi's user stories and outputs
-│   ├── christopher/     # Christopher's contributions
-│   ├── mike/            # Mike's contributions
-│   ├── jeff/            # Jeff's contributions
-│   └── yash/            # Yash's contributions
-├── docs/                 # Documentation PDFs
-├── data/                 # Data storage (gitignored)
-├── deps/                 # External dependencies (gitignored)
+.
+├── docs
+├── results
+│   ├── aoi
+│   ├── christopher
+│   ├── jeff
+│   ├── mike
+│   └── yash
+├── src
+│   └── fish_eeg
+├── tests
+│   └── __pycache__
+└── tools
+    ├── analysis
+    └── passive_acoustic
 ├── *.html               # Web dashboard pages
 ├── style.css            # Shared stylesheet
 ├── environment.yml      # Conda environment specification
@@ -114,7 +112,7 @@
       <p class="text-slate-700 text-sm mt-2"><strong>Key Directories:</strong></p>
       <ul class="list-disc ml-6 text-slate-700 text-sm space-y-1">
         <li><strong>src/</strong> - Production code with process-specific READMEs</li>
-        <li><strong>analysis/</strong> - Exploratory notebooks (not for production)</li>
+        <li><strong>tools/</strong> - Contextual tools (not for production)</li>
         <li><strong>results/</strong> - Final outputs and deliverables</li>
         <li><strong>docs/</strong> - Contextual documentation</li>
       </ul>
