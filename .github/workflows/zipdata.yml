@@ -1,19 +1,28 @@
-name: Zip Data Folders # Zips on every push so the site has updated data.
+name: Zip Data Folders # Zips on specific pushes so the site has updated data.
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    paths:
+      - 'tools/analysis/CI_csv'
+      - 'tools/analysis/plots'
+      - 'tools/analysis/weights_csv'
+  pull_request:
+    paths:
+      - 'tools/analysis/CI_csv'
+      - 'tools/analysis/plots'
+      - 'tools/analysis/weights_csv'
 
 jobs:
   zip-folders:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
 
     steps:
       # Checkout repository
       - name: Checkout repository
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
 
       # Install zip utility sudo
       - name: Install zip
@@ -40,6 +49,8 @@ jobs:
 
       # Commit and push ZIPs
       - name: Commit and push ZIP files
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
