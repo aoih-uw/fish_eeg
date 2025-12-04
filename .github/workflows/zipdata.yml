@@ -33,6 +33,9 @@ jobs:
             # Zip only the contents, not the parent folders
             cd "$folder"
             zip -r "../../../$zipname" .
+
+            # Return to base dir
+            cd ../../..
           done
 
       # Commit and push ZIPs
