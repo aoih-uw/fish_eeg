@@ -11,6 +11,8 @@ on:
       - 'tools/analysis/CI_csv'
       - 'tools/analysis/plots'
       - 'tools/analysis/weights_csv'
+  workflow_dispatch:
+      
 
 jobs:
   zip-folders:
@@ -22,7 +24,7 @@ jobs:
     steps:
       # Checkout repository
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@main
 
       # Install zip utility sudo
       - name: Install zip
@@ -50,7 +52,7 @@ jobs:
       # Commit and push ZIPs
       - name: Commit and push ZIP files
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ github.token }}
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -58,5 +60,5 @@ jobs:
           git commit -m "Auto-update ZIPs for analysis folders" || echo "No changes to commit"
 
           # Push using the GITHUB_TOKEN
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push 
 
