@@ -12,13 +12,26 @@
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-4 focus:bg-white focus:text-slate-900">Skip to main content</a>
-    <nav class="menu-bar bg-white border-b border-slate-200 px-6 py-4 flex gap-6" role="navigation" aria-label="Main navigation">
-      <a href="index.html" class="font-semibold" style="color:#32006e">Home</a>
-      <a href="overview.html" class="text-slate-700">Overview</a>
-      <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
-      <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
-      <a href="team.html" class="text-slate-700">Team & Course</a>
-      <a href="repo.html" class="text-slate-700">Repository Info</a>
+    <nav class="menu-bar bg-white border-b border-slate-200 px-6 py-4" role="navigation" aria-label="Main navigation">
+      <div class="flex items-center justify-between">
+        <div class="flex gap-6 menu-links" id="navLinks">
+          <a href="index.html" class="font-semibold" style="color:#32006e">Home</a>
+          <a href="overview.html" class="text-slate-700">Overview</a>
+          <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
+          <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
+          <a href="team.html" class="text-slate-700">Team & Course</a>
+          <a href="repo.html" class="text-slate-700">Repository Info</a>
+        </div>
+        <button id="hamburger" class="hidden md:hidden text-slate-700 text-2xl font-semibold focus:outline-none" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+      </div>
+      <div id="mobileMenu" class="hidden md:hidden flex-col gap-3 mt-4 pb-2" style="display:none;">
+        <a href="index.html" class="block text-slate-700 px-2 py-1" style="color:#32006e">Home</a>
+        <a href="overview.html" class="block text-slate-700 px-2 py-1">Overview</a>
+        <a href="pipeline.html" class="block text-slate-700 px-2 py-1">Analysis Pipeline</a>
+        <a href="visuals.html" class="block text-slate-700 px-2 py-1">Visual Summaries</a>
+        <a href="team.html" class="block text-slate-700 px-2 py-1">Team & Course</a>
+        <a href="repo.html" class="block text-slate-700 px-2 py-1">Repository Info</a>
+      </div>
     </nav>
     <main id="main-content" class="max-w-2xl mx-auto py-16 px-4 text-center">
       <!-- Dashboard Search Bar -->
@@ -202,6 +215,29 @@
           link.style.backgroundColor = '';
           link.style.padding = '';
           link.style.borderRadius = '';
+        });
+      }
+      
+      // Hamburger menu toggle
+      const hamburger = document.getElementById('hamburger');
+      const mobileMenu = document.getElementById('mobileMenu');
+      
+      if (hamburger) {
+        hamburger.addEventListener('click', function() {
+          const isOpen = mobileMenu.style.display === 'flex';
+          mobileMenu.style.display = isOpen ? 'none' : 'flex';
+          hamburger.setAttribute('aria-expanded', !isOpen);
+        });
+      }
+      
+      // Close menu when clicking on a link
+      if (mobileMenu) {
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+          link.addEventListener('click', function() {
+            mobileMenu.style.display = 'none';
+            hamburger.setAttribute('aria-expanded', false);
+          });
         });
       }
     </script>

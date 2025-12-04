@@ -145,3 +145,44 @@ select:focus {
     border-bottom: 1px solid #e2e8f0;
   }
 }
+
+/* Hamburger menu styles */
+#hamburger {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  padding: 0.5rem;
+}
+
+#hamburger:hover {
+  transform: scale(1.1);
+}
+
+#mobileMenu {
+  flex-direction: column;
+  background-color: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Show hamburger only on mobile */
+@media (max-width: 768px) {
+  #hamburger {
+    display: inline-block !important;
+  }
+  
+  #navLinks {
+    display: none;
+  }
+}
+
