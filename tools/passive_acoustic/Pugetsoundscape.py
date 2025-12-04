@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # ===== SETTINGS =====
 folders = [
     "data/PAcoustic/audio/port_townsend",
-    "data/PAcoustic/audio/orcasound_lab/rpi"
+    "data/PAcoustic/audio/orcasound_lab"
 ]
 folder_labels = ["Port Townsend", "San Juan Island"]
 audiogram_csv = "results/aoi/ratfish_auditory_thresholds.csv"
@@ -21,11 +21,10 @@ def get_psd(filename, nperseg=1024):
     nperseg = fs/5
     if data.ndim > 1:
         data = data.mean(axis=1)
-    f, psd = welch(data, fs=fs, nperseg=nperseg)
+    f, psd = welch(data, fs=fs, nperseg=nperseg) # Power Spectral density normalizes power to a / 1 Hz bin width
     df = f[1] - f[0]
-    power = psd * df
     pref = 1e-6
-    power_db = 10 * np.log10(power / pref**2)
+    power_db = 10 * np.log10(psd / pref**2)
     return f, power_db
 
 # ===== Load audiogram =====
@@ -79,7 +78,7 @@ for i, label in enumerate(folder_labels):
     plt.fill_between(f_target, mean_psd - std_psd, mean_psd + std_psd, color=colors[i], alpha=0.3, label=f"{label} ±1 std")
 
 # Audiogram (native points)
-plt.plot(freq_aud, amp_aud, 'r--o', linewidth=2, markersize=6, label="Proven Ratfish Hearing")
+plt.plot(freq_aud, amp_aud, 'r--o', linewidth=2, markersize=6, label="Ratfish Hearing Minimum Observed")
 
 plt.xlabel("Frequency (Hz)")
 plt.ylabel("SPL (dB re 1 μPa)")
@@ -88,7 +87,7 @@ plt.grid(True)
 plt.legend()
 plt.xlim([0, 500])
 plt.tight_layout()
-plt.savefig("tools/analysis/audiogram_and_Puget_Sound.png", dpi=300)
+plt.savefig("tools/analysis/plots/summary_plots/audiogram_and_Puget_Sound.png", dpi=300)
 plt.show()
 
 print("\nSaved:\n  src/analysis/audiogram_and_Puget_Sound.png")
