@@ -243,12 +243,12 @@ import altair as alt
 # - ICA weights by channel and frequency
 
 # Export to HTML and PNG
-chart.save('analysis/plots/summary_plots/95CI_all.html')
-chart.save('analysis/plots/summary_plots/95CI_all.png', scale_factor=3)
+chart.save('tools/analysis/plots/summary_plots/95CI_all.html')
+chart.save('tools/analysis/plots/summary_plots/95CI_all.png', scale_factor=3)
 
 # Export data to CSV
-ci_data.to_csv('analysis/CI_csv/{subjid}/{subjid}_{freq}Hz_{amp}dB_CI_0.csv')
-weights_data.to_csv('analysis/weights_csv/{subjid}/{subjid}_{freq}Hz_{amp}dB_weights.csv')</code></pre>
+ci_data.to_csv('tools/analysis/CI_csv/{subjid}/{subjid}_{freq}Hz_{amp}dB_CI_0.csv')
+weights_data.to_csv('tools/analysis/weights_csv/{subjid}/{subjid}_{freq}Hz_{amp}dB_weights.csv')</code></pre>
           <p class="text-xs text-slate-500 mt-2"><strong>Output:</strong> Interactive HTML plots, high-resolution PNG images, and CSV data files</p>
         </div>
       </details>
