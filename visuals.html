@@ -274,15 +274,15 @@
     
     // Export chart data
     function exportChartData() {
-      alert('📥 Downloading chart data as CSV...\n\nData files are available in:\n- tools/analysis/CI_csv/ (confidence intervals)\n- tools/analysis/weights_csv/ (ICA weights)\n\nClick OK to open the download folder.');
+      alert('📥 Downloading chart data as CSV...\n\nData files are available in:\n- downloads/CI_csv/ (confidence intervals)\n- downloads/weights_csv/ (ICA weights)\n\nClick OK to open the download folder.');
       window.open('tools_analysis_CI_csv.zip', '_blank');
       window.open('tools_analysis_weights_csv.zip', '_blank');
     }
     
     // Download chart image
     function downloadChartImage() {
-      alert('📸 High-resolution PNG images are available in:\n\ntools/analysis/plots/summary_plots/\n\nFiles:\n- 95CI_all.png\n- 95CI_median.png\n- ICAweights.png\n\nClick OK to open the folder.');
-      window.open('tools/analysis/plots/summary_plots/', '_blank');
+      alert('📸 High-resolution PNG images are available in:\n\ndownloads/plots/summary_plots/\n\nFiles:\n- 95CI_all.png\n- 95CI_median.png\n- ICAweights.png\n\nClick OK to open the folder.');
+      window.open('downloads/plots/summary_plots/', '_blank');
     }
     
     // Toggle annotations
@@ -313,7 +313,7 @@
         return;
       }
       
-      alert(`🔬 Loading comparison:\n\nSubject A: ${subjectA}\nSubject B: ${subjectB}\n\nComparison data is available in:\ntools/analysis/plots/${subjectA}/\ntools/analysis/plots/${subjectB}/\n\n(Side-by-side view coming in next update)`);
+      alert(`🔬 Loading comparison:\n\nSubject A: ${subjectA}\nSubject B: ${subjectB}\n\nComparison data is available in:\ndownloads/plots/${subjectA}/\ndownloads/plots/${subjectB}/\n\n(Side-by-side view coming in next update)`);
     }
     
     // Filter functionality
