@@ -1,0 +1,39 @@
+name: Zip Data Folders # Zips on every push so the site has updated data. 
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  zip-folders:
+    runs-on: ubuntu-latest
+
+    steps:
+        # Checkout Main
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # List of all the folders to zip
+      - name: Set folders
+        run: |
+          echo "FOLDERS=('tools/analysis/CI_csv' 'tools/analysis/weights_csv' 'tools/analysis/plots')" >> $GITHUB_ENV
+
+      # Zip folders
+      - name: Zip folders
+        run: |
+          for folder in "${FOLDERS[@]}"; do
+            zipname="${folder//\//_}.zip"  # convert path to zip name
+            echo "Zipping $folder -> $zipname"
+            zip -r "$zipname" "$folder"
+          done
+
+      # commit and push zips
+      - name: Commit ZIP files
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add *.zip
+          git commit -m "Auto-update ZIPs for analysis folders" || echo "No changes to commit"
+          git push
