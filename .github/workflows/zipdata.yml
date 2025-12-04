@@ -13,20 +13,17 @@ jobs:
     steps:
       # Checkout repository
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@main
 
       # Install zip utility sudo
       - name: Install zip
         run: sudo apt-get update && sudo apt-get install -y zip
 
-      # Define folders to zip
-      - name: Set folders
-        run: |
-          echo "FOLDERS=('tools/analysis/CI_csv' 'tools/analysis/weights_csv' 'tools/analysis/plots')" >> $GITHUB_ENV
-
       # Zip folders (contents only) into downloads/
       - name: Zip folders
         run: |
+          FOLDERS=('tools/analysis/CI_csv' 'tools/analysis/weights_csv' 'tools/analysis/plots')
+
           mkdir -p downloads
           for folder in "${FOLDERS[@]}"; do
             folder_name=$(basename "$folder")
