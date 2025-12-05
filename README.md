@@ -22,7 +22,9 @@ University of Washington
 
 Civil and Environmental Engineering - PhD Student  - adv. Jim Thomson; Kristin Zeiden
 
-[Environmental Fluid Mechanics Group](http://depts.washington.edu/uwefm/wordpress/)
+[SWIFT Lab](https://www.apl.washington.edu/project/project.php?id=swift)
+
+[Environmental Fluid Mechanics Group](http://depts.washington.edu/uwefm/wordpress/home/people/)
 
 [mkj29@uw.edu](mailto:mkj29@uw.edu)
 
@@ -46,11 +48,7 @@ Included in a single stimulus combination dictionary are the following:
 
 ### src 
 "source code" 
-Contains all code for running programs. Each subdir represents a different process and contains a README for functions specific to that process. 
-
-### deps
-"dependencies" (.gitignored)
-Storage location for auxillary programs that are not contained within conda or python. 
+Contains the fish_eeg python package with tools to be used specifically for this test analysis. Prior to using, please initialize anaconda environment using "condainit.bash" (see below) and then install the package using "pip install ." while in the home directory of "fish eeg". To download Anaconda, please visit [their distrobution]("https://github.com/conda-forge/miniforge").
 
 ### data 
 "data" (.gitignored)
@@ -60,16 +58,22 @@ Location for users to store their data used in this repo.
 "documentation"
 Location of pdfs and other documents which provide contextual information to the repository. 
 
-### analysis
-"analysis"
-Location of jupyter notebooks which explore different analysis methods (not to be used in production)
+### tools
+"tools"
+Location of different analysis methods and auxillary scripts that serve as a log of analysis development as well as contextual support scripts for ratfish auditory analysis. 
 
-## results
-Final location of src products and project deliverables
+### tests
+"tests"
+Location of the tests used on the fish eeg python package. In [github actions]("https://github.com/aoih-uw/fish_eeg/actions") you can whether or not each test has passed for a given push to the repo. 
 
-# Initializing anaconda environment
+### results
+Final location of src products and project deliverables.
 
-For each type of script in this repo that is a python script, there are different modules that need to be installed. This can be done through anaconda or via "PIP". We tend to opt for anaconda because the modules can be stored in an "environment", where each conda environment has the right modules and versions for the job. In this folder we have two files:
+## Initializing anaconda environment
 
-**environment.yml** - lists out the modules in the conda environment which will cover all installed modules needed for **all** python scripts in this repo. 
-**condainit.bash** - this bash file contains the commands to create and select this environment from the CLI. Prior to running any code, the user should make sure to run this script in order to have the right dependencies to run the rest of the scripts. 
+For each type of script in this repo that is a python script, there are different modules that need to be installed. This can be done through anaconda or via "PIP". We tend to opt for anaconda because the modules can be stored in an "environment", where each conda environment has the right modules and versions for the job. As a tertiary environment, we make our conda environment initially to add onto while building the process. For this functionality we have 2 files:
+
+**environment.yml** - lists out the modules in the conda environment which will cover all installed modules needed for python scripts excluding the python package in this repo. 
+**condainit.bash** - this bash file contains the commands to create and select this environment from the command line. Prior to running any code, the user should make sure to run this script in order to have the right dependencies to run the rest of the scripts. 
+
+**To initialize your environment, in a bash terminal (Linux) with the fisheeg directory selected, please run "source condainit.bash"**
