@@ -13,11 +13,11 @@ from fish_eeg.preprocess import Preprocessor
 # Created: Jeffrey Jackson
 # Checked: Michael James
 
-def test_filter_high_rms_smoke(FakeDataset, small_clean_dict):
+def test_filter_high_rms_smoke(fake_dataset, small_clean_dict):
     """Smoke test: runs without raising an exception."""
     # Preprocessor expects eegdataset.data to be a numpy object array containing a dict of coords
     wrapped_data = np.array({"coord1": small_clean_dict}, dtype=object)
-    ds = FakeDataset(wrapped_data)
+    ds = fake_dataset(wrapped_data)
 
     pre = Preprocessor(ds)
 
@@ -33,7 +33,7 @@ def test_filter_high_rms_smoke(FakeDataset, small_clean_dict):
 # Created: Jeffrey Jackson
 # Checked: Michael James
 
-def test_filter_high_rms_one_trial_removed(FakeDataset, fake_channels):
+def test_filter_high_rms_one_trial_removed(fake_dataset, fake_channels):
     """
     Create a dataset where ONE channel has one extremely high RMS row.
     Check that exactly one row is removed.
@@ -42,7 +42,7 @@ def test_filter_high_rms_one_trial_removed(FakeDataset, fake_channels):
     clean["ch1"][1] *= 10000  # Giant outlier
 
     wrapped_data = np.array({"coord1": clean}, dtype=object)
-    ds = FakeDataset(wrapped_data)
+    ds = fake_dataset(wrapped_data)
 
     pre = Preprocessor(ds)
 
@@ -56,14 +56,14 @@ def test_filter_high_rms_one_trial_removed(FakeDataset, fake_channels):
 # Created: Jeffrey Jackson
 # Checked: Michael James
 
-def test_filter_high_rms_edge_all_removed(FakeDataset, fake_channels):
+def test_filter_high_rms_edge_all_removed(fake_dataset, fake_channels):
     """
     All rows exceed the RMS threshold → everything should be removed.
     """
     high_noise = {ch: np.ones((4, 5)) * 9999 for ch in fake_channels}
 
     wrapped_data = np.array({"coord1": high_noise}, dtype=object)
-    ds = FakeDataset(wrapped_data)
+    ds = fake_dataset(wrapped_data)
 
     pre = Preprocessor(ds)
 
@@ -79,7 +79,7 @@ def test_filter_high_rms_edge_all_removed(FakeDataset, fake_channels):
 # Created: Jeffrey Jackson
 # Checked: Michael James
 
-def test_filter_high_rms_pattern_known(FakeDataset):
+def test_filter_high_rms_pattern_known(fake_dataset):
     """
     Feed a precise known-pattern dataset where RMS is predictable.
     Only known rows should be removed.
@@ -93,7 +93,7 @@ def test_filter_high_rms_pattern_known(FakeDataset):
     }
 
     wrapped_data = np.array({"coord1": data}, dtype=object)
-    ds = FakeDataset(wrapped_data)
+    ds = fake_dataset(wrapped_data)
 
     pre = Preprocessor(ds)
 

@@ -20,7 +20,7 @@ from fish_eeg.filters import Filter
 import numpy as np
 from fish_eeg.filters import Filter
 
-def test_smoke_bandpass_runs(fakedataset, fake_channels):
+def test_smoke_bandpass_runs(fake_dataset, fake_channels):
     """
     author: Michael James
     reviewer: Jeff
@@ -29,10 +29,10 @@ def test_smoke_bandpass_runs(fakedataset, fake_channels):
     """
 
     # 1. Initialize Filter with the EEGDataset fixture
-    f = Filter(fakedataset)
+    f = Filter(fake_dataset())
 
     # 2. Extract the channel dictionary for testing bandpass
-    channel_dict = fakedataset.rms_subsampled_data.item()["data"]
+    channel_dict = fake_dataset().rms_subsampled_data.item()["data"]
 
     # 3. Call bandpass
     out = f.bandpass(channel_dict, low=1, high=30, fs=100)
@@ -47,7 +47,7 @@ def test_smoke_bandpass_runs(fakedataset, fake_channels):
 # ----------------------------------------------------
 # 2. ONE-SHOT TEST
 # ----------------------------------------------------
-def test_one_shot_constant_signal(fakedataset, fake_channels):
+def test_one_shot_constant_signal(fake_dataset, fake_channels):
     """
     author: Michael James
     reviewer: Jeff
@@ -61,7 +61,7 @@ def test_one_shot_constant_signal(fakedataset, fake_channels):
     channel_dict = {ch: const_signal for ch in fake_channels}
 
     # Use fake dataset
-    ds = fakedataset
+    ds = fake_dataset()
     f = Filter(ds)
 
     # Apply bandpass (5-15 Hz)
@@ -75,7 +75,7 @@ def test_one_shot_constant_signal(fakedataset, fake_channels):
 # ----------------------------------------------------
 # 3. EDGE TEST
 # ----------------------------------------------------
-def test_edge_missing_channel_pass_through(fakedataset):
+def test_edge_missing_channel_pass_through(fake_dataset):
     """
     author: Michael James
     reviewer: Jeff
@@ -87,7 +87,7 @@ def test_edge_missing_channel_pass_through(fakedataset):
     # small array with enough samples
     d = {unknown_key: np.random.randn(1, 50)}
 
-    f = Filter(fakedataset)
+    f = Filter(fake_dataset())
     out = f.bandpass(d, low=1, high=30, fs=100)
 
     # Channel not in get_channels() should remain unchanged
@@ -97,7 +97,7 @@ def test_edge_missing_channel_pass_through(fakedataset):
 # ----------------------------------------------------
 # 4. PATTERN TEST
 # ----------------------------------------------------
-def test_pattern_pipeline_structure(fakedataset):
+def test_pattern_pipeline_structure(fake_dataset):
     """
     author: Michael James
     reviewer: Jeff
@@ -105,7 +105,7 @@ def test_pattern_pipeline_structure(fakedataset):
     pipeline() should preserve coordinates and produce a dict-of-dicts.
     """
 
-    f = Filter(fakedataset)
+    f = Filter(fake_dataset())
     out_ds = f.pipeline(low=1, high=30, fs=100, order=4)
 
     # pipeline output should be stored in bandpass_data
