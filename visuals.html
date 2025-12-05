@@ -5,18 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Visual Summaries - Fish Auditory EEG Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Encode+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-4 focus:bg-white focus:text-slate-900">Skip to main content</a>
-  <nav class="menu-bar bg-white border-b border-slate-200 px-6 py-4 flex gap-6" role="navigation" aria-label="Main navigation">
-    <a href="index.html" class="font-semibold" style="color:#32006e">Home</a>
-    <a href="overview.html" class="text-slate-700">Overview</a>
-    <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
-    <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
-    <a href="team.html" class="text-slate-700">Team & Course</a>
-    <a href="repo.html" class="text-slate-700">Repository Info</a>
+  <nav class="menu-bar bg-white border-b border-slate-200 px-6 py-4" role="navigation" aria-label="Main navigation">
+    <div class="flex items-center justify-between">
+      <div class="flex gap-6 menu-links" id="navLinks">
+        <a href="index.html" class="font-semibold" style="color:#32006e">Home</a>
+        <a href="overview.html" class="text-slate-700">Overview</a>
+        <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
+        <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
+        <a href="team.html" class="text-slate-700">Team & Course</a>
+        <a href="repo.html" class="text-slate-700">Repository Info</a>
+      </div>
+      <button id="hamburger" class="hidden md:hidden text-slate-700 text-2xl font-semibold focus:outline-none" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden flex-col gap-3 mt-4 pb-2" style="display:none;">
+      <a href="index.html" class="block text-slate-700 px-2 py-1" style="color:#32006e">Home</a>
+      <a href="overview.html" class="block text-slate-700 px-2 py-1">Overview</a>
+      <a href="pipeline.html" class="block text-slate-700 px-2 py-1">Analysis Pipeline</a>
+      <a href="visuals.html" class="block text-slate-700 px-2 py-1">Visual Summaries</a>
+      <a href="team.html" class="block text-slate-700 px-2 py-1">Team & Course</a>
+      <a href="repo.html" class="block text-slate-700 px-2 py-1">Repository Info</a>
+    </div>
   </nav>
   <main id="main-content" class="max-w-5xl mx-auto py-10 px-4">
     <h1 class="text-3xl font-bold mb-6" style="color:#32006e">Visual Summaries</h1>
@@ -109,7 +123,7 @@
       <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
         <p class="text-slate-700 mb-3">Listen to an example of the auditory stimulus used in the experiments:</p>
         <audio controls class="w-full" aria-label="Auditory stimulus sample">
-          <source src="analysis/soundeffect.wav" type="audio/wav">
+          <source src="tools/analysis/soundeffect.wav" type="audio/wav">
           <p class="text-slate-600 text-sm">Your browser does not support the audio element. Please use a modern browser to listen to the stimulus sample.</p>
         </audio>
         <p class="text-xs text-slate-500 mt-2">This audio file represents one of the stimuli presented to the ratfish during EEG recordings.</p>
@@ -140,7 +154,7 @@
           <p class="text-slate-600"><strong>💡 About Interactive Charts:</strong> The embedded visualizations below are interactive - hover over data points for details, zoom, and pan to explore the data (when in Interactive mode).</p>
         </div>
         <div class="relative">
-          <iframe id="iframeAll" title="All 95% CI" src="analysis/plots/summary_plots/95CI_all.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200 locked-chart" aria-label="Interactive chart showing 95% confidence intervals across all subjects" style="pointer-events: none;"></iframe>
+          <iframe id="iframeAll" title="All 95% CI" src="tools/analysis/plots/summary_plots/95CI_all.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200 locked-chart" aria-label="Interactive chart showing 95% confidence intervals across all subjects" style="pointer-events: none;"></iframe>
           <div class="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded">🔒 Locked View</div>
         </div>
         <div id="table-ci-all" class="hidden mt-3 overflow-x-auto">
@@ -175,7 +189,7 @@
           <p class="text-slate-700"><strong>📊 Reading this chart:</strong> Shows the median (middle value) across all subjects. Smooths out individual variation to reveal overall trends. Compare with "All Data" chart to see consistency.</p>
         </div>
         <div class="relative">
-          <iframe id="iframeMedian" title="Median 95% CI" src="analysis/plots/summary_plots/95CI_median.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200 locked-chart" aria-label="Interactive chart showing median confidence intervals" style="pointer-events: none;"></iframe>
+          <iframe id="iframeMedian" title="Median 95% CI" src="tools/analysis/plots/summary_plots/95CI_median.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200 locked-chart" aria-label="Interactive chart showing median confidence intervals" style="pointer-events: none;"></iframe>
           <div class="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded">🔒 Locked View</div>
         </div>
       </div>
@@ -192,7 +206,7 @@
           <p class="text-slate-700"><strong>📊 Reading this chart:</strong> Different colors = different electrode channels (ch1-ch4). Higher weights mean that channel captures more of the neural response. Helps identify optimal electrode placement.</p>
         </div>
         <div class="relative">
-          <iframe id="iframeIca" title="ICA Weights" src="analysis/plots/summary_plots/ICAweights.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200 locked-chart" aria-label="Interactive chart showing ICA weights by channel" style="pointer-events: none;"></iframe>
+          <iframe id="iframeIca" title="ICA Weights" src="tools/analysis/plots/summary_plots/ICAweights.html" loading="lazy" class="w-full h-[460px] rounded-lg border border-slate-200 locked-chart" aria-label="Interactive chart showing ICA weights by channel" style="pointer-events: none;"></iframe>
           <div class="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded">🔒 Locked View</div>
         </div>
       </div>
@@ -260,14 +274,15 @@
     
     // Export chart data
     function exportChartData() {
-      alert('📥 Downloading chart data as CSV...\n\nData files are available in:\n- analysis/CI_csv/ (confidence intervals)\n- analysis/weights_csv/ (ICA weights)\n\nClick OK to open the download folder.');
-      window.open('analysis/CI_csv/', '_blank');
+      alert('📥 Downloading chart data as CSV...\n\nData files are available in:\n- /tools/analysis/CI_csv/ (confidence intervals)\n- /tools/analysis/weights_csv/ (ICA weights)\n\nClick OK to open the download folder.');
+      window.open('https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/tools/analysis/CI_csv', '_blank');
+      window.open('https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/tools/analysis/weights_csv', '_blank');
     }
     
     // Download chart image
     function downloadChartImage() {
-      alert('📸 High-resolution PNG images are available in:\n\nanalysis/plots/summary_plots/\n\nFiles:\n- 95CI_all.png\n- 95CI_median.png\n- ICAweights.png\n\nClick OK to open the folder.');
-      window.open('analysis/plots/summary_plots/', '_blank');
+      alert('📸 High-resolution PNG images are available in:\n\n/tools/analysis/plots/summary_plots/\n\nFiles:\n- 95CI_all.png\n- 95CI_median.png\n- ICAweights.png\n\nClick OK to open the folder.');
+      window.open('https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/tools/analysis/plots/summary_plots/', '_blank');
     }
     
     // Toggle annotations
@@ -298,7 +313,7 @@
         return;
       }
       
-      alert(`🔬 Loading comparison:\n\nSubject A: ${subjectA}\nSubject B: ${subjectB}\n\nComparison data is available in:\nanalysis/plots/${subjectA}/\nanalysis/plots/${subjectB}/\n\n(Side-by-side view coming in next update)`);
+      alert(`🔬 Loading comparison:\n\nSubject A: ${subjectA}\nSubject B: ${subjectB}\n\nComparison data is available in:\n/tools/analysis/plots/${subjectA}/\n/tools/analysis/plots/${subjectB}/\n\n(Side-by-side view coming in next update)`);
     }
     
     // Filter functionality
@@ -313,6 +328,29 @@
     document.getElementById('ampFilter').addEventListener('change', function() {
       console.log('Filter by amplitude:', this.value);
     });
+
+    // Hamburger menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (hamburger) {
+      hamburger.addEventListener('click', function() {
+        const isOpen = mobileMenu.style.display === 'flex';
+        mobileMenu.style.display = isOpen ? 'none' : 'flex';
+        hamburger.setAttribute('aria-expanded', !isOpen);
+      });
+    }
+    
+    // Close menu when clicking on a link
+    if (mobileMenu) {
+      const mobileLinks = mobileMenu.querySelectorAll('a');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          mobileMenu.style.display = 'none';
+          hamburger.setAttribute('aria-expanded', false);
+        });
+      });
+    }
   </script>
 </body>
 </html>

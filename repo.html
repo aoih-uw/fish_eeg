@@ -5,18 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Repository Information | Fish Auditory EEG Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Encode+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-4 focus:bg-white focus:text-slate-900">Skip to main content</a>
-  <nav class="menu-bar bg-white border-b border-slate-200 px-6 py-4 flex gap-6" role="navigation" aria-label="Main navigation">
-    <a href="index.html" class="font-semibold" style="color:#32006e">Home</a>
-    <a href="overview.html" class="text-slate-700">Overview</a>
-    <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
-    <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
-    <a href="team.html" class="text-slate-700">Team & Course</a>
-    <a href="repo.html" class="text-slate-700">Repository Info</a>
+  <nav class="menu-bar bg-white border-b border-slate-200 px-6 py-4" role="navigation" aria-label="Main navigation">
+    <div class="flex items-center justify-between">
+      <div class="flex gap-6 menu-links" id="navLinks">
+        <a href="index.html" class="font-semibold" style="color:#32006e">Home</a>
+        <a href="overview.html" class="text-slate-700">Overview</a>
+        <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
+        <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
+        <a href="team.html" class="text-slate-700">Team & Course</a>
+        <a href="repo.html" class="text-slate-700">Repository Info</a>
+      </div>
+      <button id="hamburger" class="hidden md:hidden text-slate-700 text-2xl font-semibold focus:outline-none" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden flex-col gap-3 mt-4 pb-2" style="display:none;">
+      <a href="index.html" class="block text-slate-700 px-2 py-1" style="color:#32006e">Home</a>
+      <a href="overview.html" class="block text-slate-700 px-2 py-1">Overview</a>
+      <a href="pipeline.html" class="block text-slate-700 px-2 py-1">Analysis Pipeline</a>
+      <a href="visuals.html" class="block text-slate-700 px-2 py-1">Visual Summaries</a>
+      <a href="team.html" class="block text-slate-700 px-2 py-1">Team & Course</a>
+      <a href="repo.html" class="block text-slate-700 px-2 py-1">Repository Info</a>
+    </div>
   </nav>
   <main id="main-content" class="max-w-4xl mx-auto py-10 px-4">
     <h1 class="text-3xl font-bold mb-8" style="color:#32006e">Repository Information</h1>
@@ -89,23 +103,21 @@
     <section class="mb-8">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Project Structure</h2>
       <pre class="bg-slate-100 border border-slate-200 rounded p-4 text-xs overflow-x-auto mb-2">fish_eeg/
-├── src/                    # Source code for all programs
-│   ├── fish_eeg/          # Main package
-│   ├── passive_acoustic/  # Acoustic data processing
-│   └── condainit/         # Conda environment setup
-├── analysis/              # Jupyter notebooks for exploration
-│   ├── CI_csv/           # Confidence interval data
-│   ├── weights_csv/      # ICA weights data
-│   └── plots/            # Generated visualizations
-├── results/              # Final deliverables and products
-│   ├── aoi/             # Aoi's user stories and outputs
-│   ├── christopher/     # Christopher's contributions
-│   ├── mike/            # Mike's contributions
-│   ├── jeff/            # Jeff's contributions
-│   └── yash/            # Yash's contributions
-├── docs/                 # Documentation PDFs
-├── data/                 # Data storage (gitignored)
-├── deps/                 # External dependencies (gitignored)
+.
+├── docs
+├── results
+│   ├── aoi
+│   ├── christopher
+│   ├── jeff
+│   ├── mike
+│   └── yash
+├── src
+│   └── fish_eeg
+├── tests
+│   └── __pycache__
+└── tools
+    ├── analysis
+    └── passive_acoustic
 ├── *.html               # Web dashboard pages
 ├── style.css            # Shared stylesheet
 ├── environment.yml      # Conda environment specification
@@ -114,7 +126,7 @@
       <p class="text-slate-700 text-sm mt-2"><strong>Key Directories:</strong></p>
       <ul class="list-disc ml-6 text-slate-700 text-sm space-y-1">
         <li><strong>src/</strong> - Production code with process-specific READMEs</li>
-        <li><strong>analysis/</strong> - Exploratory notebooks (not for production)</li>
+        <li><strong>tools/</strong> - Contextual tools (not for production)</li>
         <li><strong>results/</strong> - Final outputs and deliverables</li>
         <li><strong>docs/</strong> - Contextual documentation</li>
       </ul>
@@ -125,15 +137,15 @@
       <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
         <p class="text-slate-700 mb-4">Access data, figures, and documentation for your research, education, or presentations.</p>
         <div class="grid md:grid-cols-3 gap-4">
-          <a href="analysis/CI_csv/" class="block bg-white border border-slate-300 rounded-lg p-4 hover:shadow-md transition">
+          <a href="https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/tools/analysis/CI_csv" class="block bg-white border border-slate-300 rounded-lg p-4 hover:shadow-md transition">
             <h3 class="font-semibold text-slate-800 mb-1">📊 Confidence Interval Data</h3>
             <p class="text-sm text-slate-600">CSV files with 95% CI values for all subjects and conditions</p>
           </a>
-          <a href="analysis/weights_csv/" class="block bg-white border border-slate-300 rounded-lg p-4 hover:shadow-md transition">
+          <a href="https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/tools/analysis/weights_csv" class="block bg-white border border-slate-300 rounded-lg p-4 hover:shadow-md transition">
             <h3 class="font-semibold text-slate-800 mb-1">⚖️ ICA Weights Data</h3>
             <p class="text-sm text-slate-600">Channel-wise ICA component weights by frequency and amplitude</p>
           </a>
-          <a href="analysis/plots/" class="block bg-white border border-slate-300 rounded-lg p-4 hover:shadow-md transition">
+          <a href="https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/tools/analysis/plots" class="block bg-white border border-slate-300 rounded-lg p-4 hover:shadow-md transition">
             <h3 class="font-semibold text-slate-800 mb-1">📈 Publication Figures</h3>
             <p class="text-sm text-slate-600">High-resolution PNG and interactive HTML plots</p>
           </a>
@@ -198,5 +210,30 @@
   <footer class="mt-10 text-center text-sm text-slate-500">
     &copy; 2025 Fish Auditory EEG Dashboard. <a href="https://github.com/aoih-uw/fish_eeg" class="underline" style="color:#32006e" target="_blank" rel="noopener">GitHub Repository</a>
   </footer>
+
+  <script>
+    // Hamburger menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (hamburger) {
+      hamburger.addEventListener('click', function() {
+        const isOpen = mobileMenu.style.display === 'flex';
+        mobileMenu.style.display = isOpen ? 'none' : 'flex';
+        hamburger.setAttribute('aria-expanded', !isOpen);
+      });
+    }
+    
+    // Close menu when clicking on a link
+    if (mobileMenu) {
+      const mobileLinks = mobileMenu.querySelectorAll('a');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          mobileMenu.style.display = 'none';
+          hamburger.setAttribute('aria-expanded', false);
+        });
+      });
+    }
+  </script>
 </body>
 </html>
