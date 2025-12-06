@@ -1,5 +1,6 @@
 import pytest
 import numpy as np
+from fish_eeg.data import EEGDataset
 
 
 @pytest.fixture
@@ -11,46 +12,78 @@ def fake_channels(monkeypatch):
     return ["ch1", "ch2", "ch3", "ch4"]
 
 
-import pytest
-import numpy as np
-from fish_eeg.data import EEGDataset
+# @pytest.fixture
+# def fake_dataset(fake_channels):
+#     """
+#     Returns a minimal EEGDataset-like object for testing.
+#     """
+    
+#     # Create dummy data
+#     data_dict = {}
+#     for ch in fake_channels:
+#         # 2 trials, 50 samples per channel
+#         data_dict[ch] = np.random.randn(2, 50)
+    
+#     # Wrap in 0-d object array for using Filter
+#     fakedata = np.array({"data": data_dict}, dtype=object)
+
+#     # Minimal freq_amp_table (please change if testing this aspect)
+#     fakefreq_amp_table = np.random.randn(2, 5)
+
+#     # Create EEGDataset instance
+#     ds = EEGDataset(
+#         data=fakedata,
+#         freq_amp_table=fakefreq_amp_table,
+#         latency=0,
+#         channel_keys=fake_channels,
+#         period_keys=["prestim", "stimresp"],
+#         metric_keys=["rms", "fft"],
+#         submetric_keys=["mean", "std"]
+#     )
+
+#     # Say the rms subsample is just data (no significant change to testing methods)
+#     ds.rms_subsampled_data = fakedata
+
+#     # ADD ANY OTHER STRUCTURAL COMPONENTS HERE
+
+#     return ds
 
 @pytest.fixture
-def fakedataset(fake_channels):
+def fake_dataset(fake_channels):
     """
-    Returns a minimal EEGDataset-like object for testing.
+    Factory fixture: returns an EEGDataset-like object.
+    Can be called with or without custom wrapped data.
     """
-    
-    # Create dummy data
-    data_dict = {}
-    for ch in fake_channels:
-        # 2 trials, 50 samples per channel
-        data_dict[ch] = np.random.randn(2, 50)
-    
-    # Wrap in 0-d object array for using Filter
-    fakedata = np.array({"data": data_dict}, dtype=object)
 
-    # Minimal freq_amp_table (please change if testing this aspect)
-    fakefreq_amp_table = np.random.randn(2, 5)
+    def _make(wrapped_data=None):
+        # If user does not pass custom data, create default structure
+        if wrapped_data is None:
+            data_dict = {}
+            for ch in fake_channels:
+                data_dict[ch] = np.random.randn(2, 50)
 
-    # Create EEGDataset instance
-    ds = EEGDataset(
-        data=fakedata,
-        freq_amp_table=fakefreq_amp_table,
-        latency=0,
-        channel_keys=fake_channels,
-        period_keys=["prestim", "stimresp"],
-        metric_keys=["rms", "fft"],
-        submetric_keys=["mean", "std"]
-    )
+            wrapped_data = np.array({"data": data_dict}, dtype=object)
 
-    # Say the rms subsample is just data (no significant change to testing methods)
-    ds.rms_subsampled_data = fakedata
+        # Minimal freq_amp_table
+        fakefreq_amp_table = np.random.randn(2, 5)
 
-    # ADD ANY OTHER STRUCTURAL COMPONENTS HERE
+        # Build dataset
+        ds = EEGDataset(
+            data=wrapped_data,
+            freq_amp_table=fakefreq_amp_table,
+            latency=0,
+            channel_keys=fake_channels,
+            period_keys=["prestim", "stimresp"],
+            metric_keys=["rms", "fft"],
+            submetric_keys=["mean", "std"],
+        )
 
-    return ds
+        # Keep this for compatibility
+        ds.rms_subsampled_data = wrapped_data
 
+        return ds
+
+    return _make
 
 
 @pytest.fixture

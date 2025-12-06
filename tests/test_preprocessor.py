@@ -12,12 +12,12 @@ from fish_eeg.preprocess import Preprocessor
 # ============================================================
 
 
-def test_subsample_smoke(fake_channels, FakeDataset):
+def test_subsample_smoke(fake_channels, fake_dataset):
     """
     Smoke: method should execute.
     Args:
         fake_channels: The fake channels to use for the test.
-        FakeDataset: The fake dataset to use for the test.
+        fake_dataset: The fake dataset to use for the test.
     Returns:
         out: The subsampled data.
     """
@@ -31,18 +31,18 @@ def test_subsample_smoke(fake_channels, FakeDataset):
         "ch4": np.random.randn(4, 3),
         "ch4_total_trials": 4,
     }
-    ds = FakeDataset(None)
+    ds = fake_dataset(None)
     p = Preprocessor(ds)
     out = p.SubsampleTrialsPerChannel(dictionary, 0)
     assert isinstance(out, dict)
 
 
-def test_subsample_one_shot(fake_channels, FakeDataset):
+def test_subsample_one_shot(fake_channels, fake_dataset):
     """
     One-shot: ensure min-trials logic works.
     Args:
         fake_channels: The fake channels to use for the test.
-        FakeDataset: The fake dataset to use for the test.
+        fake_dataset: The fake dataset to use for the test.
     Returns:
         out: The subsampled data.
     """
@@ -56,19 +56,19 @@ def test_subsample_one_shot(fake_channels, FakeDataset):
         "ch4": np.random.randn(3, 4),
         "ch4_total_trials": 3,
     }
-    ds = FakeDataset(None)
+    ds = fake_dataset(None)
     p = Preprocessor(ds)
     out = p.SubsampleTrialsPerChannel(dictionary, seed=0)
     for ch in fake_channels:
         assert out[ch].shape[0] == 3
 
 
-def test_subsample_edge_single_trial(fake_channels, FakeDataset):
+def test_subsample_edge_single_trial(fake_channels, fake_dataset):
     """
     Edge: if one channel has only 1 trial → all must subsample to 1.
     Args:
         fake_channels: The fake channels to use for the test.
-        FakeDataset: The fake dataset to use for the test.
+        fake_dataset: The fake dataset to use for the test.
     Returns:
         out: The subsampled data.
     """
@@ -82,19 +82,19 @@ def test_subsample_edge_single_trial(fake_channels, FakeDataset):
         "ch4": np.random.randn(3, 5),
         "ch4_total_trials": 3,
     }
-    ds = FakeDataset(None)
+    ds = fake_dataset(None)
     p = Preprocessor(ds)
     out = p.SubsampleTrialsPerChannel(dictionary, seed=123)
     for ch in fake_channels:
         assert out[ch].shape[0] == 1
 
 
-def test_subsample_pattern_reproducible(fake_channels, FakeDataset):
+def test_subsample_pattern_reproducible(fake_channels, fake_dataset):
     """
     Pattern: with same seed, subsampling is deterministic.
     Args:
         fake_channels: The fake channels to use for the test.
-        FakeDataset: The fake dataset to use for the test.
+        fake_dataset: The fake dataset to use for the test.
     Returns:
         out: The subsampled data.
     """
@@ -103,7 +103,7 @@ def test_subsample_pattern_reproducible(fake_channels, FakeDataset):
     for ch in fake_channels:
         dictionary[f"{ch}_total_trials"] = 10
 
-    ds = FakeDataset(None)
+    ds = fake_dataset(None)
     p = Preprocessor(ds)
 
     out1 = p.SubsampleTrialsPerChannel(dictionary, seed=42)
@@ -118,12 +118,12 @@ def test_subsample_pattern_reproducible(fake_channels, FakeDataset):
 # ============================================================
 
 
-def test_pipeline_smoke(fake_channels, FakeDataset):
+def test_pipeline_smoke(fake_channels, fake_dataset):
     """
     Smoke: pipeline should run end-to-end.
     Args:
         fake_channels: The fake channels to use for the test.
-        FakeDataset: The fake dataset to use for the test.
+        dake_dataset: The fake dataset to use for the test.
     Returns:
         out.rms_filtered_data: The filtered data.
         out.rms_subsampled_data: The subsampled data.
@@ -132,26 +132,26 @@ def test_pipeline_smoke(fake_channels, FakeDataset):
         (0, 1): {ch: np.random.randn(8, 5) for ch in fake_channels},
         (1, 2): {ch: np.random.randn(8, 5) for ch in fake_channels},
     }
-    ds = FakeDataset(np.array(data, dtype=object))
+    ds = fake_dataset(np.array(data, dtype=object))
     p = Preprocessor(ds)
     out = p.pipeline()
     assert out.rms_filtered_data is not None
     assert out.rms_subsampled_data is not None
 
 
-def test_pipeline_one_shot(fake_channels, FakeDataset):
+def test_pipeline_one_shot(fake_channels, fake_dataset):
     """
     One-shot: channels with a single outlier get filtered then subsampled.
     Args:
         fake_channels: The fake channels to use for the test.
-        FakeDataset: The fake dataset to use for the test.
+        fake_dataset: The fake dataset to use for the test.
     Returns:
         out: The filtered and subsampled data.
     """
     dictionary = {
         ch: np.vstack([np.ones((4, 5)), np.full((1, 5), 999)]) for ch in fake_channels
     }
-    ds = FakeDataset(np.array({(10, 20): dictionary}, dtype=object))
+    ds = fake_dataset(np.array({(10, 20): dictionary}, dtype=object))
     p = Preprocessor(ds)
     out = p.pipeline()
 
@@ -164,17 +164,17 @@ def test_pipeline_one_shot(fake_channels, FakeDataset):
         assert filtered[ch].shape[0] == 4
 
 
-def test_pipeline_edge_empty_after_filter(fake_channels, FakeDataset):
+def test_pipeline_edge_empty_after_filter(fake_channels, fake_dataset):
     """
     Edge: if ALL rows are extreme outliers → no filtering removed (std=0 case).
     Args:
         fake_channels: The fake channels to use for the test.
-        FakeDataset: The fake dataset to use for the test.
+        fake_dataset: The fake dataset to use for the test.
     Returns:
         out: The filtered and subsampled data.
     """
     dictionary = {ch: np.full((5, 5), 1000) for ch in fake_channels}
-    ds = FakeDataset(np.array({(5, 5): dictionary}, dtype=object))
+    ds = fake_dataset(np.array({(5, 5): dictionary}, dtype=object))
     p = Preprocessor(ds)
     out = p.pipeline()
 
@@ -183,12 +183,12 @@ def test_pipeline_edge_empty_after_filter(fake_channels, FakeDataset):
         assert filtered[ch].shape == (5, 5)
 
 
-def test_pipeline_pattern_coords_kept_separate(fake_channels, FakeDataset):
+def test_pipeline_pattern_coords_kept_separate(fake_channels, fake_dataset):
     """
     Pattern: pipeline preserves dictionary keys (coords).
     Args:
         fake_channels: The fake channels to use for the test.
-        FakeDataset: The fake dataset to use for the test.
+        fake_dataset: The fake dataset to use for the test.
     Returns:
         out: The filtered and subsampled data.
     """
@@ -198,7 +198,7 @@ def test_pipeline_pattern_coords_kept_separate(fake_channels, FakeDataset):
         (3, 3): {ch: np.random.randn(6, 4) for ch in fake_channels},
     }
 
-    ds = FakeDataset(np.array(data, dtype=object))
+    ds = fake_dataset(np.array(data, dtype=object))
     p = Preprocessor(ds)
     out = p.pipeline()
 
