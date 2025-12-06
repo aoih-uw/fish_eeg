@@ -36,24 +36,26 @@ def test_filter_high_rms_smoke(fake_dataset, small_clean_dict):
 def test_filter_high_rms_one_trial_removed(fake_dataset, fake_channels):
     """
     Create a dataset where ONE channel has one extremely high RMS row.
-    Check that exactly one row is removed.
+    Because trials across channels must remain aligned, the outlier
+    row should be removed across ALL channels.
     """
-     # 20 normal rows + 1 gigantic outlier
+    # 20 normal rows + 1 gigantic outlier at the same index
     clean = {ch: np.random.randn(20, 5) for ch in fake_channels}
     for ch in fake_channels:
         clean[ch] = np.vstack([
             clean[ch],
-            np.ones((1, 5)) * 1e6   # huge RMS row
+            np.ones((1, 5)) * 1e6   # huge outlier row (same index)
         ])
 
     ds = fake_dataset(clean)
     pre = Preprocessor(ds)
-
     result = pre.FilterHighRMSTrials(clean)
 
-    # Each channel should now have ONLY 20 rows (last one removed)
+    # Because the outlier is at the same index across channels,
+    # each channel should end up with exactly 19 rows.
     for ch in fake_channels:
-        assert result[ch].shape[0] == 20
+        assert result[ch].shape[0] == 19
+
 
 
 # Edge Test

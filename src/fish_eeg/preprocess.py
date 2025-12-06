@@ -15,7 +15,7 @@ class Preprocessor:
 
         Filter high RMS trials from the data.
         Calculates RMS for each trial for each channel in a freq/amp pair stimulus.
-        Filters out trials with RMS greater than 3 standard deviations above the mean RMS for that channel.
+        Filters out trials from each channel using median absolute deviation (MAD) since EEG is not normally distributed.
 
         Args:
             self.data: The data to filter high RMS trials from.
@@ -31,11 +31,27 @@ class Preprocessor:
             rms_per_row = np.sqrt(
                 np.mean(dictionary[channel] ** 2, axis=1)
             )  # Get RMS of each row, axis = 1 means collapse rows
-            rms_mean = np.mean(rms_per_row)
-            rms_std = np.std(rms_per_row)
-            ### Question from Yash: Is this threshold standard? Or customized to this project?
-            threshold = rms_mean + (rms_std * 2.5)
-            keep_rows = rms_per_row <= threshold
+            
+            #Jeffrey: Since EEG data is not normally distributed, using Z-score is not a good approach to find outliers
+            #Instead, I suggest using MAD/modified z-scores. my implementation is as follows:
+
+            median = np.median(rms_per_row)
+            mad = np.median(np.abs(rms_per_row - median))
+
+            # MAD checks for outliers, of course since we divide by mad we need to account for if MAD = 0
+            if mad < 1e-6: #Protect for numerical stability, we conside values below 1e-6 to be small enough to have no outliers
+                median_rms = np.median(rms_per_row)
+                max_rms = np.max(rms_per_row)
+
+                # Remove only if the max is clearly abnormal, (5 times the median)
+                if max_rms > median_rms * 5:   # 3 is a common threshold, We use 5 to be less strict
+                    keep_rows = np.where(rms_per_row == max_rms, False, True)
+                else:
+                    keep_rows = np.ones_like(rms_per_row, dtype=bool)
+            else:
+                modified_z = 0.6745 * (rms_per_row - median) / mad
+                keep_rows = np.abs(modified_z) <= 3.5  #Jeffrey: 3.5 is the standard threshold value
+            
             keep_rows_list.append(keep_rows) #Keep a record of what trials to keep and ditch
 
         keep_rows = keep_rows_list[0]
