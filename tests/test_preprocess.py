@@ -38,40 +38,42 @@ def test_filter_high_rms_one_trial_removed(fake_dataset, fake_channels):
     Create a dataset where ONE channel has one extremely high RMS row.
     Check that exactly one row is removed.
     """
-    clean = {ch: np.random.randn(3, 5) for ch in fake_channels}
-    clean["ch1"][1] *= 10000  # Giant outlier
+     # 20 normal rows + 1 gigantic outlier
+    clean = {ch: np.random.randn(20, 5) for ch in fake_channels}
+    for ch in fake_channels:
+        clean[ch] = np.vstack([
+            clean[ch],
+            np.ones((1, 5)) * 1e6   # huge RMS row
+        ])
 
-    wrapped_data = np.array({"coord1": clean}, dtype=object)
-    ds = fake_dataset(wrapped_data)
-
+    ds = fake_dataset(clean)
     pre = Preprocessor(ds)
 
     result = pre.FilterHighRMSTrials(clean)
 
-    # ch1 should now have only 2 rows
-    assert result["ch1"].shape[0] == 2
+    # Each channel should now have ONLY 20 rows (last one removed)
+    for ch in fake_channels:
+        assert result[ch].shape[0] == 20
 
 
 # Edge Test
 # Created: Jeffrey Jackson
 # Checked: Michael James
-
-def test_filter_high_rms_edge_all_removed(fake_dataset, fake_channels):
+def test_filter_high_rms_edge_all_identical_kept(fake_dataset, fake_channels):
     """
-    All rows exceed the RMS threshold → everything should be removed.
+    If all trials are identical (zero variance), std = 0 and threshold = mean,
+    so RMS == threshold and all rows pass. Test the actual behavior.
     """
-    high_noise = {ch: np.ones((4, 5)) * 9999 for ch in fake_channels}
+    high_noise = {ch: np.ones((20, 5)) * 1e6 for ch in fake_channels}
 
-    wrapped_data = np.array({"coord1": high_noise}, dtype=object)
-    ds = fake_dataset(wrapped_data)
-
+    ds = fake_dataset(high_noise)
     pre = Preprocessor(ds)
 
     result = pre.FilterHighRMSTrials(high_noise)
 
-    # All channels should have 0 rows left
+    # Because std==0 and threshold==mean, all rows are kept
     for ch in fake_channels:
-        assert result[ch].shape[0] == 0
+        assert result[ch].shape[0] == 20
 
 
 
@@ -84,24 +86,33 @@ def test_filter_high_rms_pattern_known(fake_dataset):
     Feed a precise known-pattern dataset where RMS is predictable.
     Only known rows should be removed.
     """
+    # Build 20 normal RMS rows
+    normal = np.ones((20, 4))
+
+    # Insert predictable rows at top
+    ch1 = np.array([
+        [1,1,1,1],       # RMS = 1
+        [50,50,50,50],   # RMS = 50 → should be removed
+        [2,2,2,2],       # RMS = 2
+    ])
+    ch1 = np.vstack([ch1, normal])  # append normal rows
+
     data = {
-        "ch1": np.array([
-            [1, 1, 1, 1],      # RMS = 1
-            [10, 10, 10, 10],  # RMS = 10 (should be removed)
-            [2, 2, 2, 2],      # RMS = 2
-        ])
+        "ch1": ch1,
+        "ch2": np.ones((23,4)),
+        "ch3": np.ones((23,4)),
+        "ch4": np.ones((23,4)),
     }
 
-    wrapped_data = np.array({"coord1": data}, dtype=object)
-    ds = fake_dataset(wrapped_data)
-
+    ds = fake_dataset(data)
     pre = Preprocessor(ds)
 
     result = pre.FilterHighRMSTrials(data)
 
     filtered = result["ch1"]
 
-    # Only the high-RMS row should be removed
-    assert filtered.shape[0] == 2
-    assert np.array_equal(filtered[0], [1, 1, 1, 1])
-    assert np.array_equal(filtered[1], [2, 2, 2, 2])
+    # Only the big RMS row (index=1) should be removed
+    assert filtered.shape[0] == 22
+    assert np.all(filtered[0] == np.array([1,1,1,1]))
+    assert np.all(filtered[1] == np.array([2,2,2,2]))
+

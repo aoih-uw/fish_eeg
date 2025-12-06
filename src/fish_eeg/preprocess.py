@@ -26,6 +26,7 @@ class Preprocessor:
         """
 
         filtered_dict = {}
+        keep_rows_list = []
         for channel in self.channels:
             rms_per_row = np.sqrt(
                 np.mean(dictionary[channel] ** 2, axis=1)
@@ -33,10 +34,21 @@ class Preprocessor:
             rms_mean = np.mean(rms_per_row)
             rms_std = np.std(rms_per_row)
             ### Question from Yash: Is this threshold standard? Or customized to this project?
-            threshold = rms_mean + (rms_std * 3)
+            threshold = rms_mean + (rms_std * 2.5)
             keep_rows = rms_per_row <= threshold
+            keep_rows_list.append(keep_rows) #Keep a record of what trials to keep and ditch
+
+        keep_rows = keep_rows_list[0]
+        for array in keep_rows_list[1:]:
+            keep_rows = keep_rows & array 
+            #keep_rows and array consist of True and False values
+            #This allows us to run & to get an array for all indexes that never were flagged
+
+        for channel in self.channels: #keep only the trials that meet the threshold
             filtered_dict[channel] = dictionary[channel][keep_rows]
-            filtered_dict[f"{channel}_total_trials"] = sum(keep_rows)
+            filtered_dict[f"{channel}_total_trials"] = int(keep_rows.sum())
+
+
         return filtered_dict
 
         # filtered_data[coord] = filtered_dict
