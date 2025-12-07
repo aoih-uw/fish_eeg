@@ -9,7 +9,7 @@ class FFT:
         self.data = self.eegdataset.ica_output
         self.channels = get_channels(eegdataset)
         try:
-            self.data = self.eegdataset.reconstructed_ica_data
+            self.data = self.eegdataset.reconstructed_ica_data["separated_by_period"]
         except:
             pass
 
@@ -47,7 +47,7 @@ class FFT:
                     fft_freq_vecs = np.vstack(freq_vecs)
 
         # Only have channels
-        elif len(self.eegdataset.period_keys) == 0 and len(self.channels) > 0:
+        elif len(period_keys) == 0 and len(channel_keys) > 0:
             # Initialize dictionaries with nested structure
             fft_magnitudes = {}
             fft_freq_vecs = {}
@@ -75,13 +75,13 @@ class FFT:
                 fft_freq_vecs[channel] = np.vstack(freq_vecs)
 
         # Have both period and channel delination
-        elif len(self.eegdataset.period_keys) > 0 and len(self.channels) > 0:
+        elif len(period_keys) > 0 and len(channel_keys) > 0:
             # Initialize dictionaries with nested structure
-            fft_magnitudes = {period: {} for period in self.eegdataset.period_keys}
-            fft_freq_vecs = {period: {} for period in self.eegdataset.period_keys}
+            fft_magnitudes = {period: {} for period in period_keys}
+            fft_freq_vecs = {period: {} for period in period_keys}
 
-            for period in self.eegdataset.period_keys:
-                for channel in self.channels:
+            for period in period_keys:
+                for channel in channel_keys:
                     trial_magnitudes = []
                     freq_vecs = []
                     num_trial = data[period][channel].shape[0]
@@ -110,13 +110,27 @@ class FFT:
     def pipeline(self, sampling_frequency):
         fft_out = {}
         for coord, array in self.data.items():
-            out = self.compute_fft(
-                array["S"],
-                sampling_frequency,
-                period_keys=[],
-                channel_keys=[],
-                smallest_dim=1,
-            )
-            fft_out[coord] = out
-        self.eegdataset.ica_fft_output = fft_out
+            if self.data != self.eegdataset.ica_output:
+                out = self.compute_fft(
+                    array,
+                    sampling_frequency,
+                    period_keys=self.eegdataset.period_keys,
+                    channel_keys=self.eegdataset.channel_keys,
+                    smallest_dim=[],
+                )
+                fft_out[coord] = out
+            else:
+                out = self.compute_fft(
+                    array["S"],
+                    sampling_frequency,
+                    period_keys=[],
+                    channel_keys=[],
+                    smallest_dim=1,
+                )
+                fft_out[coord] = out
+
+        if self.data != self.eegdataset.ica_output:
+            self.eegdataset.reconstructed_ica_fft_output = fft_out
+        else:
+            self.eegdataset.ica_fft_output = fft_out
         return self.eegdataset
