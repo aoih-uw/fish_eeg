@@ -1,5 +1,5 @@
-from data import EEGDataset
-from utils import get_channels
+from fish_eeg.data import EEGDataset
+from fish_eeg.utils import get_channels
 from scipy.signal import butter, filtfilt
 import numpy as np
 

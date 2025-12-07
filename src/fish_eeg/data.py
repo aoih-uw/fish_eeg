@@ -1,6 +1,6 @@
 import numpy as np
 from dataclasses import dataclass
-from constants import PERIOD_KEYS, METRIC_KEYS, SUBMETRIC_KEYS
+from fish_eeg.constants import PERIOD_KEYS, METRIC_KEYS, SUBMETRIC_KEYS
 
 
 #### Dataclass for EEGDataset ####
@@ -18,6 +18,7 @@ class EEGDataset:
     period_keys: list[str]
     metric_keys: list[str]
     submetric_keys: list[str]
+    period_len: int
 
 
 #### I/O for data ####
@@ -52,6 +53,7 @@ def load_data(path: str, subjid: str) -> EEGDataset:
         period_keys=period_keys,
         metric_keys=metric_keys,
         submetric_keys=submetric_keys,
+        period_len=3528,  ### this should be part of npz/mtx file instead of hard coded
     )
 
 
