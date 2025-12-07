@@ -56,16 +56,48 @@ def fake_dataset(fake_channels):
     """
 
     def _make(wrapped_data=None):
-        # If user does not pass custom data, create default structure
+        #No data provided
         if wrapped_data is None:
-            data_dict = {}
-            for ch in fake_channels:
-                data_dict[ch] = np.random.randn(2, 50)
-
+            data_dict = {ch: np.random.randn(2, 50) for ch in fake_channels}
             wrapped_data = np.array({"data": data_dict}, dtype=object)
 
         # Minimal freq_amp_table
         fakefreq_amp_table = np.random.randn(2, 5)
+
+                # ---- Normalize wrapped_data into raw dict ----
+        if isinstance(wrapped_data, dict):
+            raw = wrapped_data
+
+        elif isinstance(wrapped_data, np.ndarray):
+            # CASE 1: 0-dim object array → contains a dict
+            if wrapped_data.ndim == 0:
+                raw = wrapped_data.item()
+
+            # CASE 2: Multi-dimensional ndarray → this *is* the data
+            else:
+                # Wrap into dict for consistency
+                raw = {ch: wrapped_data for ch in fake_channels}
+
+        else:
+            raise TypeError(f"wrapped_data must be dict or ndarray, got {type(wrapped_data)}")
+
+        # ---- Extract the actual data dict ----
+        if "data" in raw:
+            data_dict = raw["data"]
+        else:
+            # Either { (freq,amp): {...} } OR {ch: array}
+            first_key = next(iter(raw.keys()))
+            val = raw[first_key]
+
+            # If mapping channels → array
+            if isinstance(val, np.ndarray):
+                # raw is {ch: array}
+                data_dict = raw
+            else:
+                # raw is { (freq,amp): {ch: array} }
+                data_dict = val
+        # Period length (# time points)
+        period_len = data_dict[fake_channels[0]].shape[1]
 
         # Build dataset
         ds = EEGDataset(
@@ -76,6 +108,7 @@ def fake_dataset(fake_channels):
             period_keys=["prestim", "stimresp"],
             metric_keys=["rms", "fft"],
             submetric_keys=["mean", "std"],
+            period_len= period_len
         )
 
         # Keep this for compatibility

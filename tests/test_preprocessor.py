@@ -1,6 +1,6 @@
 """
 Tests for preprocess.py functions
-Author: Yash Sonthalia
+Authors: Yash Sonthalia
 Reviewer:
 """
 
