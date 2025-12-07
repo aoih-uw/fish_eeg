@@ -263,13 +263,8 @@ class Reconstructor:
                 component_weights=weights,
             )
             reconstructed_ica_data[coord] = recon_restruct_data
-            (
-                compare_denoising_mean,
-                compare_denoising_std,
-                fft_magnitudes_mean,
-                fft_magnitudes_std,
-                fft_freq_vecs,
-            ) = self.compare_denoised_waveform(
+
+            comparison_results = self.compare_denoised_waveform(
                 self.eegdataset.bandpass_data.item()[coord],
                 recon_restruct_data,
                 self.channel_keys,
@@ -278,14 +273,14 @@ class Reconstructor:
                 sampling_frequency,
             )
             reconstructed_ica_data[coord]["compare_denoising_mean"] = (
-                compare_denoising_mean
+                comparison_results[0]
             )
-            reconstructed_ica_data[coord]["compare_denoising_std"] = (
-                compare_denoising_std
-            )
-            reconstructed_ica_data[coord]["fft_magnitudes_mean"] = fft_magnitudes_mean
-            reconstructed_ica_data[coord]["fft_magnitudes_std"] = fft_magnitudes_std
-            reconstructed_ica_data[coord]["fft_freq_vecs"] = fft_freq_vecs
+            reconstructed_ica_data[coord]["compare_denoising_std"] = comparison_results[
+                1
+            ]
+            reconstructed_ica_data[coord]["fft_magnitudes_mean"] = comparison_results[2]
+            reconstructed_ica_data[coord]["fft_magnitudes_std"] = comparison_results[3]
+            reconstructed_ica_data[coord]["fft_freq_vecs"] = comparison_results[4]
 
         self.eegdataset.reconstructed_ica_data = reconstructed_ica_data
         return self.eegdataset

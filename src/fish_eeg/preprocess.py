@@ -32,18 +32,11 @@ class Preprocessor:
             )  # Get RMS of each row, axis = 1 means collapse rows
             rms_mean = np.mean(rms_per_row)
             rms_std = np.std(rms_per_row)
-            ### Question from Yash: Is this threshold standard? Or customized to this project?
             threshold = rms_mean + (rms_std * 3)
             keep_rows = rms_per_row <= threshold
             filtered_dict[channel] = dictionary[channel][keep_rows]
             filtered_dict[f"{channel}_total_trials"] = sum(keep_rows)
         return filtered_dict
-
-        # filtered_data[coord] = filtered_dict
-
-        # ### later on can use self.filtered_data for different types of artefact removal for example, other than RMS perhaps?
-        # filtered_data = np.array(filtered_data, dtype=object)
-        # self.eegdataset.rms_filtered_data = filtered_data
 
     def SubsampleTrialsPerChannel(self, dictionary: dict, seed) -> np.ndarray:
         """
