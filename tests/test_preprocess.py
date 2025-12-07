@@ -40,21 +40,21 @@ def test_filter_high_rms_one_trial_removed(fake_dataset, fake_channels):
     row should be removed across ALL channels.
     """
     # 20 normal rows + 1 gigantic outlier at the same index
-    clean = {ch: np.random.randn(20, 5) for ch in fake_channels}
+    clean = {ch: np.ones((20, 5)) for ch in fake_channels}
     for ch in fake_channels:
-        clean[ch] = np.vstack([
-            clean[ch],
-            np.ones((1, 5)) * 1e6   # huge outlier row (same index)
-        ])
+        clean[ch] = np.vstack([clean[ch], np.ones((1, 5)) * 1e6])
+
+    for ch in fake_channels:
+        print(f"{ch} shape before filtering: {clean[ch].shape}")
 
     ds = fake_dataset(clean)
     pre = Preprocessor(ds)
     result = pre.FilterHighRMSTrials(clean)
 
     # Because the outlier is at the same index across channels,
-    # each channel should end up with exactly 19 rows.
+    # each channel should end up with exactly 20 rows.
     for ch in fake_channels:
-        assert result[ch].shape[0] == 19
+        assert result[ch].shape[0] == 20
 
 
 
