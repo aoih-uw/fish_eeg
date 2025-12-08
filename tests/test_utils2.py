@@ -41,7 +41,8 @@ def test_get_channels_smoke():
         channel_keys=["ch1", "ch2"],
         period_keys=["prestim", "stimresp"],
         metric_keys=["mean", "std"],
-        submetric_keys=["doub_freq_mag", "SNR"]
+        submetric_keys=["doub_freq_mag", "SNR"],
+        period_len = test_data[(100.0, 110.0)]["ch1"].shape[1]
     )
     
     # Should run without error
@@ -79,7 +80,9 @@ def test_get_channels_one_shot():
         channel_keys=["ch1", "ch2", "ch3", "ch4"],
         period_keys=["prestim", "stimresp"],
         metric_keys=["mean", "std"],
-        submetric_keys=["doub_freq_mag", "SNR"]
+        submetric_keys=["doub_freq_mag", "SNR"],
+        period_len = test_data[(220.0, 130.0)]["ch1"].shape[1]
+
     )
     
     result = get_channels(eegdataset)
@@ -108,7 +111,8 @@ def test_get_channels_edge_empty_data():
         channel_keys=[],
         period_keys=["prestim", "stimresp"],
         metric_keys=["mean", "std"],
-        submetric_keys=["doub_freq_mag", "SNR"]
+        submetric_keys=["doub_freq_mag", "SNR"],
+        period_len=0
     )
     
     result = get_channels(eegdataset)
@@ -143,7 +147,8 @@ def test_get_channels_edge_no_channels():
         channel_keys=[],
         period_keys=["prestim", "stimresp"],
         metric_keys=["mean", "std"],
-        submetric_keys=["doub_freq_mag", "SNR"]
+        submetric_keys=["doub_freq_mag", "SNR"],
+        period_len = 0
     )
     
     result = get_channels(eegdataset)
@@ -180,7 +185,8 @@ def test_get_channels_edge_mixed_keys():
         channel_keys=["ch1", "ch2"],
         period_keys=["prestim", "stimresp"],
         metric_keys=["mean", "std"],
-        submetric_keys=["doub_freq_mag", "SNR"]
+        submetric_keys=["doub_freq_mag", "SNR"],
+        period_len = test_data[(100.0, 110.0)]["ch1"].shape[1]
     )
     
     result = get_channels(eegdataset)
@@ -226,7 +232,8 @@ def test_get_channels_pattern_multiple_stimuli():
         channel_keys=["ch1", "ch2", "ch3", "ch4"],
         period_keys=["prestim", "stimresp"],
         metric_keys=["mean", "std"],
-        submetric_keys=["doub_freq_mag", "SNR"]
+        submetric_keys=["doub_freq_mag", "SNR"],
+        period_len = test_data[(55.0, 130.0)]["ch1"].shape[1]
     )
     
     result = get_channels(eegdataset)
@@ -263,7 +270,9 @@ def test_get_channels_pattern_large_channel_numbers():
         channel_keys=["ch1", "ch10", "ch99", "ch123"],
         period_keys=["prestim", "stimresp"],
         metric_keys=["mean", "std"],
-        submetric_keys=["doub_freq_mag", "SNR"]
+        submetric_keys=["doub_freq_mag", "SNR"],
+        period_len = test_data[(100.0, 110.0)]["ch1"].shape[1]
+
     )
     
     result = get_channels(eegdataset)
