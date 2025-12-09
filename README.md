@@ -11,6 +11,9 @@ A data analysis pipeline and web visualization package for auditory fish EEG rec
 
 This package provides a complete workflow for processing, analyzing, and visualizing auditory fish EEG recordings. It includes tools for data ingestion, preprocessing, feature extraction, statistical analysis, and interactive web-based visualization.
 
+# Website Link
+https://aoih-uw.github.io/fish_eeg/index.html  
+
 # Intended Audience
 1. Researchers who need to analyze auditory fish EEG recordings  
 2. Collaborators of researchers who want to understand the data analysis pipeline and its results  
