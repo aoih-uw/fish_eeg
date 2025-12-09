@@ -37,11 +37,62 @@
     <section class="mb-8">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Background</h2>
       <p class="text-slate-700 mb-4">This project analyzes auditory evoked potentials (AEPs) in <em>Hydrolagus colliei</em> (spotted ratfish) using a multi-stage electrophysiological pipeline. The analysis focuses on detecting the double-frequency (2f) neural response to acoustic stimuli using ICA-based denoising, bootstrapping, and SNR calculations.</p>
-      <p class="text-slate-700">Understanding how fish respond to auditory stimuli is crucial for marine conservation, especially in relation to anthropogenic noise pollution in environments like the Puget Sound. This research provides insights into the auditory capabilities of cartilaginous fish and their potential vulnerability to underwater acoustic disturbances.</p>
+      <p class="text-slate-700 mb-4">Understanding how fish respond to auditory stimuli is crucial for marine conservation, especially in relation to anthropogenic noise pollution in environments like the Puget Sound. This research provides insights into the auditory capabilities of cartilaginous fish and their potential vulnerability to underwater acoustic disturbances.</p>
+
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <p class="font-semibold text-slate-800 mb-2">Intended Audience</p>
+        <ul class="list-disc ml-6 text-sm text-slate-700 space-y-1">
+          <li>Researchers who need to analyze auditory fish EEG recordings</li>
+          <li>Collaborators of researchers who want to understand the data analysis pipeline and its results</li>
+          <li>Generally scientifically minded curious people who want to know about what sounds fish can hear</li>
+        </ul>
+      </div>
     </section>
+
     <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Data Used</h2>
-      <p class="text-slate-700 mb-3"><strong>Dataset:</strong> Multi-channel electrophysiological recordings from 7 subjects:</p>
+      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Installation</h2>
+      <p class="text-slate-700 mb-3">This package provides a complete workflow for processing, analyzing, and visualizing auditory fish EEG recordings. It includes tools for data ingestion, preprocessing, feature extraction, statistical analysis, and interactive web-based visualization.</p>
+
+      <div class="space-y-4">
+        <div class="bg-slate-50 border border-slate-200 rounded p-4">
+          <p class="font-semibold text-slate-800 mb-2">Option 1: Install directly from GitHub</p>
+          <pre class="bg-slate-900 text-slate-100 rounded p-3 text-sm overflow-x-auto"><code>pip install git+https://github.com/aoih-uw/fish_eeg.git</code></pre>
+        </div>
+
+        <div class="bg-slate-50 border border-slate-200 rounded p-4">
+          <p class="font-semibold text-slate-800 mb-2">Option 2: Clone the repository and install locally</p>
+          <pre class="bg-slate-900 text-slate-100 rounded p-3 text-sm overflow-x-auto"><code>git clone https://github.com/aoih-uw/fish_eeg.git
+cd fish_eeg
+pip install .</code></pre>
+          <p class="text-xs text-slate-600 mt-2">These commands will build and install the package from <code class="bg-slate-200 px-1 rounded">pyproject.toml</code></p>
+        </div>
+      </div>
+
+      <div class="mt-4 bg-blue-50 border border-blue-200 rounded p-4">
+        <p class="font-semibold text-slate-800 mb-2">Example Usage</p>
+        <p class="text-sm text-slate-700 mb-2">1. Ensure your dataset is in the right format (.mat file with the following structure):</p>
+        <pre class="bg-slate-900 text-slate-100 rounded p-3 text-sm overflow-x-auto mb-3"><code>f = h5py.File('fish01.mat', 'r')
+ex_data = f['ex']
+channel_keys = ['ch1','ch2','ch3','ch4']
+period_keys = ['prestim_sig','stimresp_sig','poststimresp_sig']</code></pre>
+        <p class="text-sm text-slate-700 mb-2">2. Place your dataset in the <code class="bg-slate-200 px-1 rounded">data/</code> directory</p>
+        <p class="text-sm text-slate-700 mb-2">3. Run the analysis pipeline:</p>
+        <pre class="bg-slate-900 text-slate-100 rounded p-3 text-sm overflow-x-auto"><code>python pipeline.py --input data/'fish01.mat' --output results/</code></pre>
+      </div>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Data Sources</h2>
+      <div class="bg-slate-50 border border-slate-200 rounded p-4 mb-3">
+        <p class="text-slate-700 mb-2"><strong>1. Fish EEG Recordings</strong></p>
+        <p class="text-sm text-slate-700">Collected by Aoi Hunsaker in June 2025. Multi-channel electrophysiological recordings from 7 subjects at the Sisneros Lab, University of Washington.</p>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 rounded p-4 mb-4">
+        <p class="text-slate-700 mb-2"><strong>2. Passive Acoustic Data</strong></p>
+        <p class="text-sm text-slate-700">Environmental noise data from Puget Sound via NOAA's Google Cloud Storage (Orcasound Labs). Used to contextualize auditory thresholds against real-world underwater noise levels.</p>
+      </div>
+
+      <p class="text-slate-700 mb-3"><strong>Dataset Details:</strong> Multi-channel electrophysiological recordings from 7 subjects:</p>
       <ul class="list-disc ml-6 text-slate-700 space-y-1 mb-3">
         <li><strong>deadFish</strong> (control/baseline)</li>
         <li><strong>hydrolagusColliei_4 through hydrolagusColliei_9</strong> (6 test subjects)</li>
@@ -87,18 +138,18 @@
       <p class="text-slate-700">All visualizations are created using Altair and are fully interactive in the browser.</p>
     </section>
     <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Design</h2>
+      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Software Architecture</h2>
       <p class="text-slate-700 mb-3"><strong>System Components:</strong></p>
       <ul class="list-disc ml-6 text-slate-700 space-y-2 mb-4">
-        <li><strong>Data Ingestion:</strong> Python scripts read MATLAB .mat files and organize trials by frequency/amplitude</li>
-        <li><strong>Preprocessing Module:</strong> Artifact rejection based on RMS thresholds, trial balancing across channels</li>
-        <li><strong>Signal Processing:</strong> Bandpass filtering (70-1400 Hz), ICA denoising with component selection</li>
-        <li><strong>Statistical Analysis:</strong> Bootstrap resampling (100 iterations), FFT analysis, SNR calculation at 2f</li>
-        <li><strong>Visualization Engine:</strong> Altair library generates interactive HTML plots with faceting by frequency</li>
-        <li><strong>Web Dashboard:</strong> Multi-page HTML interface with responsive navigation, search functionality, and embedded visualizations</li>
+        <li><strong>Data Ingestion Manager (<code class="bg-slate-200 px-1 rounded text-xs">preprocess.py</code>):</strong> Loads .mat EEG datasets, validates file structure, performs artifact rejection, and prepares data for downstream analysis. Outputs structured data objects containing raw EEG signals and metadata.</li>
+        <li><strong>EEG Data Filtering (<code class="bg-slate-200 px-1 rounded text-xs">filters.py</code>):</strong> Performs bandpass filtering (70-1400 Hz) to remove irrelevant signals from analysis. Takes filter parameters (low/high cutoff frequencies, order) and outputs filtered EEG datasets.</li>
+        <li><strong>ICA Denoising Manager (<code class="bg-slate-200 px-1 rounded text-xs">denoiser.py</code>, <code class="bg-slate-200 px-1 rounded text-xs">reconstruct.py</code>):</strong> Performs ICA-based denoising to remove irrelevant signals. Outputs denoised EEG datasets and ICA decomposition objects (unmixing matrix, time-series components).</li>
+        <li><strong>Statistical Analysis Manager (<code class="bg-slate-200 px-1 rounded text-xs">statistics.py</code>):</strong> Performs bootstrap-based confidence interval tests (100 iterations) on cleaned and filtered EEG datasets. Outputs results determining if the fish heard a given sound frequency.</li>
+        <li><strong>Visualization Manager (<code class="bg-slate-200 px-1 rounded text-xs">plotting.py</code>):</strong> Plots results of statistical analysis using Altair library. Generates interactive HTML plots with tooltips showing auditory sensitivity across tested frequencies.</li>
+        <li><strong>Web Dashboard (<code class="bg-slate-200 px-1 rounded text-xs">index.html</code>):</strong> Multi-page HTML interface with responsive navigation, search functionality, guided tour, and embedded interactive visualizations.</li>
       </ul>
       <p class="text-slate-700 mb-3"><strong>Data Flow:</strong></p>
-      <p class="text-slate-700">Raw .mat files → Artifact removal → Bandpass filter → ICA denoising → Period separation (prestim/stimresp) → FFT → Bootstrap → Confidence intervals → Interactive visualizations</p>
+      <p class="text-slate-700">Raw .mat files → <code class="bg-slate-200 px-1 rounded text-xs">preprocess.py</code> (artifact removal) → <code class="bg-slate-200 px-1 rounded text-xs">filters.py</code> (bandpass filter) → <code class="bg-slate-200 px-1 rounded text-xs">denoiser.py</code> (ICA denoising) → Period separation (prestim/stimresp) → <code class="bg-slate-200 px-1 rounded text-xs">statistics.py</code> (FFT → Bootstrap → Confidence intervals) → <code class="bg-slate-200 px-1 rounded text-xs">plotting.py</code> (interactive visualizations) → <code class="bg-slate-200 px-1 rounded text-xs">index.html</code> (web dashboard)</p>
     </section>
     <section class="mb-8">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Project Structure</h2>

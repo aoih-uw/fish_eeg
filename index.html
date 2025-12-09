@@ -78,30 +78,54 @@
     <script>
       // Dashboard search bar logic
       const dashboardLinks = [
-        { text: 'Project Overview', url: 'pages/overview.html' },
-        { text: 'Analysis Pipeline', url: 'pages/pipeline.html' },
-        { text: 'Visual Summaries', url: 'pages/visuals.html' },
-        { text: 'Team & Course', url: 'pages/team.html' },
-        { text: 'Repository Info', url: 'pages/repo.html' },
-        // Add more keywords/sections as needed
+        { text: 'Project Overview', url: 'pages/overview.html', keywords: ['background', 'goals', 'parameters', 'overview', 'project', 'ratfish', 'eeg', 'auditory', 'thresholds', 'glossary'] },
+        { text: 'Analysis Pipeline', url: 'pages/pipeline.html', keywords: ['pipeline', 'analysis', 'workflow', 'processing', 'steps', 'code', 'data', 'ica', 'bootstrap', 'filtering'] },
+        { text: 'Visual Summaries', url: 'pages/visuals.html', keywords: ['visuals', 'charts', 'graphs', 'results', 'data', 'statistics', 'plots', 'figures', 'interactive'] },
+        { text: 'Team & Course', url: 'pages/team.html', keywords: ['team', 'course', 'members', 'people', 'contributors', 'acknowledgments', 'aoi', 'hunsaker', 'michael', 'james', 'christopher', 'tritt', 'yash', 'sonthalia', 'jeff', 'bryna', 'hazelton', 'dave', 'beck', 'ian', 'quah', 'elli', 'anastasia', 'beres'] },
+        { text: 'Repository Info', url: 'pages/repo.html', keywords: ['repository', 'repo', 'github', 'code', 'downloads', 'resources', 'citation', 'install', 'installation', 'setup', 'usage', 'architecture', 'modules'] },
       ];
+
       const searchForm = document.getElementById('dashboardSearchForm');
-      if (searchForm) {
+      const searchInput = document.getElementById('dashboardSearchInput');
+      const resultsDiv = document.getElementById('dashboardSearchResults');
+
+      if (searchForm && searchInput && resultsDiv) {
         searchForm.addEventListener('submit', function(e) {
           e.preventDefault();
-          const query = document.getElementById('dashboardSearchInput').value.trim().toLowerCase();
-          const resultsDiv = document.getElementById('dashboardSearchResults');
-          if (!query) {
-            resultsDiv.textContent = '';
-            return;
-          }
-          const results = dashboardLinks.filter(link => link.text.toLowerCase().includes(query));
-          if (results.length === 0) {
-            resultsDiv.innerHTML = '<span class="text-slate-500">No matches found.</span>';
-          } else {
-            resultsDiv.innerHTML = results.map(link => `<a href="${link.url}" class="underline text-[#32006e] mr-4">${link.text}</a>`).join(' ');
+          performSearch();
+        });
+
+        // Optional: Real-time search as user types
+        searchInput.addEventListener('input', function() {
+          const query = searchInput.value.trim();
+          if (query.length >= 2) {
+            performSearch();
+          } else if (query.length === 0) {
+            resultsDiv.innerHTML = '';
           }
         });
+      }
+
+      function performSearch() {
+        const query = searchInput.value.trim().toLowerCase();
+        if (!query) {
+          resultsDiv.innerHTML = '';
+          return;
+        }
+
+        const results = dashboardLinks.filter(link => {
+          const textMatch = link.text.toLowerCase().includes(query);
+          const keywordMatch = link.keywords && link.keywords.some(keyword => keyword.includes(query));
+          return textMatch || keywordMatch;
+        });
+
+        if (results.length === 0) {
+          resultsDiv.innerHTML = '<span class="text-slate-500">No matches found. Try searching for: overview, pipeline, visuals, team, or repository.</span>';
+        } else {
+          resultsDiv.innerHTML = '<div class="flex flex-wrap gap-2 justify-center">' +
+            results.map(link => `<a href="${link.url}" class="inline-block px-3 py-1 bg-white border border-[#32006e] rounded-full text-[#32006e] hover:bg-[#32006e] hover:text-white transition">${link.text}</a>`).join('') +
+            '</div>';
+        }
       }
         // ...existing code for tab switching, subject selection, etc...
       
