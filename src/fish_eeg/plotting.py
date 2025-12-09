@@ -1,4 +1,3 @@
-from matplotlib.backends.backend_pdf import PdfPages
 import os
 import numpy as np
 import matplotlib.pyplot as plt

@@ -1,4 +1,4 @@
-from fish_eeg.data import EEGDataset
+from fish_eeg.data import EEGDataset, ConfigAccessor
 from fish_eeg.utils import get_channels
 import numpy as np
 import time
@@ -7,11 +7,14 @@ from sklearn.decomposition import FastICA
 
 
 class Denoiser:
-    def __init__(self, eegdataset: EEGDataset):
+    def __init__(self, eegdataset: EEGDataset, cfg: ConfigAccessor | None = None):
         self.eegdataset = eegdataset
         self.data = self.eegdataset.bandpass_data
         self.channels = get_channels(eegdataset)
         self.period_keys = eegdataset.period_keys
+        cfg = cfg or ConfigAccessor(None)
+        self.method = cfg.get("denoiser", "method", default="ICA")
+        self.cfg = cfg.get("denoiser", "params", default=ConfigAccessor(None))
 
     def ICA(self, dictionary: dict):
         def reshape_the_data(data, bootstrapped=False):
@@ -24,7 +27,14 @@ class Denoiser:
             reshaped_data = np.hstack(reshaped_list)
             return reshaped_data
 
-        def perform_ICA(data):
+        def perform_ICA(
+            data,
+            n_components=4,
+            random_state=42,
+            max_iter=500,
+            tol=1e-4,
+            whiten="unit-variance",
+        ):
             start = time.perf_counter()
 
             # Standardize the data
@@ -38,11 +48,11 @@ class Denoiser:
             # Improved FastICA configuration
             # Use default variables more or less except max_iter set to 500 instead of 200
             ica = FastICA(
-                n_components=len(self.channels),
-                random_state=42,  # More robust random seed
-                max_iter=500,  # Increased iterations
-                tol=1e-4,  # Tightened tolerance???
-                whiten="unit-variance",  # Corrected whiten parameter
+                n_components=self.cfg.get("n_components", n_components),
+                random_state=self.cfg.get("random_state", random_state),
+                max_iter=self.cfg.get("max_iter", max_iter),
+                tol=self.cfg.get("tol", tol),
+                whiten=self.cfg.get("whiten", whiten),
             )
 
             S = ica.fit_transform(data_scaled)
@@ -73,9 +83,13 @@ class Denoiser:
         pass
 
     def pipeline(self):
-        ica_dictionary = {}
-        for coord, dictionary in self.data.item().items():
-            ica_results = self.ICA(dictionary)
-            ica_dictionary[coord] = ica_results
-        self.eegdataset.ica_output = ica_dictionary
-        return self.eegdataset
+        method = self.method
+        if method == "ICA":
+            ica_data = {}
+            for coord, dictionary in self.data.items():
+                ica_results = self.ICA(dictionary)
+                ica_data[coord] = ica_results
+            self.eegdataset.ica_output = ica_data
+            return self.eegdataset
+        else:
+            raise ValueError(f"Unknown denoiser method: {method!r}. Must be 'ICA'.")

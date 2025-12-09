@@ -1,6 +1,7 @@
 import numpy as np
 from dataclasses import dataclass
 from fish_eeg.constants import PERIOD_KEYS, METRIC_KEYS, SUBMETRIC_KEYS
+from typing import Optional, Any, Mapping
 
 
 #### Dataclass for EEGDataset ####
@@ -19,6 +20,117 @@ class EEGDataset:
     metric_keys: list[str]
     submetric_keys: list[str]
     period_len: int
+
+
+@dataclass
+class PipelineConfig:
+    def __init__(self, yaml_loaded: dict):
+        self.preprocess: dict = yaml_loaded["preprocess"]
+        self.filters: dict = yaml_loaded["filters"]
+        self.denoiser: dict = yaml_loaded["denoiser"]
+        self.reconstruct: dict = yaml_loaded["reconstruct"]
+        self.statistics: dict = yaml_loaded["statistics"]
+
+
+@dataclass
+class SectionAccessor:
+    """
+    Safe wrapper around a single config section (a dict-like).
+
+    Lets you do both:
+        cfg.preprocess.get("method", "rms_subsampled")
+        cfg.preprocess.method
+    """
+
+    _data: Optional[Mapping[str, Any]] = None
+
+    @property
+    def is_present(self) -> bool:
+        return bool(self._data)
+
+    def get(self, key: str, default: Any = None) -> Any:
+        if self._data is None:
+            return default
+        return self._data.get(key, default)
+
+    def as_dict(self) -> dict:
+        return dict(self._data or {})
+
+    def __getattr__(self, item: str) -> Any:
+        """
+        Attribute-style access: section.method, section.seed, etc.
+        Falls back to normal AttributeError if key not present.
+        """
+        if self._data is not None and item in self._data:
+            return self._data[item]
+        raise AttributeError(f"{self.__class__.__name__} has no attribute '{item}'")
+
+
+class ConfigAccessor:
+    """
+    Thin wrapper around PipelineConfig that is safe to use even if config is None.
+
+    Usage:
+        cfg = ConfigAccessor(pipeline_config_or_none)
+
+        # dict-like section/key access
+        method = cfg.get("preprocess", "method", default="rms_subsampled")
+
+        # section accessor
+        preprocess = cfg.section("preprocess")
+        method = preprocess.get("method", "rms_subsampled")
+        seed = preprocess.seed  # attribute form
+
+        # attribute shortcut for sections:
+        method = cfg.preprocess.method
+    """
+
+    def __init__(self, config: Optional["PipelineConfig"] = None):
+        self._config = config
+
+    @property
+    def is_present(self) -> bool:
+        return self._config is not None
+
+    # ------------ high-level helpers ------------
+
+    def get(self, section: str, key: str, default: Any = None) -> Any:
+        """
+        Safe access:
+            cfg.get('preprocess', 'method', default='rms_subsampled')
+        """
+        return self.section(section).get(key, default)
+
+    def section(self, section: str) -> SectionAccessor:
+        """
+        Return a SectionAccessor for a given section name.
+
+        Safe even if:
+        - overall config is None
+        - that section doesn't exist
+        """
+        if self._config is None:
+            return SectionAccessor(None)
+
+        section_dict = getattr(self._config, section, None)
+        return SectionAccessor(section_dict)
+
+    # ------------ attribute shortcut for sections ------------
+
+    def __getattr__(self, name: str) -> SectionAccessor:
+        """
+        Fallback: treat unknown attributes as section names.
+
+        This lets you do:
+            cfg.preprocess.method
+            cfg.filters.low
+        even though `preprocess` / `filters` aren't real attributes
+        on ConfigAccessor itself.
+        """
+        # don't swallow private / dunder attributes
+        if name.startswith("_"):
+            raise AttributeError(f"{self.__class__.__name__} has no attribute '{name}'")
+        return self.section(name)
 
 
 #### I/O for data ####

@@ -200,4 +200,18 @@ def select_doub_freq_bin(data, frequencies, period_keys, myfreq, window_size=100
     return doub_freq_dict
 
 
-# check 11/20/25
+class dotdict(dict):
+    """dot.notation access to dictionary attributes
+    Example:
+    >>> my_dict = dotdict({"key1": "value1", "key2": "value2"})
+    >>> my_dict.key1
+    'value1'
+    >>> my_dict.key2
+    'value2'
+    >>> my_dict.key3
+    None
+    """
+
+    __getattr__ = dict.get
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__

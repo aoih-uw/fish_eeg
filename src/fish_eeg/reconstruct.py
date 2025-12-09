@@ -1,18 +1,31 @@
 import numpy as np
 from fish_eeg.utils import get_channels
-from fish_eeg.data import EEGDataset
+from fish_eeg.data import EEGDataset, ConfigAccessor
 from fish_eeg.constants import sampling_frequency
+from fish_eeg.constants import baseline_artifact_freqs
 
 
 class Reconstructor:
-    def __init__(self, eegdataset: EEGDataset):
+    def __init__(self, eegdataset: EEGDataset, cfg: ConfigAccessor | None = None):
         self.eegdataset = eegdataset
         self.fft_data = eegdataset.ica_fft_output
         self.ica_data = eegdataset.ica_output
         self.channel_keys = get_channels(self.eegdataset)
+        cfg = cfg or ConfigAccessor(None)
+        self.method = cfg.get("reconstruct", "method", default="ICA")
+        self.cfg = cfg.get("reconstruct", "params", default=ConfigAccessor(None))
 
     def select_doub_freq_bin(
-        self, magnitudes, frequencies, period_keys=[], myfreq=55, window_size=100
+        self,
+        magnitudes,
+        frequencies,
+        period_keys=[],
+        myfreq=55,
+        window_size=100,
+        double_freq_mask_tolerance=3,
+        artifact_freqs=baseline_artifact_freqs,
+        art_mask_tolerance=3,
+        snr_scaler=10,
     ):
         if len(period_keys) == 0:
             doub_freq_dict = {}
@@ -22,32 +35,22 @@ class Reconstructor:
             artifact_freqs = [
                 myfreq,
                 target_freq,
-                60,
-                120,
-                180,
-                240,
-                300,
-                360,
-                420,
-                480,
-                540,
-                600,
-                660,
-                720,
-                780,
-                840,
-                900,
+                *artifact_freqs,
             ]
             freq_vec = frequencies[0]
 
             # Double frequency mask (3 Hz tolerance)
-            doub_mask = np.abs(freq_vec - target_freq) <= 3
+            doub_mask = np.abs(freq_vec - target_freq) <= self.cfg.get(
+                "double_freq_mask_tolerance", double_freq_mask_tolerance
+            )
             window_mask = (freq_vec >= target_freq - part_window) & (
                 freq_vec <= target_freq + part_window
             )
 
             for freq in artifact_freqs:
-                art_mask = np.abs(freq_vec - freq) <= 3
+                art_mask = np.abs(freq_vec - freq) <= self.cfg.get(
+                    "art_mask_tolerance", art_mask_tolerance
+                )
                 window_mask[art_mask] = False
 
             num_it = magnitudes.shape[0]
@@ -64,7 +67,10 @@ class Reconstructor:
                 remain_mag = np.mean(remain_mag)
 
                 doub_freq_tmp.append(doub_mag)
-                snr_tmp.append(10 * np.log10((doub_mag) / (remain_mag)))
+                snr_tmp.append(
+                    self.cfg.get("snr_scaler", snr_scaler)
+                    * np.log10((doub_mag) / (remain_mag))
+                )
 
             # Move this inside the period loop
             doub_freq_dict = {
@@ -80,31 +86,21 @@ class Reconstructor:
             artifact_freqs = [
                 myfreq,
                 target_freq,
-                60,
-                120,
-                180,
-                240,
-                300,
-                360,
-                420,
-                480,
-                540,
-                600,
-                660,
-                720,
-                780,
-                840,
-                900,
+                *artifact_freqs,
             ]
             freq_vec = frequencies["prestim"]["ch1"]
             # Double frequency mask (3 Hz tolerance)
-            doub_mask = np.abs(freq_vec - target_freq) <= 3
+            doub_mask = np.abs(freq_vec - target_freq) <= self.cfg.get(
+                "double_freq_mask_tolerance", double_freq_mask_tolerance
+            )
             window_mask = (freq_vec >= target_freq - part_window) & (
                 freq_vec <= target_freq + part_window
             )
 
             for freq in artifact_freqs:
-                art_mask = np.abs(freq_vec - freq) <= 3
+                art_mask = np.abs(freq_vec - freq) <= self.cfg.get(
+                    "art_mask_tolerance", art_mask_tolerance
+                )
                 window_mask[art_mask] = False
 
             num_it = len(magnitudes["prestim"])
@@ -125,7 +121,10 @@ class Reconstructor:
                     remain_mag = np.mean(remain_mag)
 
                     doub_freq_tmp.append(doub_mag)
-                    snr_tmp.append(10 * np.log10((doub_mag) / (remain_mag)))
+                    snr_tmp.append(
+                        self.cfg.get("snr_scaler", snr_scaler)
+                        * np.log10((doub_mag) / (remain_mag))
+                    )
 
                 # Move this inside the period loop
                 doub_freq_dict[period] = {
@@ -246,41 +245,52 @@ class Reconstructor:
 
     def pipeline(self, weighted: bool = False):
         reconstructed_ica_data = {}
+        method = self.method
         for coord, ffts in self.fft_data.items():
-            ica_doub_freq = self.select_doub_freq_bin(
-                magnitudes=ffts[0], frequencies=ffts[1], period_keys=[], myfreq=coord[0]
-            )
-            if weighted:
-                weights = self.create_ICA_weights(ica_doub_freq)
-            else:
-                weights = None
+            if method == "ICA":
+                ica_doub_freq = self.select_doub_freq_bin(
+                    magnitudes=ffts[0],
+                    frequencies=ffts[1],
+                    period_keys=[],
+                    myfreq=coord[0],
+                )
+                if weighted:
+                    weights = self.create_ICA_weights(ica_doub_freq)
+                else:
+                    weights = None
 
-            recon_restruct_data = self.reconstruct_ICA(
-                self.eegdataset.ica_output[coord],
-                self.eegdataset.rms_subsampled_data.item()[coord],
-                self.channel_keys,
-                [0, 1, 2, 3],
-                component_weights=weights,
-            )
-            reconstructed_ica_data[coord] = recon_restruct_data
+                recon_restruct_data = self.reconstruct_ICA(
+                    self.eegdataset.ica_output[coord],
+                    self.eegdataset.rms_subsampled_data.item()[coord],
+                    self.channel_keys,
+                    [0, 1, 2, 3],
+                    component_weights=weights,
+                )
+                reconstructed_ica_data[coord] = recon_restruct_data
 
-            comparison_results = self.compare_denoised_waveform(
-                self.eegdataset.bandpass_data.item()[coord],
-                recon_restruct_data,
-                self.channel_keys,
-                coord[0],
-                coord[1],
-                sampling_frequency,
-            )
-            reconstructed_ica_data[coord]["compare_denoising_mean"] = (
-                comparison_results[0]
-            )
-            reconstructed_ica_data[coord]["compare_denoising_std"] = comparison_results[
-                1
-            ]
-            reconstructed_ica_data[coord]["fft_magnitudes_mean"] = comparison_results[2]
-            reconstructed_ica_data[coord]["fft_magnitudes_std"] = comparison_results[3]
-            reconstructed_ica_data[coord]["fft_freq_vecs"] = comparison_results[4]
+                comparison_results = self.compare_denoised_waveform(
+                    self.eegdataset.bandpass_data.item()[coord],
+                    recon_restruct_data,
+                    self.channel_keys,
+                    coord[0],
+                    coord[1],
+                    sampling_frequency,
+                )
+                reconstructed_ica_data[coord]["compare_denoising_mean"] = (
+                    comparison_results[0]
+                )
+                reconstructed_ica_data[coord]["compare_denoising_std"] = (
+                    comparison_results[1]
+                )
+                reconstructed_ica_data[coord]["fft_magnitudes_mean"] = (
+                    comparison_results[2]
+                )
+                reconstructed_ica_data[coord]["fft_magnitudes_std"] = (
+                    comparison_results[3]
+                )
+                reconstructed_ica_data[coord]["fft_freq_vecs"] = comparison_results[4]
 
-        self.eegdataset.reconstructed_ica_data = reconstructed_ica_data
-        return self.eegdataset
+            self.eegdataset.reconstructed_ica_data = reconstructed_ica_data
+            return self.eegdataset
+        else:
+            raise ValueError(f"Unknown reconstruct method: {method!r}. Must be 'ICA'.")
