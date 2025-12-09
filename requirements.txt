@@ -1,7 +1,0 @@
-pandas
-numpy
-altair
-scipy
-scikit-learn
-matplotlib
-pywavelets
