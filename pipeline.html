@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Analysis Pipeline - Fish Auditory EEG Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Encode+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -256,12 +257,12 @@ import altair as alt
 # - ICA weights by channel and frequency
 
 # Export to HTML and PNG
-chart.save('analysis/plots/summary_plots/95CI_all.html')
-chart.save('analysis/plots/summary_plots/95CI_all.png', scale_factor=3)
+chart.save('tools/analysis/plots/summary_plots/95CI_all.html')
+chart.save('tools/analysis/plots/summary_plots/95CI_all.png', scale_factor=3)
 
 # Export data to CSV
-ci_data.to_csv('analysis/CI_csv/{subjid}/{subjid}_{freq}Hz_{amp}dB_CI_0.csv')
-weights_data.to_csv('analysis/weights_csv/{subjid}/{subjid}_{freq}Hz_{amp}dB_weights.csv')</code></pre>
+ci_data.to_csv('tools/analysis/CI_csv/{subjid}/{subjid}_{freq}Hz_{amp}dB_CI_0.csv')
+weights_data.to_csv('tools/analysis/weights_csv/{subjid}/{subjid}_{freq}Hz_{amp}dB_weights.csv')</code></pre>
           <p class="text-xs text-slate-500 mt-2"><strong>Output:</strong> Interactive HTML plots, high-resolution PNG images, and CSV data files</p>
         </div>
       </details>

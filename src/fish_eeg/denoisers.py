@@ -1,5 +1,5 @@
-from data import EEGDataset
-from utils import get_channels
+from fish_eeg.data import EEGDataset
+from fish_eeg.utils import get_channels
 import numpy as np
 import time
 from sklearn.preprocessing import StandardScaler
@@ -11,19 +11,20 @@ class Denoiser:
         self.eegdataset = eegdataset
         self.data = self.eegdataset.bandpass_data
         self.channels = get_channels(eegdataset)
+        self.period_keys = eegdataset.period_keys
 
     def ICA(self, dictionary: dict):
-        def reshape_the_data(data, channel_keys, period_keys, bootstrapped=False):
+        def reshape_the_data(data, bootstrapped=False):
             # Reshape to (trials * samples) x channels
             reshaped_list = []
-            for channel in channel_keys:
+            for channel in self.channels:
                 cur_set = data[channel]
                 reshaped_list.append(cur_set.reshape(-1, 1))
 
             reshaped_data = np.hstack(reshaped_list)
             return reshaped_data
 
-        def perform_ICA(data, channel_keys):
+        def perform_ICA(data):
             start = time.perf_counter()
 
             # Standardize the data
@@ -37,7 +38,7 @@ class Denoiser:
             # Improved FastICA configuration
             # Use default variables more or less except max_iter set to 500 instead of 200
             ica = FastICA(
-                n_components=len(channel_keys),
+                n_components=len(self.channels),
                 random_state=42,  # More robust random seed
                 max_iter=500,  # Increased iterations
                 tol=1e-4,  # Tightened tolerance???
@@ -64,10 +65,8 @@ class Denoiser:
 
             return ica_results
 
-        reshaped_data = reshape_the_data(
-            dictionary, self.channels, self.eegdataset.period_keys
-        )
-        ica_results = perform_ICA(reshaped_data, self.channels)
+        reshaped_data = reshape_the_data(dictionary)
+        ica_results = perform_ICA(reshaped_data)
         return ica_results
 
     def your_new_denoiser(self):
