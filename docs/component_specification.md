@@ -1,7 +1,7 @@
 # Component Specification
 
 ## Software Components
-1. Data ingestion manager (`preprocess.py`)  
+### 1. Data ingestion manager (`preprocess.py`)  
   - Loads `.mat` EEG datasets  
   - Validates file structure  
   - Prepares data for downstream analysis  
@@ -14,7 +14,7 @@
         - Structured data object (i.e., Python dictionary) containing raw EEG signals  
         - Metadata summary (e.g., Stimulus frequencies, amplitude, trial number)  
 
-2. EEG data filtering and ICA Denoising manager (`filters.py`,`reconstruct.py`)  
+### 2. EEG data filtering and ICA Denoising manager (`filters.py`,`reconstruct.py`)  
   - Performs artifact rejection  
   - Performs bandpass filtering of EEG signals  
   - Performs ICA based denoising method  
@@ -29,7 +29,7 @@
         - Filtered and cleaned EEG dataset  
         - ICA decomposition object (unmixing matrix, time-series components)  
     
-3. Statistical Analysis Manager (`statistics.py`)  
+### 3. Statistical Analysis Manager (`statistics.py`)  
   - Performs bootstrap-based confidence interval tests on cleaned and filtered EEG dataset  
 
       Required input:  
@@ -40,7 +40,7 @@
       Outputs provided:  
         - Results from confidence interval tests which determine if the fish heard a given sound frequency
         
-4. Visualization Manager (`plotting.py`)  
+### 4. Visualization Manager (`plotting.py`)  
   - Plots results of statistical analysis and displays the auditory sensitivity of the fish for multiple sound frequencies  
 
       Required input:  
@@ -51,7 +51,7 @@
       Outputs provided:  
       - Interactive data visualizations (e.g., with tooltips) showing auditory sensitivity of fish across tested sound frequencies  
 
-5. Website (`index.html`)  
+### 5. Website (`index.html`)  
   - There is not technically a manager or python script for taking the outputs of the visualization manager and applying it to the website. The user has to code in HTML themselves to display their data analysis results themselves.  
 
 ## Interactions to accomplish "Use Cases"
