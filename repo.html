@@ -35,12 +35,16 @@
     <h1 class="text-3xl font-bold mb-8" style="color:#32006e">Repository Information</h1>
     <section class="mb-8">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Background</h2>
-      <p class="text-slate-700 mb-4">This project analyzes auditory evoked potentials (AEPs) in <em>Hydrolagus colliei</em> (spotted ratfish) using a multi-stage electrophysiological pipeline. The analysis focuses on detecting the double-frequency (2f) neural response to acoustic stimuli using ICA-based denoising, bootstrapping, and SNR calculations.</p>
+      <p class="text-slate-700 mb-4">The goal of this work is to determine the sound frequencies that the spotted ratfish (<em>Hydrolagus colliei</em>) can hear and to present the findings to a broad scientific audience. The challenge is that the collected EEG data require specialized analysis and visualization methods to extract reliable auditory responses. This project analyzes auditory evoked potentials (AEPs) using a multi-stage electrophysiological pipeline that detects the double-frequency (2f) neural response to acoustic stimuli through ICA-based denoising, bootstrapping, and SNR calculations.</p>
       <p class="text-slate-700">Understanding how fish respond to auditory stimuli is crucial for marine conservation, especially in relation to anthropogenic noise pollution in environments like the Puget Sound. This research provides insights into the auditory capabilities of cartilaginous fish and their potential vulnerability to underwater acoustic disturbances.</p>
     </section>
     <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Data Used</h2>
-      <p class="text-slate-700 mb-3"><strong>Dataset:</strong> Multi-channel electrophysiological recordings from 7 subjects:</p>
+      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Data Sources</h2>
+      <ol class="list-decimal ml-6 text-slate-700 space-y-2 mb-4">
+        <li>Fish EEG recordings collected by Aoi Hunsaker in June 2025</li>
+        <li>Passive acoustic data via NOAA's Google Cloud Storage</li>
+      </ol>
+      <p class="text-slate-700 mb-3"><strong>Primary Dataset:</strong> Multi-channel electrophysiological recordings from 7 subjects:</p>
       <ul class="list-disc ml-6 text-slate-700 space-y-1 mb-3">
         <li><strong>deadFish</strong> (control/baseline)</li>
         <li><strong>hydrolagusColliei_4 through hydrolagusColliei_9</strong> (6 test subjects)</li>
@@ -53,24 +57,22 @@
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Use Cases</h2>
       <div class="space-y-4">
         <div class="bg-slate-50 border border-slate-200 rounded p-4">
-          <p class="font-semibold text-slate-800 mb-1">Researcher / Graduate Student</p>
-          <p class="text-sm text-slate-700">Wants to understand the analysis pipeline, replicate methods, and extend the research. Needs detailed documentation, accessible code, and visualizations to learn step-by-step data processing techniques.</p>
+          <p class="font-semibold text-slate-800 mb-2">1. Analyzing EEG Data</p>
+          <p class="text-sm text-slate-700 mb-2"><strong>Actors:</strong> Primary experimenter, collaborator</p>
+          <p class="text-sm text-slate-700 mb-2"><strong>Goal:</strong> Run custom pipeline of analysis scripts on fish EEG datasets to determine hearing thresholds</p>
+          <p class="text-sm text-slate-700"><strong>Workflow:</strong> Install package using pyproject.toml, load data, denoise and filter data, conduct statistical analysis to identify audible frequencies</p>
         </div>
         <div class="bg-slate-50 border border-slate-200 rounded p-4">
-          <p class="font-semibold text-slate-800 mb-1">Undergraduate Lab Assistant</p>
-          <p class="text-sm text-slate-700">New to the team with minimal background, needs readable code with extensive comments and easy online access to scripts for testing and learning.</p>
+          <p class="font-semibold text-slate-800 mb-2">2. Verifying Analytical Choices and Monitoring Results</p>
+          <p class="text-sm text-slate-700 mb-2"><strong>Actors:</strong> Principal investigator</p>
+          <p class="text-sm text-slate-700 mb-2"><strong>Goal:</strong> Review dataset structure, analytical decisions, and results to stay aligned with the project</p>
+          <p class="text-sm text-slate-700"><strong>Workflow:</strong> Read documentation describing data and analysis workflow, explore interactive visualizations on website, examine plots and metrics to verify analysis decisions, provide feedback to refine next steps</p>
         </div>
         <div class="bg-slate-50 border border-slate-200 rounded p-4">
-          <p class="font-semibold text-slate-800 mb-1">Principal Investigator / Advisor</p>
-          <p class="text-sm text-slate-700">Wants to understand student's work in detail, verify methods for errors, and potentially use the codebase for future lab projects after student graduation.</p>
-        </div>
-        <div class="bg-slate-50 border border-slate-200 rounded p-4">
-          <p class="font-semibold text-slate-800 mb-1">Wildlife Advocate / Educator</p>
-          <p class="text-sm text-slate-700">Curious about fish hearing and conservation. Needs jargon defined, visual explanations, and understanding of what findings mean for Puget Sound wildlife.</p>
-        </div>
-        <div class="bg-slate-50 border border-slate-200 rounded p-4">
-          <p class="font-semibold text-slate-800 mb-1">Environmental Impact Assessor</p>
-          <p class="text-sm text-slate-700">Needs to understand if anthropogenic noise (ships, construction, industry) will adversely affect spotted ratfish populations for legal/regulatory purposes.</p>
+          <p class="font-semibold text-slate-800 mb-2">3. Exploring Results as Curious Friend</p>
+          <p class="text-sm text-slate-700 mb-2"><strong>Actors:</strong> Curious friend, general audience</p>
+          <p class="text-sm text-slate-700 mb-2"><strong>Goal:</strong> Understand main results without needing deep knowledge of dataset or analytical methods</p>
+          <p class="text-sm text-slate-700"><strong>Workflow:</strong> Open website using provided link, browse results sections and use interactive features, view simple explanations of findings and significance</p>
         </div>
       </div>
     </section>
@@ -102,34 +104,59 @@
     <section class="mb-8">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Project Structure</h2>
       <pre class="bg-slate-100 border border-slate-200 rounded p-4 text-xs overflow-x-auto mb-2">fish_eeg/
-├── src/                    # Source code for all programs
-│   ├── fish_eeg/          # Main package
-│   ├── passive_acoustic/  # Acoustic data processing
-│   └── condainit/         # Conda environment setup
-├── analysis/              # Jupyter notebooks for exploration
-│   ├── CI_csv/           # Confidence interval data
-│   ├── weights_csv/      # ICA weights data
-│   └── plots/            # Generated visualizations
-├── results/              # Final deliverables and products
-│   ├── aoi/             # Aoi's user stories and outputs
-│   ├── christopher/     # Christopher's contributions
-│   ├── mike/            # Mike's contributions
-│   ├── jeff/            # Jeff's contributions
-│   └── yash/            # Yash's contributions
-├── docs/                 # Documentation PDFs
-├── data/                 # Data storage (gitignored)
-├── deps/                 # External dependencies (gitignored)
-├── *.html               # Web dashboard pages
-├── style.css            # Shared stylesheet
-├── environment.yml      # Conda environment specification
-├── requirements.txt     # Python dependencies
-└── README.md           # Project overview</pre>
+├── src/                    # Source code (installable package)
+│   └── fish_eeg/          # Main package with core modules
+│       ├── __init__.py
+│       ├── data.py        # Data loading utilities
+│       ├── preprocess.py  # Preprocessing and artifact rejection
+│       ├── denoisers.py   # ICA and denoising functions
+│       ├── fft.py         # FFT analysis
+│       ├── statistics.py  # Bootstrap and statistical analysis
+│       ├── plotting.py    # Visualization functions
+│       └── utils.py       # Helper functions
+├── tests/                 # Test suite (pytest)
+│   ├── test_load_data.py
+│   ├── test_preprocess.py
+│   ├── test_filter.py
+│   ├── test_fft.py
+│   └── conftest.py
+├── tutorials/             # End-to-end analysis examples
+│   └── end_to_end_analysis.ipynb
+├── analysis/              # Exploratory Jupyter notebooks
+│   ├── analysis/          # Generated CSV outputs
+│   │   ├── CI_csv/       # Confidence interval data
+│   │   └── weights_csv/  # ICA weights data
+│   └── old/              # Archived notebooks
+├── test_data/             # Sample datasets for testing
+├── results/               # Final deliverables and products
+│   ├── aoi/              # Aoi's user stories and outputs
+│   ├── christopher/      # Christopher's contributions
+│   ├── mike/             # Mike's contributions
+│   ├── jeff/             # Jeff's contributions
+│   └── yash/             # Yash's contributions
+├── docs/                  # Documentation
+│   ├── functional_specification.md
+│   └── Hunsaker_ProjectSummary_Final.pdf
+├── tools/                 # Auxiliary tools (not for production)
+│   ├── analysis/         # Analysis helper scripts
+│   └── passive_acoustic/ # Acoustic data processing
+├── data/                  # Data storage (gitignored)
+├── deps/                  # External dependencies (gitignored)
+├── *.html                 # Web dashboard pages
+├── style.css              # Shared stylesheet
+├── pyproject.toml         # Package configuration
+├── environment.yml        # Conda environment specification
+├── requirements.txt       # Python dependencies
+├── LICENSE                # MIT License
+└── README.md              # Project overview</pre>
       <p class="text-slate-700 text-sm mt-2"><strong>Key Directories:</strong></p>
       <ul class="list-disc ml-6 text-slate-700 text-sm space-y-1">
-        <li><strong>src/</strong> - Production code with process-specific READMEs</li>
+        <li><strong>src/fish_eeg/</strong> - Installable package containing production code</li>
+        <li><strong>tests/</strong> - Test files using pytest (test_*.py naming convention)</li>
+        <li><strong>tutorials/</strong> - Example notebooks demonstrating package usage</li>
         <li><strong>analysis/</strong> - Exploratory notebooks (not for production)</li>
-        <li><strong>results/</strong> - Final outputs and deliverables</li>
-        <li><strong>docs/</strong> - Contextual documentation</li>
+        <li><strong>docs/</strong> - Functional specification and project documentation</li>
+        <li><strong>results/</strong> - Final outputs and team deliverables</li>
       </ul>
     </section>
     <!-- Downloadable Resources Section -->
