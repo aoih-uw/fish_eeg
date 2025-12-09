@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fish Auditory EEG Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Encode+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-4 focus:bg-white focus:text-slate-900">Skip to main content</a>
@@ -17,21 +17,21 @@
       <div class="flex items-center justify-between">
         <div class="flex gap-6 menu-links" id="navLinks">
           <a href="index.html" class="font-semibold" style="color:#32006e">Home</a>
-          <a href="overview.html" class="text-slate-700">Overview</a>
-          <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
-          <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
-          <a href="team.html" class="text-slate-700">Team & Course</a>
-          <a href="repo.html" class="text-slate-700">Repository Info</a>
+          <a href="pages/overview.html" class="text-slate-700">Overview</a>
+          <a href="pages/pipeline.html" class="text-slate-700">Analysis Pipeline</a>
+          <a href="pages/visuals.html" class="text-slate-700">Visual Summaries</a>
+          <a href="pages/team.html" class="text-slate-700">Team & Course</a>
+          <a href="pages/repo.html" class="text-slate-700">Repository Info</a>
         </div>
         <button id="hamburger" class="hidden md:hidden text-slate-700 text-2xl font-semibold focus:outline-none" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
       </div>
       <div id="mobileMenu" class="hidden md:hidden flex-col gap-3 mt-4 pb-2" style="display:none;">
         <a href="index.html" class="block text-slate-700 px-2 py-1" style="color:#32006e">Home</a>
-        <a href="overview.html" class="block text-slate-700 px-2 py-1">Overview</a>
-        <a href="pipeline.html" class="block text-slate-700 px-2 py-1">Analysis Pipeline</a>
-        <a href="visuals.html" class="block text-slate-700 px-2 py-1">Visual Summaries</a>
-        <a href="team.html" class="block text-slate-700 px-2 py-1">Team & Course</a>
-        <a href="repo.html" class="block text-slate-700 px-2 py-1">Repository Info</a>
+        <a href="pages/overview.html" class="block text-slate-700 px-2 py-1">Overview</a>
+        <a href="pages/pipeline.html" class="block text-slate-700 px-2 py-1">Analysis Pipeline</a>
+        <a href="pages/visuals.html" class="block text-slate-700 px-2 py-1">Visual Summaries</a>
+        <a href="pages/team.html" class="block text-slate-700 px-2 py-1">Team & Course</a>
+        <a href="pages/repo.html" class="block text-slate-700 px-2 py-1">Repository Info</a>
       </div>
     </nav>
     <main id="main-content" class="max-w-2xl mx-auto py-16 px-4 text-center">
@@ -51,25 +51,25 @@
         🎓 Start Guided Tour (Recommended for First-Time Visitors)
       </button>
       <div class="grid gap-6 md:grid-cols-2 mt-8">
-        <a href="overview.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+        <a href="pages/overview.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
           <h2 class="text-xl font-semibold mb-2" style="color:#32006e">Project Overview</h2>
           <p class="text-slate-600">Background, goals, and key parameters of the auditory EEG analysis pipeline.</p>
         </a>
-        <a href="pipeline.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+        <a href="pages/pipeline.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
           <h2 class="text-xl font-semibold mb-2" style="color:#32006e">Analysis Pipeline</h2>
           <p class="text-slate-600">Step-by-step breakdown of the data processing and analysis workflow.</p>
         </a>
-        <a href="visuals.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+        <a href="pages/visuals.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
           <h2 class="text-xl font-semibold mb-2" style="color:#32006e">Visual Summaries</h2>
           <p class="text-slate-600">Interactive charts and summary statistics from the analysis results.</p>
         </a>
-        <a href="team.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+        <a href="pages/team.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
           <h2 class="text-xl font-semibold mb-2" style="color:#32006e">Team & Course</h2>
           <p class="text-slate-600">Meet the project team and see course information and acknowledgments.</p>
         </a>
       </div>
       <div class="mt-10">
-        <img src="ratfish_animation.gif" alt="Spotted ratfish animation" class="mx-auto h-32 w-32 object-contain mb-4" />
+        <img src="assets/images/ratfish_animation.gif" alt="Spotted ratfish animation" class="mx-auto h-32 w-32 object-contain mb-4" />
         <p class="text-sm text-slate-500">&copy; 2025 Fish Auditory EEG Dashboard. Data citation: Hunsaker, A., Brown, A., Sisneros, J., James, M., Tritt, C., Sonthalia, Y. (2025). Fish Auditory EEG Analysis Dataset. University of Washington. <a href="https://github.com/aoih-uw/fish_eeg" class="underline" style="color:#32006e" target="_blank" rel="noopener">https://github.com/aoih-uw/fish_eeg</a></p>
         <p class="text-sm text-slate-700 mt-2">Thank you to the Spotted Ratfish</p>
       </div>
@@ -78,11 +78,11 @@
     <script>
       // Dashboard search bar logic
       const dashboardLinks = [
-        { text: 'Project Overview', url: 'overview.html' },
-        { text: 'Analysis Pipeline', url: 'pipeline.html' },
-        { text: 'Visual Summaries', url: 'visuals.html' },
-        { text: 'Team & Course', url: 'team.html' },
-        { text: 'Repository Info', url: 'repo.html' },
+        { text: 'Project Overview', url: 'pages/overview.html' },
+        { text: 'Analysis Pipeline', url: 'pages/pipeline.html' },
+        { text: 'Visual Summaries', url: 'pages/visuals.html' },
+        { text: 'Team & Course', url: 'pages/team.html' },
+        { text: 'Repository Info', url: 'pages/repo.html' },
         // Add more keywords/sections as needed
       ];
       const searchForm = document.getElementById('dashboardSearchForm');
@@ -116,27 +116,27 @@
         {
           title: "Step 1: Understanding the Research",
           content: "Start with the Overview page to learn about our methodology, key parameters, and the species we study. You'll also find a glossary of technical terms.",
-          action: () => { highlightNavLink('overview.html'); }
+          action: () => { highlightNavLink('pages/overview.html'); }
         },
         {
           title: "Step 2: The Analysis Process",
           content: "The Analysis Pipeline page shows our 9-step data processing workflow with code examples. Each step is explained in simple terms with technical details available.",
-          action: () => { highlightNavLink('pipeline.html'); }
+          action: () => { highlightNavLink('pages/pipeline.html'); }
         },
         {
           title: "Step 3: Explore the Data",
           content: "Visual Summaries contains interactive charts showing our results. You can filter by subject, listen to the auditory stimulus, and export data for your own use.",
-          action: () => { highlightNavLink('visuals.html'); }
+          action: () => { highlightNavLink('pages/visuals.html'); }
         },
         {
           title: "Step 4: Meet the Team",
           content: "Learn about the researchers behind this work and the course that supported this project.",
-          action: () => { highlightNavLink('team.html'); }
+          action: () => { highlightNavLink('pages/team.html'); }
         },
         {
           title: "Step 5: Dive Deeper",
           content: "The Repository Info page has downloadable resources, citation information, and details about our software engineering approach. Perfect for researchers wanting to build on our work!",
-          action: () => { highlightNavLink('repo.html'); }
+          action: () => { highlightNavLink('pages/repo.html'); }
         },
         {
           title: "Tour Complete!",
