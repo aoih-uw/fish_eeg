@@ -1,10 +1,9 @@
 # Component Specification
 
 ## Software Components
-### 1. Data ingestion manager (`preprocess.py`)  
-  - Loads `.mat` EEG datasets  
+### 1. Data ingestion class (`data.py`)  
+  - Loads `.npz` EEG datasets  
   - Validates file structure
-  - Performs artifact rejection  
   - Prepares data for downstream analysis  
 
       Required input:  
@@ -15,7 +14,8 @@
         - Structured data object (i.e., Python dictionary) containing raw EEG signals  
         - Metadata summary (e.g., Stimulus frequencies, amplitude, trial number)  
 
-### 2. EEG data filtering (`filters.py`)
+### 2. EEG Filtering Data class (`preprocess.py`,`filters.py`)
+  - Performs artifact rejection  
   - Performs bandpass filtering of EEG signals to remove irrelevant signals from analysis  
 
       Required input:  
@@ -25,7 +25,7 @@
       Outputs provided:   
         - Filtered EEG dataset  
 
-### 3. ICA "denoising" manager (`denoiser.py`,`reconstruct.py`)  
+### 3. ICA "denoising" class (`denoiser.py`,`reconstruct.py`)  
   - Performs ICA-based denoising method to remove irrelevant signals from analysis  
 
       Required input:  
@@ -37,7 +37,7 @@
         - "Denoised" EEG dataset  
         - ICA decomposition object (unmixing matrix, time-series components)  
     
-### 4. Statistical Analysis Manager (`statistics.py`)  
+### 4. Statistical Analysis Class (`statistics.py`)  
   - Performs bootstrap-based confidence interval tests on cleaned and filtered EEG dataset  
 
       Required input:  
@@ -48,7 +48,7 @@
       Outputs provided:  
         - Results from confidence interval tests which determine if the fish heard a given sound frequency
         
-### 5. Visualization Manager (`plotting.py`)  
+### 5. Visualization Class (`plotting.py`)  
   - Plots results of statistical analysis and displays the auditory sensitivity of the fish for multiple sound frequencies  
 
       Required input:  
