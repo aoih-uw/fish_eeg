@@ -33,8 +33,30 @@
     </div>
   </nav>
   <main id="main-content" class="max-w-4xl mx-auto py-10 px-4">
-    <h1 class="text-3xl font-bold mb-8" style="color:#32006e">Repository Information</h1>
-    <section class="mb-8">
+    <h1 class="text-3xl font-bold mb-6" style="color:#32006e">Repository Information</h1>
+
+    <!-- Table of Contents -->
+    <nav class="mb-8 bg-white border border-slate-200 rounded-lg p-4 shadow-sm" aria-label="Table of contents">
+      <p class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        On This Page
+      </p>
+      <ul class="space-y-1 text-sm">
+        <li><a href="#background" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Background</a></li>
+        <li><a href="#installation" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Installation</a></li>
+        <li><a href="#data-sources" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Data Sources</a></li>
+        <li><a href="#use-cases" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Use Cases</a></li>
+        <li><a href="#demo" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Demo</a></li>
+        <li><a href="#architecture" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Software Architecture</a></li>
+        <li><a href="#structure" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Project Structure</a></li>
+        <li><a href="#resources" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Downloadable Resources</a></li>
+        <li><a href="#lessons" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Lessons Learned & Future Work</a></li>
+      </ul>
+    </nav>
+
+    <section class="mb-8" id="background">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Background</h2>
       <p class="text-slate-700 mb-4">This project analyzes auditory evoked potentials (AEPs) in <em>Hydrolagus colliei</em> (spotted ratfish) using a multi-stage electrophysiological pipeline. The analysis focuses on detecting the double-frequency (2f) neural response to acoustic stimuli using ICA-based denoising, bootstrapping, and SNR calculations.</p>
       <p class="text-slate-700 mb-4">Understanding how fish respond to auditory stimuli is crucial for marine conservation, especially in relation to anthropogenic noise pollution in environments like the Puget Sound. This research provides insights into the auditory capabilities of cartilaginous fish and their potential vulnerability to underwater acoustic disturbances.</p>
@@ -49,7 +71,7 @@
       </div>
     </section>
 
-    <section class="mb-8">
+    <section class="mb-8" id="installation">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Installation</h2>
       <p class="text-slate-700 mb-3">This package provides a complete workflow for processing, analyzing, and visualizing auditory fish EEG recordings. It includes tools for data ingestion, preprocessing, feature extraction, statistical analysis, and interactive web-based visualization.</p>
 
@@ -81,7 +103,7 @@ period_keys = ['prestim_sig','stimresp_sig','poststimresp_sig']</code></pre>
       </div>
     </section>
 
-    <section class="mb-8">
+    <section class="mb-8" id="data-sources">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Data Sources</h2>
       <div class="bg-slate-50 border border-slate-200 rounded p-4 mb-3">
         <p class="text-slate-700 mb-2"><strong>1. Fish EEG Recordings</strong></p>
@@ -101,7 +123,7 @@ period_keys = ['prestim_sig','stimresp_sig','poststimresp_sig']</code></pre>
       <p class="text-slate-700 mb-3"><strong>Collection Method:</strong> Auditory stimuli were presented at various frequencies (55-385 Hz) and amplitudes (70-150 dB), with neural responses recorded via surface electrodes.</p>
       <p class="text-slate-700"><strong>Limitations:</strong> Some frequencies (50 Hz, 385 Hz) showed artifacts and were filtered out. Certain amplitude ranges (145-150 dB) contained problematic data. Subject hydrolagusColliei_7 had issues at 55 Hz and 100 Hz. Sample size is limited to 6 live subjects plus one control.</p>
     </section>
-    <section class="mb-8">
+    <section class="mb-8" id="use-cases">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Use Cases</h2>
       <div class="space-y-4">
         <div class="bg-slate-50 border border-slate-200 rounded p-4">
@@ -126,7 +148,7 @@ period_keys = ['prestim_sig','stimresp_sig','poststimresp_sig']</code></pre>
         </div>
       </div>
     </section>
-    <section class="mb-8">
+    <section class="mb-8" id="demo">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Demo</h2>
       <p class="text-slate-700 mb-3">Explore the interactive features of this dashboard:</p>
       <ul class="list-disc ml-6 text-slate-700 space-y-2 mb-4">
@@ -137,7 +159,7 @@ period_keys = ['prestim_sig','stimresp_sig','poststimresp_sig']</code></pre>
       </ul>
       <p class="text-slate-700">All visualizations are created using Altair and are fully interactive in the browser.</p>
     </section>
-    <section class="mb-8">
+    <section class="mb-8" id="architecture">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Software Architecture</h2>
       <p class="text-slate-700 mb-3"><strong>System Components:</strong></p>
       <ul class="list-disc ml-6 text-slate-700 space-y-2 mb-4">
@@ -151,7 +173,7 @@ period_keys = ['prestim_sig','stimresp_sig','poststimresp_sig']</code></pre>
       <p class="text-slate-700 mb-3"><strong>Data Flow:</strong></p>
       <p class="text-slate-700">Raw .mat files → <code class="bg-slate-200 px-1 rounded text-xs">preprocess.py</code> (artifact removal) → <code class="bg-slate-200 px-1 rounded text-xs">filters.py</code> (bandpass filter) → <code class="bg-slate-200 px-1 rounded text-xs">denoiser.py</code> (ICA denoising) → Period separation (prestim/stimresp) → <code class="bg-slate-200 px-1 rounded text-xs">statistics.py</code> (FFT → Bootstrap → Confidence intervals) → <code class="bg-slate-200 px-1 rounded text-xs">plotting.py</code> (interactive visualizations) → <code class="bg-slate-200 px-1 rounded text-xs">index.html</code> (web dashboard)</p>
     </section>
-    <section class="mb-8">
+    <section class="mb-8" id="structure">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Project Structure</h2>
       <pre class="bg-slate-100 border border-slate-200 rounded p-4 text-xs overflow-x-auto mb-2">fish_eeg/
 .
@@ -236,7 +258,7 @@ period_keys = ['prestim_sig','stimresp_sig','poststimresp_sig']</code></pre>
       </div>
     </section>
     
-    <section class="mb-8">
+    <section class="mb-8" id="lessons">
       <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Lessons Learned &amp; Future Work</h2>
       <p class="text-slate-700 mb-3"><strong>Software Engineering Lessons:</strong></p>
       <ul class="list-disc ml-6 text-slate-700 space-y-2 mb-4">
@@ -258,9 +280,35 @@ period_keys = ['prestim_sig','stimresp_sig','poststimresp_sig']</code></pre>
       </ul>
     </section>
   </main>
-  <footer class="mt-10 text-center text-sm text-slate-500">
+  <footer class="mt-10 text-center text-sm text-slate-500 pb-6">
     &copy; 2025 Fish Auditory EEG Dashboard. <a href="https://github.com/aoih-uw/fish_eeg" class="underline" style="color:#32006e" target="_blank" rel="noopener">GitHub Repository</a>
   </footer>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" class="fixed bottom-6 right-6 bg-[#32006e] text-white p-3 rounded-full shadow-lg hover:bg-[#22004a] transition opacity-0 pointer-events-none focus:outline-none focus:ring-2 focus:ring-[#32006e] focus:ring-offset-2" aria-label="Back to top">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+    </svg>
+  </button>
+
+  <script>
+    // Back to Top functionality
+    const backToTopButton = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', function() {
+      if (window.pageYOffset > 300) {
+        backToTopButton.style.opacity = '1';
+        backToTopButton.style.pointerEvents = 'auto';
+      } else {
+        backToTopButton.style.opacity = '0';
+        backToTopButton.style.pointerEvents = 'none';
+      }
+    });
+
+    backToTopButton.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
 
   <script>
     // Hamburger menu toggle
@@ -286,5 +334,62 @@ period_keys = ['prestim_sig','stimresp_sig','poststimresp_sig']</code></pre>
       });
     }
   </script>
+
+  <style>
+    /* Print Styles */
+    @media print {
+      /* Hide interactive elements */
+      #backToTop,
+      nav[aria-label="Main navigation"],
+      nav[aria-label="Breadcrumb"],
+      nav[aria-label="Table of contents"],
+      .no-print {
+        display: none !important;
+      }
+
+      /* Optimize layout for printing */
+      body {
+        background: white !important;
+        color: black !important;
+        font-size: 12pt;
+        line-height: 1.5;
+      }
+
+      main {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0.5in !important;
+      }
+
+      /* Ensure links show URLs */
+      a[href^="http"]::after {
+        content: " (" attr(href) ")";
+        font-size: 10pt;
+        color: #666;
+      }
+
+      /* Prevent page breaks inside code blocks */
+      pre, code {
+        page-break-inside: avoid;
+      }
+
+      /* Add page breaks before major sections */
+      section {
+        page-break-before: auto;
+        page-break-inside: avoid;
+      }
+
+      h1, h2, h3 {
+        page-break-after: avoid;
+        color: #32006e !important;
+      }
+
+      /* Remove shadows and borders for print */
+      * {
+        box-shadow: none !important;
+        border-color: #ccc !important;
+      }
+    }
+  </style>
 </body>
 </html>
