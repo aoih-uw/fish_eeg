@@ -22,6 +22,11 @@ Civil and Environmental Engineering - PhD Student  - adv. Jim Thomson; Kristin Z
 
 [mkj29@uw.edu](mailto:mkj29@uw.edu)
 
+**Yash Sonthalia**
+University of Washington
+
+Genome Sciences - PhD Student  - adv. Bill Noble; Sud Pinglay
+
 # Information about "data" structure
 
 Data is a collection of python dictionaries.
