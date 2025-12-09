@@ -87,6 +87,7 @@
 3. Mike will
     - Write  `pyproject.toml` and conda environment files  
     - Create example of using the package
+    - Impliment continuous integration
 3. Jeff will lead on writing tests for pipeline
 5. Chris and Mike will take the outputs from the refactored code and display the results onto an interactive web visualization
 6. All members of the team will review eachothers work for possible errors and inconsistencies across package
