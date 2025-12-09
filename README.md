@@ -114,6 +114,14 @@ Location of pdfs and other documents which provide contextual information to the
 "tools" "passive acoustic data"
 Auxillary folder for loading in public acoustic data to compare to audiogram. 
 
+## pages 
+"Webpages"
+Webpage structure for fisheeg project information
+
+## assets
+"Assets"
+Everything that website uses as a resource for showing data
+
 ## results
 "results"
 Final location of src products and project deliverables
