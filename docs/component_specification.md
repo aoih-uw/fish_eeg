@@ -3,7 +3,8 @@
 ## Software Components
 ### 1. Data ingestion manager (`preprocess.py`)  
   - Loads `.mat` EEG datasets  
-  - Validates file structure  
+  - Validates file structure
+  - Performs artifact rejection  
   - Prepares data for downstream analysis  
 
       Required input:  
@@ -14,22 +15,29 @@
         - Structured data object (i.e., Python dictionary) containing raw EEG signals  
         - Metadata summary (e.g., Stimulus frequencies, amplitude, trial number)  
 
-### 2. EEG data filtering and ICA Denoising manager (`filters.py`,`reconstruct.py`)  
-  - Performs artifact rejection  
-  - Performs bandpass filtering of EEG signals  
-  - Performs ICA based denoising method  
+### 2. EEG data filtering (`filters.py`)
+  - Performs bandpass filtering of EEG signals to remove irrelevant signals from analysis  
 
       Required input:  
         - Preprocessed EEG data object  
-        - Filter parameters (low/high cutoff frequencies, order)  
-        - ICA parameters (number of components, algorithm choice)  
-        - Noise-component identification rules for ICA-based denoising  
+        - Filter parameters (low/high cutoff frequencies, order)   
     
       Outputs provided:   
-        - Filtered and cleaned EEG dataset  
+        - Filtered EEG dataset  
+
+### 3. ICA "denoising" manager (`denoiser.py`,`reconstruct.py`)  
+  - Performs ICA-based denoising method to remove irrelevant signals from analysis  
+
+      Required input:  
+        - Filtered EEG data object  
+        - ICA parameters (number of components, algorithm choice)  
+        - Noise-component identification rules for ICA-based denoising (e.g., apply component weights)
+    
+      Outputs provided:   
+        - "Denoised" EEG dataset  
         - ICA decomposition object (unmixing matrix, time-series components)  
     
-### 3. Statistical Analysis Manager (`statistics.py`)  
+### 4. Statistical Analysis Manager (`statistics.py`)  
   - Performs bootstrap-based confidence interval tests on cleaned and filtered EEG dataset  
 
       Required input:  
@@ -40,7 +48,7 @@
       Outputs provided:  
         - Results from confidence interval tests which determine if the fish heard a given sound frequency
         
-### 4. Visualization Manager (`plotting.py`)  
+### 5. Visualization Manager (`plotting.py`)  
   - Plots results of statistical analysis and displays the auditory sensitivity of the fish for multiple sound frequencies  
 
       Required input:  
@@ -51,7 +59,7 @@
       Outputs provided:  
       - Interactive data visualizations (e.g., with tooltips) showing auditory sensitivity of fish across tested sound frequencies  
 
-### 5. Website (`index.html`)  
+### 6. Website (`index.html`)  
   - There is not technically a manager or python script for taking the outputs of the visualization manager and applying it to the website. The user has to code in HTML themselves to display their data analysis results themselves.  
 
 ## Interactions to accomplish "Use Cases"
@@ -72,11 +80,13 @@
 
 ## Preliminary plan
 1. Aoi will design and code the components of the data analysis needed to analyze this dataset
-2. Yash, Mike, Jeff will
-    - Refactor Aoi's initial code set  
+2. Yash will
+    - Refactor Aoi's initial code set
+    -  Set up `__init__.py`  
     - Write docstrings  
-    - Write  `pyproject.toml` and `__init__.py` files  
-    - Create example of using the package  
-4. All members will write tests for this code set
-5. Chris will take the outputs from the refactored code and display the results onto an interactive web visualization
+3. Mike will
+    - Write  `pyproject.toml` and conda environment files  
+    - Create example of using the package
+3. Jeff will lead on writing tests for pipeline
+5. Chris and Mike will take the outputs from the refactored code and display the results onto an interactive web visualization
 6. All members of the team will review eachothers work for possible errors and inconsistencies across package
