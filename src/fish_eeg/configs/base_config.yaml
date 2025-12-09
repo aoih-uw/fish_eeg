@@ -1,0 +1,42 @@
+# pipeline_config.yaml
+preprocess:
+  method: "rms_subsampled"
+  params:
+    seed: 42
+    mad: !!float 1e-6
+    max_rms_median_ratio: 5
+    modified_z_scale: 0.6745
+    modified_z_threshold: 3.5
+
+filters:
+  method: "bandpass"
+  params:
+    ny_fs_ratio: 0.5
+    low: 70
+    high: 1400
+    sampling_frequency: 22050
+    order: 4
+
+denoiser:
+  method: "ICA"
+  params:
+    n_components: 4
+    random_state: 42
+    max_iter: 500
+    tol: !!float 1e-4
+    whiten: "unit-variance"
+
+reconstruct:
+  method: "ICA"
+  params:
+    artifact_freqs:
+      [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900]
+    double_freq_mask_tolerance: 3
+    art_mask_tolerance: 3
+    snr_scaler: 10
+
+statistics:
+  method: "bootstrap"
+  params:
+    seed: 42
+    n_iterations: 100

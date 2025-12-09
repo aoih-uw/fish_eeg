@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fish Auditory EEG Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Encode+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-4 focus:bg-white focus:text-slate-900">Skip to main content</a>
@@ -17,59 +17,91 @@
       <div class="flex items-center justify-between">
         <div class="flex gap-6 menu-links" id="navLinks">
           <a href="index.html" class="font-semibold" style="color:#32006e">Home</a>
-          <a href="overview.html" class="text-slate-700">Overview</a>
-          <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
-          <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
-          <a href="team.html" class="text-slate-700">Team & Course</a>
-          <a href="repo.html" class="text-slate-700">Repository Info</a>
+          <a href="pages/overview.html" class="text-slate-700">Overview</a>
+          <a href="pages/pipeline.html" class="text-slate-700">Analysis Pipeline</a>
+          <a href="pages/visuals.html" class="text-slate-700">Visual Summaries</a>
+          <a href="pages/team.html" class="text-slate-700">Team & Course</a>
+          <a href="pages/repo.html" class="text-slate-700">Repository Info</a>
         </div>
         <button id="hamburger" class="hidden md:hidden text-slate-700 text-2xl font-semibold focus:outline-none" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
       </div>
       <div id="mobileMenu" class="hidden md:hidden flex-col gap-3 mt-4 pb-2" style="display:none;">
         <a href="index.html" class="block text-slate-700 px-2 py-1" style="color:#32006e">Home</a>
-        <a href="overview.html" class="block text-slate-700 px-2 py-1">Overview</a>
-        <a href="pipeline.html" class="block text-slate-700 px-2 py-1">Analysis Pipeline</a>
-        <a href="visuals.html" class="block text-slate-700 px-2 py-1">Visual Summaries</a>
-        <a href="team.html" class="block text-slate-700 px-2 py-1">Team & Course</a>
-        <a href="repo.html" class="block text-slate-700 px-2 py-1">Repository Info</a>
+        <a href="pages/overview.html" class="block text-slate-700 px-2 py-1">Overview</a>
+        <a href="pages/pipeline.html" class="block text-slate-700 px-2 py-1">Analysis Pipeline</a>
+        <a href="pages/visuals.html" class="block text-slate-700 px-2 py-1">Visual Summaries</a>
+        <a href="pages/team.html" class="block text-slate-700 px-2 py-1">Team & Course</a>
+        <a href="pages/repo.html" class="block text-slate-700 px-2 py-1">Repository Info</a>
       </div>
     </nav>
     <main id="main-content" class="max-w-2xl mx-auto py-16 px-4 text-center">
       <!-- Dashboard Search Bar -->
       <div class="mb-8">
-        <form id="dashboardSearchForm" class="flex items-center gap-2 justify-center">
-          <input type="text" id="dashboardSearchInput" class="flex-1 border border-slate-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#32006e]" placeholder="Search the dashboard..." aria-label="Search dashboard">
-          <button type="submit" class="px-4 py-2 rounded bg-[#32006e] text-white font-semibold hover:bg-[#22004a] transition">Search</button>
+        <form id="dashboardSearchForm" class="flex items-center gap-2 justify-center max-w-2xl mx-auto">
+          <input type="text" id="dashboardSearchInput" class="flex-1 max-w-md border border-slate-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#32006e]" placeholder="Search the dashboard... (Press / to focus)" aria-label="Search dashboard" aria-describedby="search-instructions">
+          <button type="submit" class="px-4 py-2 rounded bg-[#32006e] text-white font-semibold hover:bg-[#22004a] transition focus:outline-none focus:ring-2 focus:ring-[#32006e] focus:ring-offset-2">Search</button>
         </form>
-        <div id="dashboardSearchResults" class="mt-2 text-sm text-slate-700"></div>
+        <p id="search-instructions" class="sr-only">Type to search for pages, topics, or team members. Results will appear below as you type. Press forward slash to focus the search box.</p>
+        <div id="dashboardSearchResults" class="mt-2 text-sm text-slate-700" role="status" aria-live="polite" aria-atomic="true"></div>
       </div>
       <h1 class="text-3xl font-bold mb-4" style="color:#32006e">Welcome to the Fish Auditory EEG Dashboard</h1>
       <p class="text-lg text-slate-700 mb-4">Explore our project sections using the menu above.</p>
       
       <!-- Guided Tour Button -->
-      <button onclick="startGuidedTour()" class="mb-8 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
+      <button onclick="startGuidedTour()" class="mb-8 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
         🎓 Start Guided Tour (Recommended for First-Time Visitors)
       </button>
-      <div class="grid gap-6 md:grid-cols-2 mt-8">
-        <a href="overview.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+
+      <!-- Quick Start for Different Users -->
+      <div class="mb-8 bg-white border border-slate-200 rounded-lg p-6 shadow-sm text-left">
+        <h2 class="text-xl font-semibold mb-4" style="color:#32006e">Quick Start by Role</h2>
+        <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div class="border-l-4 border-blue-500 pl-4">
+            <p class="font-semibold text-slate-800 mb-1">🔬 Researcher / Collaborator</p>
+            <p class="text-slate-600 mb-2">Want to analyze your own EEG data?</p>
+            <a href="pages/repo.html#installation" class="text-[#32006e] underline hover:text-[#22004a]">Start with Installation →</a>
+          </div>
+          <div class="border-l-4 border-green-500 pl-4">
+            <p class="font-semibold text-slate-800 mb-1">👨‍🏫 Principal Investigator</p>
+            <p class="text-slate-600 mb-2">Reviewing methods and results?</p>
+            <a href="pages/overview.html" class="text-[#32006e] underline hover:text-[#22004a]">View Overview →</a> | <a href="pages/visuals.html" class="text-[#32006e] underline hover:text-[#22004a]">See Results →</a>
+          </div>
+          <div class="border-l-4 border-purple-500 pl-4">
+            <p class="font-semibold text-slate-800 mb-1">🐟 Curious Friend / Educator</p>
+            <p class="text-slate-600 mb-2">Want to learn about fish hearing?</p>
+            <a href="pages/overview.html#impact" class="text-[#32006e] underline hover:text-[#22004a]">Why This Matters →</a> | <a href="pages/visuals.html" class="text-[#32006e] underline hover:text-[#22004a]">Interactive Charts →</a>
+          </div>
+          <div class="border-l-4 border-orange-500 pl-4">
+            <p class="font-semibold text-slate-800 mb-1">📊 Data Analyst / Developer</p>
+            <p class="text-slate-600 mb-2">Need the code and architecture?</p>
+            <a href="pages/pipeline.html" class="text-[#32006e] underline hover:text-[#22004a]">View Pipeline →</a> | <a href="pages/repo.html#resources" class="text-[#32006e] underline hover:text-[#22004a]">Download Data →</a>
+          </div>
+        </div>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-8">
+        <a href="pages/overview.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition focus:outline-none focus:ring-2 focus:ring-[#32006e] focus:ring-offset-2">
           <h2 class="text-xl font-semibold mb-2" style="color:#32006e">Project Overview</h2>
           <p class="text-slate-600">Background, goals, and key parameters of the auditory EEG analysis pipeline.</p>
         </a>
-        <a href="pipeline.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+        <a href="pages/pipeline.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition focus:outline-none focus:ring-2 focus:ring-[#32006e] focus:ring-offset-2">
           <h2 class="text-xl font-semibold mb-2" style="color:#32006e">Analysis Pipeline</h2>
           <p class="text-slate-600">Step-by-step breakdown of the data processing and analysis workflow.</p>
         </a>
-        <a href="visuals.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+        <a href="pages/visuals.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition focus:outline-none focus:ring-2 focus:ring-[#32006e] focus:ring-offset-2">
           <h2 class="text-xl font-semibold mb-2" style="color:#32006e">Visual Summaries</h2>
           <p class="text-slate-600">Interactive charts and summary statistics from the analysis results.</p>
         </a>
-        <a href="team.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+        <a href="pages/team.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition focus:outline-none focus:ring-2 focus:ring-[#32006e] focus:ring-offset-2">
           <h2 class="text-xl font-semibold mb-2" style="color:#32006e">Team & Course</h2>
           <p class="text-slate-600">Meet the project team and see course information and acknowledgments.</p>
         </a>
+        <a href="pages/repo.html" class="block rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition focus:outline-none focus:ring-2 focus:ring-[#32006e] focus:ring-offset-2">
+          <h2 class="text-xl font-semibold mb-2" style="color:#32006e">Repository Info</h2>
+          <p class="text-slate-600">Installation guide, downloadable resources, and software architecture details.</p>
+        </a>
       </div>
       <div class="mt-10">
-        <img src="ratfish_animation.gif" alt="Spotted ratfish animation" class="mx-auto h-32 w-32 object-contain mb-4" />
+        <img src="assets/images/ratfish_animation.gif" alt="Spotted ratfish animation" class="mx-auto h-32 w-32 object-contain mb-4" />
         <p class="text-sm text-slate-500">&copy; 2025 Fish Auditory EEG Dashboard. Data citation: Hunsaker, A., Brown, A., Sisneros, J., James, M., Tritt, C., Sonthalia, Y. (2025). Fish Auditory EEG Analysis Dataset. University of Washington. <a href="https://github.com/aoih-uw/fish_eeg" class="underline" style="color:#32006e" target="_blank" rel="noopener">https://github.com/aoih-uw/fish_eeg</a></p>
         <p class="text-sm text-slate-700 mt-2">Thank you to the Spotted Ratfish</p>
       </div>
@@ -78,30 +110,54 @@
     <script>
       // Dashboard search bar logic
       const dashboardLinks = [
-        { text: 'Project Overview', url: 'overview.html' },
-        { text: 'Analysis Pipeline', url: 'pipeline.html' },
-        { text: 'Visual Summaries', url: 'visuals.html' },
-        { text: 'Team & Course', url: 'team.html' },
-        { text: 'Repository Info', url: 'repo.html' },
-        // Add more keywords/sections as needed
+        { text: 'Project Overview', url: 'pages/overview.html', keywords: ['background', 'goals', 'parameters', 'overview', 'project', 'ratfish', 'eeg', 'auditory', 'thresholds', 'glossary'] },
+        { text: 'Analysis Pipeline', url: 'pages/pipeline.html', keywords: ['pipeline', 'analysis', 'workflow', 'processing', 'steps', 'code', 'data', 'ica', 'bootstrap', 'filtering'] },
+        { text: 'Visual Summaries', url: 'pages/visuals.html', keywords: ['visuals', 'charts', 'graphs', 'results', 'data', 'statistics', 'plots', 'figures', 'interactive'] },
+        { text: 'Team & Course', url: 'pages/team.html', keywords: ['team', 'course', 'members', 'people', 'contributors', 'acknowledgments', 'aoi', 'hunsaker', 'michael', 'james', 'christopher', 'tritt', 'yash', 'sonthalia', 'jeff', 'bryna', 'hazelton', 'dave', 'beck', 'ian', 'quah', 'elli', 'anastasia', 'beres'] },
+        { text: 'Repository Info', url: 'pages/repo.html', keywords: ['repository', 'repo', 'github', 'code', 'downloads', 'resources', 'citation', 'install', 'installation', 'setup', 'usage', 'architecture', 'modules'] },
       ];
+
       const searchForm = document.getElementById('dashboardSearchForm');
-      if (searchForm) {
+      const searchInput = document.getElementById('dashboardSearchInput');
+      const resultsDiv = document.getElementById('dashboardSearchResults');
+
+      if (searchForm && searchInput && resultsDiv) {
         searchForm.addEventListener('submit', function(e) {
           e.preventDefault();
-          const query = document.getElementById('dashboardSearchInput').value.trim().toLowerCase();
-          const resultsDiv = document.getElementById('dashboardSearchResults');
-          if (!query) {
-            resultsDiv.textContent = '';
-            return;
-          }
-          const results = dashboardLinks.filter(link => link.text.toLowerCase().includes(query));
-          if (results.length === 0) {
-            resultsDiv.innerHTML = '<span class="text-slate-500">No matches found.</span>';
-          } else {
-            resultsDiv.innerHTML = results.map(link => `<a href="${link.url}" class="underline text-[#32006e] mr-4">${link.text}</a>`).join(' ');
+          performSearch();
+        });
+
+        // Optional: Real-time search as user types
+        searchInput.addEventListener('input', function() {
+          const query = searchInput.value.trim();
+          if (query.length >= 2) {
+            performSearch();
+          } else if (query.length === 0) {
+            resultsDiv.innerHTML = '';
           }
         });
+      }
+
+      function performSearch() {
+        const query = searchInput.value.trim().toLowerCase();
+        if (!query) {
+          resultsDiv.innerHTML = '';
+          return;
+        }
+
+        const results = dashboardLinks.filter(link => {
+          const textMatch = link.text.toLowerCase().includes(query);
+          const keywordMatch = link.keywords && link.keywords.some(keyword => keyword.includes(query));
+          return textMatch || keywordMatch;
+        });
+
+        if (results.length === 0) {
+          resultsDiv.innerHTML = '<span class="text-slate-500">No matches found. Try searching for: overview, pipeline, visuals, team, or repository.</span>';
+        } else {
+          resultsDiv.innerHTML = '<div class="flex flex-wrap gap-2 justify-center">' +
+            results.map(link => `<a href="${link.url}" class="inline-block px-3 py-1 bg-white border border-[#32006e] rounded-full text-[#32006e] hover:bg-[#32006e] hover:text-white transition">${link.text}</a>`).join('') +
+            '</div>';
+        }
       }
         // ...existing code for tab switching, subject selection, etc...
       
@@ -116,27 +172,27 @@
         {
           title: "Step 1: Understanding the Research",
           content: "Start with the Overview page to learn about our methodology, key parameters, and the species we study. You'll also find a glossary of technical terms.",
-          action: () => { highlightNavLink('overview.html'); }
+          action: () => { highlightNavLink('pages/overview.html'); }
         },
         {
           title: "Step 2: The Analysis Process",
           content: "The Analysis Pipeline page shows our 9-step data processing workflow with code examples. Each step is explained in simple terms with technical details available.",
-          action: () => { highlightNavLink('pipeline.html'); }
+          action: () => { highlightNavLink('pages/pipeline.html'); }
         },
         {
           title: "Step 3: Explore the Data",
           content: "Visual Summaries contains interactive charts showing our results. You can filter by subject, listen to the auditory stimulus, and export data for your own use.",
-          action: () => { highlightNavLink('visuals.html'); }
+          action: () => { highlightNavLink('pages/visuals.html'); }
         },
         {
           title: "Step 4: Meet the Team",
           content: "Learn about the researchers behind this work and the course that supported this project.",
-          action: () => { highlightNavLink('team.html'); }
+          action: () => { highlightNavLink('pages/team.html'); }
         },
         {
           title: "Step 5: Dive Deeper",
           content: "The Repository Info page has downloadable resources, citation information, and details about our software engineering approach. Perfect for researchers wanting to build on our work!",
-          action: () => { highlightNavLink('repo.html'); }
+          action: () => { highlightNavLink('pages/repo.html'); }
         },
         {
           title: "Tour Complete!",
@@ -146,32 +202,75 @@
       ];
       
       function startGuidedTour() {
+        previousFocusElement = document.activeElement;
         tourStep = 0;
         showTourStep();
       }
       
+      let previousFocusElement = null;
+
       function showTourStep() {
         const step = tourSteps[tourStep];
         const modal = document.createElement('div');
         modal.id = 'tourModal';
         modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
         modal.innerHTML = `
-          <div class="bg-white rounded-lg shadow-2xl max-w-md w-full p-6 animate-fade-in">
+          <div class="bg-white rounded-lg shadow-2xl max-w-md w-full p-6 animate-fade-in" role="dialog" aria-modal="true" aria-labelledby="tour-title">
             <div class="flex justify-between items-start mb-4">
-              <h3 class="text-xl font-bold" style="color:#32006e">${step.title}</h3>
-              <button onclick="closeTour()" class="text-slate-400 hover:text-slate-600 text-2xl leading-none">&times;</button>
+              <h3 id="tour-title" class="text-xl font-bold" style="color:#32006e">${step.title}</h3>
+              <button id="closeTourBtn" class="text-slate-400 hover:text-slate-600 text-2xl leading-none focus:outline-none focus:ring-2 focus:ring-purple-600 rounded" aria-label="Close tour">&times;</button>
             </div>
             <p class="text-slate-700 mb-6">${step.content}</p>
             <div class="flex justify-between items-center">
-              <span class="text-sm text-slate-500">Step ${tourStep + 1} of ${tourSteps.length}</span>
+              <span class="text-sm text-slate-500" aria-live="polite">Step ${tourStep + 1} of ${tourSteps.length}</span>
               <div class="flex gap-2">
-                ${tourStep > 0 ? '<button onclick="previousTourStep()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded hover:bg-slate-300 transition">← Back</button>' : ''}
-                ${tourStep < tourSteps.length - 1 ? '<button onclick="nextTourStep()" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition">Next →</button>' : '<button onclick="closeTour()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">Finish ✓</button>'}
+                ${tourStep > 0 ? '<button id="prevTourBtn" class="px-4 py-2 bg-slate-200 text-slate-700 rounded hover:bg-slate-300 transition focus:outline-none focus:ring-2 focus:ring-purple-600">← Back</button>' : ''}
+                ${tourStep < tourSteps.length - 1 ? '<button id="nextTourBtn" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition focus:outline-none focus:ring-2 focus:ring-purple-600">Next →</button>' : '<button id="finishTourBtn" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition focus:outline-none focus:ring-2 focus:ring-green-600">Finish ✓</button>'}
               </div>
             </div>
           </div>
         `;
         document.body.appendChild(modal);
+
+        // Set up event listeners
+        const closeBtn = document.getElementById('closeTourBtn');
+        const prevBtn = document.getElementById('prevTourBtn');
+        const nextBtn = document.getElementById('nextTourBtn');
+        const finishBtn = document.getElementById('finishTourBtn');
+
+        if (closeBtn) closeBtn.addEventListener('click', closeTour);
+        if (prevBtn) prevBtn.addEventListener('click', previousTourStep);
+        if (nextBtn) nextBtn.addEventListener('click', nextTourStep);
+        if (finishBtn) finishBtn.addEventListener('click', closeTour);
+
+        // Focus trap
+        const focusableElements = modal.querySelectorAll('button');
+        const firstFocusable = focusableElements[0];
+        const lastFocusable = focusableElements[focusableElements.length - 1];
+
+        modal.addEventListener('keydown', function(e) {
+          if (e.key === 'Tab') {
+            if (e.shiftKey) {
+              if (document.activeElement === firstFocusable) {
+                e.preventDefault();
+                lastFocusable.focus();
+              }
+            } else {
+              if (document.activeElement === lastFocusable) {
+                e.preventDefault();
+                firstFocusable.focus();
+              }
+            }
+          } else if (e.key === 'Escape') {
+            closeTour();
+          }
+        });
+
+        // Focus the first button
+        if (nextBtn || finishBtn) {
+          (nextBtn || finishBtn).focus();
+        }
+
         if (step.action) step.action();
       }
       
@@ -190,6 +289,11 @@
       function closeTour() {
         closeTourModal();
         clearHighlights();
+        // Restore focus to the element that triggered the tour
+        if (previousFocusElement) {
+          previousFocusElement.focus();
+          previousFocusElement = null;
+        }
       }
       
       function closeTourModal() {
@@ -219,6 +323,15 @@
         });
       }
       
+      // Keyboard shortcut: "/" to focus search
+      document.addEventListener('keydown', function(e) {
+        // Only trigger if not already in an input/textarea and not in a modal
+        if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) && !document.getElementById('tourModal')) {
+          e.preventDefault();
+          searchInput.focus();
+        }
+      });
+
       // Hamburger menu toggle
       const hamburger = document.getElementById('hamburger');
       const mobileMenu = document.getElementById('mobileMenu');
@@ -249,6 +362,22 @@
       #visualSummaryContainer { margin: 0 !important; padding: 0 !important; box-shadow: none !important; background: white !important; }
       iframe { height: 380px !important; }
       body { background: white !important; }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+
+      .transform {
+        transform: none !important;
+      }
     }
     </style>
 </body>

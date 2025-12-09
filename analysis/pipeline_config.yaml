@@ -1,0 +1,26 @@
+# pipeline_config.yaml
+preprocess:
+  method: "rms_subsampled"
+  seed: 42
+  rms_std_threshold: 3
+
+filter:
+  method: "bandpass"
+  low: 70
+  high: 1400
+  sampling_frequency: 22050
+  order: 4
+
+fft:
+  n_fft: 2048
+  hop_length: 512
+
+denoisers:
+  method: "ICA"
+  max_iter: 200
+  tol: 1e-4
+  whiten: "unit-variance"
+
+analysis:
+  stim_freqs: [55, 110, 220]
+  double_freq_window: 100

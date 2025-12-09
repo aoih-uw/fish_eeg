@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overview - Fish Auditory EEG Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Encode+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-4 focus:bg-white focus:text-slate-900">Skip to main content</a>
+  <nav class="menu-bar bg-white border-b border-slate-200 px-6 py-4" role="navigation" aria-label="Main navigation">
+    <div class="flex items-center justify-between">
+      <div class="flex gap-6 menu-links" id="navLinks">
+        <a href="../index.html" class="font-semibold" style="color:#32006e">Home</a>
+        <a href="overview.html" class="text-slate-700">Overview</a>
+        <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
+        <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
+        <a href="team.html" class="text-slate-700">Team & Course</a>
+        <a href="repo.html" class="text-slate-700">Repository Info</a>
+      </div>
+      <button id="hamburger" class="hidden md:hidden text-slate-700 text-2xl font-semibold focus:outline-none" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden flex-col gap-3 mt-4 pb-2" style="display:none;">
+      <a href="../index.html" class="block text-slate-700 px-2 py-1" style="color:#32006e">Home</a>
+      <a href="overview.html" class="block text-slate-700 px-2 py-1">Overview</a>
+      <a href="pipeline.html" class="block text-slate-700 px-2 py-1">Analysis Pipeline</a>
+      <a href="visuals.html" class="block text-slate-700 px-2 py-1">Visual Summaries</a>
+      <a href="team.html" class="block text-slate-700 px-2 py-1">Team & Course</a>
+      <a href="repo.html" class="block text-slate-700 px-2 py-1">Repository Info</a>
+    </div>
+  </nav>
+
+  <!-- Breadcrumbs -->
+  <nav aria-label="Breadcrumb" class="max-w-4xl mx-auto px-4 pt-6">
+    <ol class="flex items-center space-x-2 text-sm text-slate-600">
+      <li><a href="../index.html" class="hover:text-[#32006e] underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Home</a></li>
+      <li aria-hidden="true">/</li>
+      <li aria-current="page" class="text-slate-900 font-semibold">Project Overview</li>
+    </ol>
+  </nav>
+
+  <main id="main-content" class="max-w-4xl mx-auto py-10 px-4">
+    <h1 class="text-3xl font-bold mb-4" style="color:#32006e">Project Overview</h1>
+    
+    <!-- Quick Start Guide -->
+    <div class="mb-6 bg-gradient-to-r from-purple-50 to-blue-50 border-l-4 border-purple-600 p-4 rounded">
+      <p class="text-sm font-semibold text-purple-900 mb-2">👋 New here? Start with our <a href="#tutorial" class="underline" style="color:#32006e">guided tutorial</a> or hover over <span class="underline cursor-help" title="Technical terms are underlined - hover for definitions">underlined terms</span> for definitions.</p>
+    </div>
+    
+    <p class="text-slate-700 leading-relaxed">We analyze <span class="glossary-term" data-term="aep">auditory evoked potentials (AEPs)</span> in <em>Hydrolagus colliei</em> using a multi-stage electrophysiological pipeline. The workflow detects <span class="glossary-term" data-term="2f">double-frequency (2f)</span> neural responses to acoustic stimuli across frequency (Hz) and amplitude (dB) conditions, leveraging <span class="glossary-term" data-term="ica">ICA-based denoising</span>, <span class="glossary-term" data-term="rms">RMS artifact rejection</span>, bandpass filtering (70–1400 Hz), <span class="glossary-term" data-term="bootstrap">bootstrap resampling</span>, and <span class="glossary-term" data-term="snr">SNR estimation</span> around ±100 Hz of the second harmonic.</p>
+    <div class="mt-6 grid sm:grid-cols-2 gap-4">
+      <div class="rounded-lg bg-slate-50 border border-slate-200 p-4">
+        <p class="text-xs font-medium tracking-wide text-slate-600 uppercase">Key Parameters</p>
+        <ul class="mt-2 text-sm text-slate-700 space-y-1">
+          <li><span class="font-medium">Sampling Rate:</span> 22,050 Hz</li>
+          <li><span class="font-medium">Latency:</span> 2,118 samples (~96 ms)</li>
+          <li><span class="font-medium">Channels:</span> ch1–ch4</li>
+          <li><span class="font-medium">Bootstrap:</span> 100 iterations</li>
+          <li><span class="font-medium">SNR Window:</span> ±100 Hz around 2f</li>
+        </ul>
+      </div>
+      <div class="rounded-lg bg-slate-50 border border-slate-200 p-4">
+        <p class="text-xs font-medium tracking-wide text-slate-600 uppercase">Significance Criteria</p>
+        <ul class="mt-2 text-sm text-slate-700 space-y-1">
+          <li>95% CI of (stimresp − prestim) excludes 0</li>
+          <li>2f bins weighted by ICA SNR</li>
+          <li>Noise floor excludes fundamental & 60 Hz harmonics</li>
+        </ul>
+      </div>
+    </div>
+    
+    <section class="mt-8 mb-8">
+      <h2 class="text-xl font-semibold mb-3" style="color:#32006e">Auditory Thresholds</h2>
+      <p class="text-slate-700 mb-3">Estimated auditory thresholds for <em>Hydrolagus colliei</em> based on significant neural responses:</p>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse border border-slate-300">
+          <thead>
+            <tr class="bg-slate-100">
+              <th class="border border-slate-300 px-4 py-2 text-left text-slate-700">Stimulus Frequency (Hz)</th>
+              <th class="border border-slate-300 px-4 py-2 text-left text-slate-700">Auditory Threshold (dB)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-slate-300 px-4 py-2 text-slate-700">55</td>
+              <td class="border border-slate-300 px-4 py-2 text-slate-700">105</td>
+            </tr>
+            <tr class="bg-slate-50">
+              <td class="border border-slate-300 px-4 py-2 text-slate-700">70</td>
+              <td class="border border-slate-300 px-4 py-2 text-slate-700">95</td>
+            </tr>
+            <tr>
+              <td class="border border-slate-300 px-4 py-2 text-slate-700">100</td>
+              <td class="border border-slate-300 px-4 py-2 text-slate-700">100</td>
+            </tr>
+            <tr class="bg-slate-50">
+              <td class="border border-slate-300 px-4 py-2 text-slate-700">200</td>
+              <td class="border border-slate-300 px-4 py-2 text-slate-700">130</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-xs text-slate-500 mt-2">Thresholds represent the minimum amplitude at which significant double-frequency responses were detected.</p>
+      <!-- Plot Image -->
+      <div class="mt-6 flex justify-center">
+        <div class="bg-white rounded-lg shadow p-4 max-w-4xl">
+          <h3 class="font-semibold text-slate-800 mb-3">Puget Sound Context</h4>
+          <img
+            src="../tools/analysis/plots/summary_plots/audiogram_and_Puget_Sound.png"
+            alt="Auditory threshold plot for spotted ratfish"
+            class="rounded-lg w-full h-auto"
+          />
+          <p class="text-sm text-slate-700">
+            In shallow areas along the coastlines of Puget Sound, noise is within the observed hearing of the spotted ratfish from this test. 
+          </p>
+        </div>
+      </div>
+    </section>
+    
+    <section class="mb-8">
+      <h2 class="text-xl font-semibold mb-3" style="color:#32006e">Study Subjects</h2>
+      <p class="text-slate-700 mb-2">This analysis includes data from 7 subjects:</p>
+      <ul class="list-disc ml-6 text-slate-700 space-y-1">
+        <li><strong>deadFish</strong> - Control subject for baseline measurements</li>
+        <li><strong>hydrolagusColliei_4</strong> - Test subject</li>
+        <li><strong>hydrolagusColliei_5</strong> - Test subject</li>
+        <li><strong>hydrolagusColliei_6</strong> - Test subject</li>
+        <li><strong>hydrolagusColliei_7</strong> - Test subject (excluded 55 Hz and 100 Hz data)</li>
+        <li><strong>hydrolagusColliei_8</strong> - Test subject</li>
+        <li><strong>hydrolagusColliei_9</strong> - Test subject</li>
+      </ul>
+    </section>
+    
+    <!-- Conservation & Impact Section -->
+    <section class="mb-8" id="impact">
+      <h2 class="text-xl font-semibold mb-3" style="color:#32006e">Conservation & Real-World Impact</h2>
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <h3 class="font-semibold text-slate-800 mb-3">Why This Research Matters</h3>
+        <p class="text-slate-700 mb-4">
+          Understanding the auditory capabilities of spotted ratfish helps us assess the impact of anthropogenic (human-caused) noise on marine ecosystems, particularly in the Puget Sound region.
+        </p>
+        
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-white rounded p-4">
+            <h4 class="font-semibold text-slate-800 mb-2">🚢 Shipping & Vessel Traffic</h4>
+            <p class="text-sm text-slate-700">Commercial shipping produces low-frequency noise that overlaps with fish hearing ranges. Our threshold data (55-200 Hz at 95-130 dB) helps determine safe noise levels.</p>
+          </div>
+          <div class="bg-white rounded p-4">
+            <h4 class="font-semibold text-slate-800 mb-2">🏗️ Underwater Construction</h4>
+            <p class="text-sm text-slate-700">Pile driving and construction activities can exceed 150 dB. Understanding auditory thresholds informs mitigation strategies and construction timing.</p>
+          </div>
+          <div class="bg-white rounded p-4">
+            <h4 class="font-semibold text-slate-800 mb-2">🔬 Scientific Research</h4>
+            <p class="text-sm text-slate-700">First comprehensive study of ratfish auditory capabilities using advanced signal processing, providing baseline data for future studies.</p>
+          </div>
+          <div class="bg-white rounded p-4">
+            <h4 class="font-semibold text-slate-800 mb-2">📋 Environmental Policy</h4>
+            <p class="text-sm text-slate-700">Data supports evidence-based regulations for underwater noise pollution and marine protected areas in the Salish Sea.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Summary PDF -->
+    <section class="mb-8" id="project-summary">
+      <h2 class="text-xl font-semibold mb-3" style="color:#32006e">Project Summary Document</h2>
+      <div class="bg-white border border-slate-200 rounded-lg p-4">
+        <p class="text-sm text-slate-700 mb-3">For a detailed overview of the project methodology and objectives, view the full project summary document below:</p>
+        <div class="w-full border border-slate-300 rounded" style="height: 800px;">
+          <iframe
+            src="../docs/Hunsaker_ProjectSummary_Final.pdf"
+            width="100%"
+            height="100%"
+            style="border: none;"
+            title="Project Summary PDF"
+          ></iframe>
+        </div>
+        <div class="mt-3 flex justify-center">
+          <a href="../docs/Hunsaker_ProjectSummary_Final.pdf" class="inline-block bg-purple-700 hover:bg-purple-800 text-white font-semibold px-6 py-2 rounded-lg transition-colors" target="_blank" rel="noopener noreferrer">
+            Download PDF
+          </a>
+        </div>
+        <p class="text-xs text-slate-500 mt-2 text-center">
+          If the PDF doesn't display above, click the download button to view it in your PDF reader.
+        </p>
+      </div>
+    </section>
+
+    <!-- Glossary Section -->
+    <section class="mb-8" id="glossary">
+      <h2 class="text-xl font-semibold mb-3" style="color:#32006e">Glossary of Terms</h2>
+      <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+        <div class="grid md:grid-cols-2 gap-4 text-sm">
+          <div class="glossary-entry">
+            <h4 class="font-semibold text-slate-800" id="term-aep">AEP (Auditory Evoked Potential)</h4>
+            <p class="text-slate-700">Electrical signals generated by the nervous system in response to sound stimuli. Measured using electrodes placed on the fish's head. <span class="text-slate-500 text-xs">(Ladich & Fay, 2013)</span></p>
+          </div>
+          <div class="glossary-entry">
+            <h4 class="font-semibold text-slate-800" id="term-2f">2f (Double-Frequency Response)</h4>
+            <p class="text-slate-700">Neural response at twice the stimulus frequency. If the stimulus is 100 Hz, we look for brain activity at 200 Hz, indicating phase-locked neural firing. <span class="text-slate-500 text-xs">(Ladich & Fay, 2013)</span></p>
+          </div>
+          <div class="glossary-entry">
+            <h4 class="font-semibold text-slate-800" id="term-ica">ICA (Independent Component Analysis)</h4>
+            <p class="text-slate-700">Statistical method that separates mixed signals into independent components, helping isolate true neural responses from noise and artifacts. <span class="text-slate-500 text-xs">(Hyvärinen & Oja, 2000)</span></p>
+          </div>
+          <div class="glossary-entry">
+            <h4 class="font-semibold text-slate-800" id="term-snr">SNR (Signal-to-Noise Ratio)</h4>
+            <p class="text-slate-700">Measure of signal strength relative to background noise. Higher SNR means clearer response. Expressed in decibels (dB). <span class="text-slate-500 text-xs">(Ladich & Fay, 2013)</span></p>
+          </div>
+          <div class="glossary-entry">
+            <h4 class="font-semibold text-slate-800" id="term-rms">RMS (Root Mean Square)</h4>
+            <p class="text-slate-700">Mathematical method to measure signal amplitude. Used to detect and remove trials with excessive electrical noise or movement artifacts. <span class="text-slate-500 text-xs">(Ladich & Fay, 2013)</span></p>
+          </div>
+          <div class="glossary-entry">
+            <h4 class="font-semibold text-slate-800" id="term-bootstrap">Bootstrap Resampling</h4>
+            <p class="text-slate-700">Statistical technique that creates multiple datasets by resampling with replacement. Used to estimate confidence intervals without assuming normal distribution. <span class="text-slate-500 text-xs">(Efron & Tibshirani, 1993)</span></p>
+          </div>
+          <div class="glossary-entry">
+            <h4 class="font-semibold text-slate-800" id="term-ci">95% Confidence Interval</h4>
+            <p class="text-slate-700">Range of values we're 95% confident contains the true value. If the interval excludes zero, the response is statistically significant. <span class="text-slate-500 text-xs">(Efron & Tibshirani, 1993)</span></p>
+          </div>
+          <div class="glossary-entry">
+            <h4 class="font-semibold text-slate-800" id="term-fft">FFT (Fast Fourier Transform)</h4>
+            <p class="text-slate-700">Algorithm that converts time-domain signals into frequency-domain representation, allowing us to see which frequencies are present in the neural response. <span class="text-slate-500 text-xs">(Cooley & Tukey, 1965)</span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- References Section -->
+    <section class="mb-8" id="references">
+      <h2 class="text-xl font-semibold mb-3" style="color:#32006e">References</h2>
+      <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+        <ol class="list-decimal ml-6 text-sm text-slate-700 space-y-3">
+          <li>
+            <strong>Cooley, J. W., & Tukey, J. W. (1965).</strong> An algorithm for the machine calculation of complex Fourier series. <em>Mathematics of Computation</em>, 19(90), 297–301.
+          </li>
+          <li>
+            <strong>Efron, B., & Tibshirani, R. J. (1993).</strong> <em>An Introduction to the Bootstrap</em>. Chapman and Hall/CRC.
+          </li>
+          <li>
+            <strong>Hyvärinen, A., & Oja, E. (2000).</strong> Independent component analysis: algorithms and applications. <em>Neural Networks</em>, 13(4–5), 411–430.
+          </li>
+          <li>
+            <strong>Ladich, F., & Fay, R. R. (2013).</strong> Auditory evoked potential audiometry in fish. <em>Reviews in Fish Biology and Fisheries</em>, 23(3), 317–364. <a href="https://doi.org/10.1007/s11160-012-9297-z" class="text-purple-700 underline" target="_blank" rel="noopener noreferrer">https://doi.org/10.1007/s11160-012-9297-z</a>
+          </li>
+        </ol>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Glossary Tooltip -->
+  <div id="glossary-tooltip" class="hidden fixed bg-slate-900 text-white text-sm rounded-lg p-3 shadow-lg z-50 max-w-xs" style="pointer-events: none;"></div>
+  
+  <script>
+    // Glossary tooltip functionality
+    const glossaryDefinitions = {
+      'aep': 'Electrical signals generated by the nervous system in response to sound stimuli. (Ladich & Fay, 2013)',
+      '2f': 'Neural response at twice the stimulus frequency, indicating phase-locked neural firing. (Ladich & Fay, 2013)',
+      'ica': 'Statistical method that separates mixed signals into independent components. (Hyvärinen & Oja, 2000)',
+      'snr': 'Measure of signal strength relative to background noise, expressed in decibels. (Ladich & Fay, 2013)',
+      'rms': 'Mathematical method to measure signal amplitude and detect artifacts. (Ladich & Fay, 2013)',
+      'bootstrap': 'Statistical technique that resamples data to estimate confidence intervals. (Efron & Tibshirani, 1993)',
+      'ci': 'Range of values we\'re 95% confident contains the true value. (Efron & Tibshirani, 1993)',
+      'fft': 'Algorithm that converts time-domain signals to frequency-domain representation. (Cooley & Tukey, 1965)'
+    };
+    
+    const tooltip = document.getElementById('glossary-tooltip');
+    const glossaryTerms = document.querySelectorAll('.glossary-term');
+    
+    glossaryTerms.forEach(term => {
+      term.style.cursor = 'help';
+      term.style.textDecoration = 'underline';
+      term.style.textDecorationStyle = 'dotted';
+      term.style.textDecorationColor = '#32006e';
+      
+      term.addEventListener('mouseenter', (e) => {
+        const termKey = e.target.dataset.term;
+        const definition = glossaryDefinitions[termKey];
+        if (definition) {
+          tooltip.textContent = definition;
+          tooltip.classList.remove('hidden');
+        }
+      });
+      
+      term.addEventListener('mousemove', (e) => {
+        tooltip.style.left = (e.pageX + 15) + 'px';
+        tooltip.style.top = (e.pageY + 15) + 'px';
+      });
+      
+      term.addEventListener('mouseleave', () => {
+        tooltip.classList.add('hidden');
+      });
+    });
+
+    // Hamburger menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (hamburger) {
+      hamburger.addEventListener('click', function() {
+        const isOpen = mobileMenu.style.display === 'flex';
+        mobileMenu.style.display = isOpen ? 'none' : 'flex';
+        hamburger.setAttribute('aria-expanded', !isOpen);
+      });
+    }
+    
+    // Close menu when clicking on a link
+    if (mobileMenu) {
+      const mobileLinks = mobileMenu.querySelectorAll('a');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          mobileMenu.style.display = 'none';
+          hamburger.setAttribute('aria-expanded', false);
+        });
+      });
+    }
+  </script>
+</body>
+</html>

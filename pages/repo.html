@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repository Information | Fish Auditory EEG Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Encode+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-4 focus:bg-white focus:text-slate-900">Skip to main content</a>
+  <nav class="menu-bar bg-white border-b border-slate-200 px-6 py-4" role="navigation" aria-label="Main navigation">
+    <div class="flex items-center justify-between">
+      <div class="flex gap-6 menu-links" id="navLinks">
+        <a href="../index.html" class="font-semibold" style="color:#32006e">Home</a>
+        <a href="overview.html" class="text-slate-700">Overview</a>
+        <a href="pipeline.html" class="text-slate-700">Analysis Pipeline</a>
+        <a href="visuals.html" class="text-slate-700">Visual Summaries</a>
+        <a href="team.html" class="text-slate-700">Team & Course</a>
+        <a href="repo.html" class="text-slate-700">Repository Info</a>
+      </div>
+      <button id="hamburger" class="hidden md:hidden text-slate-700 text-2xl font-semibold focus:outline-none" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden flex-col gap-3 mt-4 pb-2" style="display:none;">
+      <a href="../index.html" class="block text-slate-700 px-2 py-1" style="color:#32006e">Home</a>
+      <a href="overview.html" class="block text-slate-700 px-2 py-1">Overview</a>
+      <a href="pipeline.html" class="block text-slate-700 px-2 py-1">Analysis Pipeline</a>
+      <a href="visuals.html" class="block text-slate-700 px-2 py-1">Visual Summaries</a>
+      <a href="team.html" class="block text-slate-700 px-2 py-1">Team & Course</a>
+      <a href="repo.html" class="block text-slate-700 px-2 py-1">Repository Info</a>
+    </div>
+  </nav>
+  <main id="main-content" class="max-w-4xl mx-auto py-10 px-4">
+    <h1 class="text-3xl font-bold mb-6" style="color:#32006e">Repository Information</h1>
+
+    <!-- Table of Contents -->
+    <nav class="mb-8 bg-white border border-slate-200 rounded-lg p-4 shadow-sm" aria-label="Table of contents">
+      <p class="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        On This Page
+      </p>
+      <ul class="space-y-1 text-sm">
+        <li><a href="#background" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Background</a></li>
+        <li><a href="#installation" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Installation</a></li>
+        <li><a href="#data-sources" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Data Sources</a></li>
+        <li><a href="#use-cases" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Use Cases</a></li>
+        <li><a href="#demo" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Demo</a></li>
+        <li><a href="#architecture" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Software Architecture</a></li>
+        <li><a href="#structure" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Project Structure</a></li>
+        <li><a href="#resources" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Downloadable Resources</a></li>
+        <li><a href="#lessons" class="text-[#32006e] hover:underline focus:outline-none focus:ring-2 focus:ring-[#32006e] rounded">Lessons Learned & Future Work</a></li>
+      </ul>
+    </nav>
+
+    <section class="mb-8" id="background">
+      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Background</h2>
+      <p class="text-slate-700 mb-4">This project analyzes auditory evoked potentials (AEPs) in <em>Hydrolagus colliei</em> (spotted ratfish) using a multi-stage electrophysiological pipeline. The analysis focuses on detecting the double-frequency (2f) neural response to acoustic stimuli using ICA-based denoising, bootstrapping, and SNR calculations.</p>
+      <p class="text-slate-700 mb-4">Understanding how fish respond to auditory stimuli is crucial for marine conservation, especially in relation to anthropogenic noise pollution in environments like the Puget Sound. This research provides insights into the auditory capabilities of cartilaginous fish and their potential vulnerability to underwater acoustic disturbances.</p>
+
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <p class="font-semibold text-slate-800 mb-2">Intended Audience</p>
+        <ul class="list-disc ml-6 text-sm text-slate-700 space-y-1">
+          <li>Researchers who need to analyze auditory fish EEG recordings</li>
+          <li>Collaborators of researchers who want to understand the data analysis pipeline and its results</li>
+          <li>Generally scientifically minded curious people who want to know about what sounds fish can hear</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="mb-8" id="installation">
+      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Installation</h2>
+      <p class="text-slate-700 mb-3">This package provides a complete workflow for processing, analyzing, and visualizing auditory fish EEG recordings. It includes tools for data ingestion, preprocessing, feature extraction, statistical analysis, and interactive web-based visualization.</p>
+
+      <div class="space-y-4">
+        <div class="bg-slate-50 border border-slate-200 rounded p-4">
+          <p class="font-semibold text-slate-800 mb-2">Option 1: Install directly from GitHub</p>
+          <pre class="bg-slate-900 text-slate-100 rounded p-3 text-sm overflow-x-auto"><code>pip install git+https://github.com/aoih-uw/fish_eeg.git</code></pre>
+        </div>
+
+        <div class="bg-slate-50 border border-slate-200 rounded p-4">
+          <p class="font-semibold text-slate-800 mb-2">Option 2: Clone the repository and install locally</p>
+          <pre class="bg-slate-900 text-slate-100 rounded p-3 text-sm overflow-x-auto"><code>git clone https://github.com/aoih-uw/fish_eeg.git
+cd fish_eeg
+pip install .</code></pre>
+          <p class="text-xs text-slate-600 mt-2">These commands will build and install the package from <code class="bg-slate-200 px-1 rounded">pyproject.toml</code></p>
+        </div>
+      </div>
+
+      <div class="mt-4 bg-blue-50 border border-blue-200 rounded p-4">
+        <p class="font-semibold text-slate-800 mb-2">Example Usage</p>
+        <p class="text-sm text-slate-700 mb-2">1. Ensure your dataset is in the right format (.mat file with the following structure):</p>
+        <pre class="bg-slate-900 text-slate-100 rounded p-3 text-sm overflow-x-auto mb-3"><code>f = h5py.File('fish01.mat', 'r')
+ex_data = f['ex']
+channel_keys = ['ch1','ch2','ch3','ch4']
+period_keys = ['prestim_sig','stimresp_sig','poststimresp_sig']</code></pre>
+        <p class="text-sm text-slate-700 mb-2">2. Place your dataset in the <code class="bg-slate-200 px-1 rounded">data/</code> directory</p>
+        <p class="text-sm text-slate-700 mb-2">3. Run the analysis pipeline:</p>
+        <pre class="bg-slate-900 text-slate-100 rounded p-3 text-sm overflow-x-auto"><code>python pipeline.py --input data/'fish01.mat' --output results/</code></pre>
+      </div>
+    </section>
+
+    <section class="mb-8" id="data-sources">
+      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Data Sources</h2>
+      <div class="bg-slate-50 border border-slate-200 rounded p-4 mb-3">
+        <p class="text-slate-700 mb-2"><strong>1. Fish EEG Recordings</strong></p>
+        <p class="text-sm text-slate-700">Collected by Aoi Hunsaker in June 2025. Multi-channel electrophysiological recordings from 7 subjects at the Sisneros Lab, University of Washington.</p>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 rounded p-4 mb-4">
+        <p class="text-slate-700 mb-2"><strong>2. Passive Acoustic Data</strong></p>
+        <p class="text-sm text-slate-700">Environmental noise data from Puget Sound via NOAA's Google Cloud Storage (Orcasound Labs). Used to contextualize auditory thresholds against real-world underwater noise levels.</p>
+      </div>
+
+      <p class="text-slate-700 mb-3"><strong>Dataset Details:</strong> Multi-channel electrophysiological recordings from 7 subjects:</p>
+      <ul class="list-disc ml-6 text-slate-700 space-y-1 mb-3">
+        <li><strong>deadFish</strong> (control/baseline)</li>
+        <li><strong>hydrolagusColliei_4 through hydrolagusColliei_9</strong> (6 test subjects)</li>
+      </ul>
+      <p class="text-slate-700 mb-3"><strong>Data Format:</strong> MATLAB .mat files containing 4-channel electrode recordings organized by stimulus frequency (Hz) and amplitude (dB). Each recording includes multiple trials across channels ch1-ch4.</p>
+      <p class="text-slate-700 mb-3"><strong>Collection Method:</strong> Auditory stimuli were presented at various frequencies (55-385 Hz) and amplitudes (70-150 dB), with neural responses recorded via surface electrodes.</p>
+      <p class="text-slate-700"><strong>Limitations:</strong> Some frequencies (50 Hz, 385 Hz) showed artifacts and were filtered out. Certain amplitude ranges (145-150 dB) contained problematic data. Subject hydrolagusColliei_7 had issues at 55 Hz and 100 Hz. Sample size is limited to 6 live subjects plus one control.</p>
+    </section>
+    <section class="mb-8" id="use-cases">
+      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Use Cases</h2>
+      <div class="space-y-4">
+        <div class="bg-slate-50 border border-slate-200 rounded p-4">
+          <p class="font-semibold text-slate-800 mb-1">Researcher / Graduate Student</p>
+          <p class="text-sm text-slate-700">Wants to understand the analysis pipeline, replicate methods, and extend the research. Needs detailed documentation, accessible code, and visualizations to learn step-by-step data processing techniques.</p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded p-4">
+          <p class="font-semibold text-slate-800 mb-1">Undergraduate Lab Assistant</p>
+          <p class="text-sm text-slate-700">New to the team with minimal background, needs readable code with extensive comments and easy online access to scripts for testing and learning.</p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded p-4">
+          <p class="font-semibold text-slate-800 mb-1">Principal Investigator / Advisor</p>
+          <p class="text-sm text-slate-700">Wants to understand student's work in detail, verify methods for errors, and potentially use the codebase for future lab projects after student graduation.</p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded p-4">
+          <p class="font-semibold text-slate-800 mb-1">Wildlife Advocate / Educator</p>
+          <p class="text-sm text-slate-700">Curious about fish hearing and conservation. Needs jargon defined, visual explanations, and understanding of what findings mean for Puget Sound wildlife.</p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded p-4">
+          <p class="font-semibold text-slate-800 mb-1">Environmental Impact Assessor</p>
+          <p class="text-sm text-slate-700">Needs to understand if anthropogenic noise (ships, construction, industry) will adversely affect spotted ratfish populations for legal/regulatory purposes.</p>
+        </div>
+      </div>
+    </section>
+    <section class="mb-8" id="demo">
+      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Demo</h2>
+      <p class="text-slate-700 mb-3">Explore the interactive features of this dashboard:</p>
+      <ul class="list-disc ml-6 text-slate-700 space-y-2 mb-4">
+        <li><strong>Visual Summaries:</strong> Navigate to the <a href="visuals.html" class="underline" style="color:#32006e">Visual Summaries page</a> to view interactive charts showing confidence intervals and ICA weights across different stimulus conditions.</li>
+        <li><strong>Analysis Pipeline:</strong> Visit the <a href="pipeline.html" class="underline" style="color:#32006e">Analysis Pipeline page</a> to explore the step-by-step data processing workflow with collapsible details.</li>
+        <li><strong>Subject Selection:</strong> Use the subject dropdown on the Visual Summaries page to compare responses across different ratfish specimens.</li>
+        <li><strong>Audio Playback:</strong> Listen to the auditory stimulus used in the experiments (available on Visual Summaries page).</li>
+      </ul>
+      <p class="text-slate-700">All visualizations are created using Altair and are fully interactive in the browser.</p>
+    </section>
+    <section class="mb-8" id="architecture">
+      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Software Architecture</h2>
+      <p class="text-slate-700 mb-3"><strong>System Components:</strong></p>
+      <ul class="list-disc ml-6 text-slate-700 space-y-2 mb-4">
+        <li><strong>Data Ingestion Manager (<code class="bg-slate-200 px-1 rounded text-xs">preprocess.py</code>):</strong> Loads .mat EEG datasets, validates file structure, performs artifact rejection, and prepares data for downstream analysis. Outputs structured data objects containing raw EEG signals and metadata.</li>
+        <li><strong>EEG Data Filtering (<code class="bg-slate-200 px-1 rounded text-xs">filters.py</code>):</strong> Performs bandpass filtering (70-1400 Hz) to remove irrelevant signals from analysis. Takes filter parameters (low/high cutoff frequencies, order) and outputs filtered EEG datasets.</li>
+        <li><strong>ICA Denoising Manager (<code class="bg-slate-200 px-1 rounded text-xs">denoiser.py</code>, <code class="bg-slate-200 px-1 rounded text-xs">reconstruct.py</code>):</strong> Performs ICA-based denoising to remove irrelevant signals. Outputs denoised EEG datasets and ICA decomposition objects (unmixing matrix, time-series components).</li>
+        <li><strong>Statistical Analysis Manager (<code class="bg-slate-200 px-1 rounded text-xs">statistics.py</code>):</strong> Performs bootstrap-based confidence interval tests (100 iterations) on cleaned and filtered EEG datasets. Outputs results determining if the fish heard a given sound frequency.</li>
+        <li><strong>Visualization Manager (<code class="bg-slate-200 px-1 rounded text-xs">plotting.py</code>):</strong> Plots results of statistical analysis using Altair library. Generates interactive HTML plots with tooltips showing auditory sensitivity across tested frequencies.</li>
+        <li><strong>Web Dashboard (<code class="bg-slate-200 px-1 rounded text-xs">index.html</code>):</strong> Multi-page HTML interface with responsive navigation, search functionality, guided tour, and embedded interactive visualizations.</li>
+      </ul>
+      <p class="text-slate-700 mb-3"><strong>Data Flow:</strong></p>
+      <p class="text-slate-700">Raw .mat files → <code class="bg-slate-200 px-1 rounded text-xs">preprocess.py</code> (artifact removal) → <code class="bg-slate-200 px-1 rounded text-xs">filters.py</code> (bandpass filter) → <code class="bg-slate-200 px-1 rounded text-xs">denoiser.py</code> (ICA denoising) → Period separation (prestim/stimresp) → <code class="bg-slate-200 px-1 rounded text-xs">statistics.py</code> (FFT → Bootstrap → Confidence intervals) → <code class="bg-slate-200 px-1 rounded text-xs">plotting.py</code> (interactive visualizations) → <code class="bg-slate-200 px-1 rounded text-xs">index.html</code> (web dashboard)</p>
+    </section>
+    <section class="mb-8" id="structure">
+      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Project Structure</h2>
+      <pre class="bg-slate-100 border border-slate-200 rounded p-4 text-xs overflow-x-auto mb-2">fish_eeg/
+.
+├── docs
+├── results
+│   ├── aoi
+│   ├── christopher
+│   ├── jeff
+│   ├── mike
+│   └── yash
+├── src
+│   └── fish_eeg
+├── tests
+│   └── __pycache__
+└── tools
+    ├── analysis
+    └── passive_acoustic
+├── *.html               # Web dashboard pages
+├── style.css            # Shared stylesheet
+├── environment.yml      # Conda environment specification
+├── requirements.txt     # Python dependencies
+└── README.md           # Project overview</pre>
+      <p class="text-slate-700 text-sm mt-2"><strong>Key Directories:</strong></p>
+      <ul class="list-disc ml-6 text-slate-700 text-sm space-y-1">
+        <li><strong>src/</strong> - Production code with process-specific READMEs</li>
+        <li><strong>tools/</strong> - Contextual tools (not for production)</li>
+        <li><strong>results/</strong> - Final outputs and deliverables</li>
+        <li><strong>docs/</strong> - Contextual documentation</li>
+      </ul>
+    </section>
+    <!-- Downloadable Resources Section -->
+    <section class="mb-8" id="resources">
+      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Downloadable Resources</h2>
+      <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+        <p class="text-slate-700 mb-4">Access data, figures, and documentation for your research, education, or presentations.</p>
+        <div class="grid md:grid-cols-3 gap-4">
+          <a href="https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/tools/analysis/CI_csv" class="block bg-white border border-slate-300 rounded-lg p-4 hover:shadow-md transition">
+            <h3 class="font-semibold text-slate-800 mb-1">📊 Confidence Interval Data</h3>
+            <p class="text-sm text-slate-600">CSV files with 95% CI values for all subjects and conditions</p>
+          </a>
+          <a href="https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/tools/analysis/weights_csv" class="block bg-white border border-slate-300 rounded-lg p-4 hover:shadow-md transition">
+            <h3 class="font-semibold text-slate-800 mb-1">⚖️ ICA Weights Data</h3>
+            <p class="text-sm text-slate-600">Channel-wise ICA component weights by frequency and amplitude</p>
+          </a>
+          <a href="https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/tools/analysis/plots" class="block bg-white border border-slate-300 rounded-lg p-4 hover:shadow-md transition">
+            <h3 class="font-semibold text-slate-800 mb-1">📈 Publication Figures</h3>
+            <p class="text-sm text-slate-600">High-resolution PNG and interactive HTML plots</p>
+          </a>
+          <a href="../results/aoi/ratfish_auditory_thresholds.csv" class="block bg-white border border-slate-300 rounded-lg p-4 hover:shadow-md transition">
+            <h3 class="font-semibold text-slate-800 mb-1">🎯 Auditory Thresholds</h3>
+            <p class="text-sm text-slate-600">Summary table of frequency-specific hearing thresholds</p>
+          </a>
+          <a href="../docs/Hunsaker_ProjectSummary_Final.pdf" class="block bg-white border border-slate-300 rounded-lg p-4 hover:shadow-md transition">
+            <h3 class="font-semibold text-slate-800 mb-1">📄 Project Summary PDF</h3>
+            <p class="text-sm text-slate-600">Complete methodology and findings documentation</p>
+          </a>
+          <a href="#citation" class="block bg-white border border-slate-300 rounded-lg p-4 hover:shadow-md transition">
+            <h3 class="font-semibold text-slate-800 mb-1">📚 Citation Information</h3>
+            <p class="text-sm text-slate-600">How to cite this work in multiple formats</p>
+          </a>
+        </div>
+        
+        <div class="mt-6 bg-white border border-slate-200 rounded p-4" id="citation">
+          <h3 class="font-semibold text-slate-800 mb-2">Citation</h3>
+          <div class="space-y-3">
+            <div>
+              <p class="text-xs text-slate-600 mb-1">APA Format:</p>
+              <p class="text-sm text-slate-700 bg-slate-50 p-2 rounded font-mono">Hunsaker, A., Brown, A., Sisneros, J., James, M., Tritt, C., & Sonthalia, Y. (2025). Fish Auditory EEG Analysis Dataset. University of Washington. https://github.com/aoih-uw/fish_eeg</p>
+            </div>
+            <div>
+              <p class="text-xs text-slate-600 mb-1">BibTeX:</p>
+              <pre class="text-sm text-slate-700 bg-slate-50 p-2 rounded font-mono overflow-x-auto">@dataset{hunsaker2025fish,
+  author = {Hunsaker, Aoi and Brown, Andrew and Sisneros, Joseph and James, Michael and Tritt, Christopher and Sonthalia, Yash},
+  title = {Fish Auditory EEG Analysis Dataset},
+  year = {2025},
+  publisher = {University of Washington},
+  url = {https://github.com/aoih-uw/fish_eeg}
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="mb-8" id="lessons">
+      <h2 class="text-2xl font-semibold mb-2" style="color:#32006e">Lessons Learned &amp; Future Work</h2>
+      <p class="text-slate-700 mb-3"><strong>Software Engineering Lessons:</strong></p>
+      <ul class="list-disc ml-6 text-slate-700 space-y-2 mb-4">
+        <li><strong>Modular Design:</strong> Separating preprocessing, analysis, and visualization into distinct modules improved code maintainability and testing</li>
+        <li><strong>Environment Management:</strong> Using Conda environments ensured reproducibility across different systems and prevented dependency conflicts</li>
+        <li><strong>Documentation:</strong> Extensive README files and inline comments were crucial for onboarding new lab members and future users</li>
+        <li><strong>Version Control:</strong> Git workflow with .gitignore for large data files kept the repository clean and collaborative</li>
+        <li><strong>Interactive Visualization:</strong> Using Altair for web-based interactive plots made results more accessible than static images</li>
+        <li><strong>Data Organization:</strong> Structured CSV outputs and consistent naming conventions simplified downstream analysis</li>
+      </ul>
+      <p class="text-slate-700 mb-3"><strong>Future Work:</strong></p>
+      <ul class="list-disc ml-6 text-slate-700 space-y-2">
+        <li>Expand to more subjects and species for comparative analysis</li>
+        <li>Implement real-time filtering and audio playback of stimuli on the website</li>
+        <li>Add machine learning classification of response patterns</li>
+        <li>Develop automated pipeline for processing new recordings</li>
+        <li>Create API for programmatic access to processed data</li>
+        <li>Add statistical power analysis tools for experimental design</li>
+      </ul>
+    </section>
+  </main>
+  <footer class="mt-10 text-center text-sm text-slate-500 pb-6">
+    &copy; 2025 Fish Auditory EEG Dashboard. <a href="https://github.com/aoih-uw/fish_eeg" class="underline" style="color:#32006e" target="_blank" rel="noopener">GitHub Repository</a>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" class="fixed bottom-6 right-6 bg-[#32006e] text-white p-3 rounded-full shadow-lg hover:bg-[#22004a] transition opacity-0 pointer-events-none focus:outline-none focus:ring-2 focus:ring-[#32006e] focus:ring-offset-2" aria-label="Back to top">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+    </svg>
+  </button>
+
+  <script>
+    // Back to Top functionality
+    const backToTopButton = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', function() {
+      if (window.pageYOffset > 300) {
+        backToTopButton.style.opacity = '1';
+        backToTopButton.style.pointerEvents = 'auto';
+      } else {
+        backToTopButton.style.opacity = '0';
+        backToTopButton.style.pointerEvents = 'none';
+      }
+    });
+
+    backToTopButton.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+
+  <script>
+    // Hamburger menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (hamburger) {
+      hamburger.addEventListener('click', function() {
+        const isOpen = mobileMenu.style.display === 'flex';
+        mobileMenu.style.display = isOpen ? 'none' : 'flex';
+        hamburger.setAttribute('aria-expanded', !isOpen);
+      });
+    }
+    
+    // Close menu when clicking on a link
+    if (mobileMenu) {
+      const mobileLinks = mobileMenu.querySelectorAll('a');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          mobileMenu.style.display = 'none';
+          hamburger.setAttribute('aria-expanded', false);
+        });
+      });
+    }
+  </script>
+
+  <style>
+    /* Print Styles */
+    @media print {
+      /* Hide interactive elements */
+      #backToTop,
+      nav[aria-label="Main navigation"],
+      nav[aria-label="Breadcrumb"],
+      nav[aria-label="Table of contents"],
+      .no-print {
+        display: none !important;
+      }
+
+      /* Optimize layout for printing */
+      body {
+        background: white !important;
+        color: black !important;
+        font-size: 12pt;
+        line-height: 1.5;
+      }
+
+      main {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0.5in !important;
+      }
+
+      /* Ensure links show URLs */
+      a[href^="http"]::after {
+        content: " (" attr(href) ")";
+        font-size: 10pt;
+        color: #666;
+      }
+
+      /* Prevent page breaks inside code blocks */
+      pre, code {
+        page-break-inside: avoid;
+      }
+
+      /* Add page breaks before major sections */
+      section {
+        page-break-before: auto;
+        page-break-inside: avoid;
+      }
+
+      h1, h2, h3 {
+        page-break-after: avoid;
+        color: #32006e !important;
+      }
+
+      /* Remove shadows and borders for print */
+      * {
+        box-shadow: none !important;
+        border-color: #ccc !important;
+      }
+    }
+  </style>
+</body>
+</html>

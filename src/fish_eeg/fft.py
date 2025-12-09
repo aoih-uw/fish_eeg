@@ -1,10 +1,14 @@
-from fish_eeg.data import EEGDataset
+from fish_eeg.data import EEGDataset, ConfigAccessor
 from fish_eeg.utils import get_channels
 import numpy as np
 
 
 class FFT:
-    def __init__(self, eegdataset: EEGDataset):
+    def __init__(
+        self,
+        eegdataset: EEGDataset,
+        cfg: ConfigAccessor | None = None,
+    ):
         self.eegdataset = eegdataset
         self.data = self.eegdataset.ica_output
         self.channels = get_channels(eegdataset)
@@ -12,6 +16,9 @@ class FFT:
             self.data = self.eegdataset.reconstructed_ica_data["separated_by_period"]
         except:
             pass
+
+        cfg = cfg or ConfigAccessor(None)
+        self.cfg = cfg
 
     def compute_fft(
         self, data, sampling_frequency, period_keys=[], channel_keys=[], smallest_dim=1
