@@ -44,11 +44,13 @@ class Preprocessor:
 
                 # Remove only if the max is clearly abnormal, (5 times the median)
                 if max_rms > median_rms * 5:   # 3 is a common threshold, We use 5 to be less strict
-                    keep_rows = np.where(rms_per_row == max_rms, False, True)
+                    keep_rows = np.ones_like(rms_per_row, dtype=bool)
+                    idx = np.argmax(rms_per_row)   # index of max RMS
+                    keep_rows[idx] = False
                 else:
                     keep_rows = np.ones_like(rms_per_row, dtype=bool)
             else:
-                modified_z = 0.6745 * (rms_per_row - median) / mad
+                modified_z = 0.6745 * (rms_per_row - median) / mad #Formula for MAD, choose 0.6745 to skew distribution away from normal to match theoretical EEG data
                 keep_rows = np.abs(modified_z) <= 3.5  #Jeffrey: 3.5 is the standard threshold value
 
             keep_rows_list.append(keep_rows) #Keep a record of what trials to keep and ditch

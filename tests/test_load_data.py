@@ -4,34 +4,6 @@ from fish_eeg.data import load_data
 import os
 import pytest
 
-# Create fixture for temporary testing files
-@pytest.fixture
-def temp_eeg_data(tmp_path, fake_channels):
-    """
-    Creates a temporary .npz file with fake EEG data for testing load_data.
-    Returns (path, subjid) tuple.
-    """
-    # Create fake data matching the structure load_data expects
-    data_dict = {}
-    for ch in fake_channels:
-        data_dict[ch] = np.random.randn(2, 50)
-    
-    fakedata = np.array({"data": data_dict}, dtype=object)
-    fakefreq_amp_table = np.random.randn(2, 5)
-    
-    # Subject ID
-    subjid = "test_subject"
-    
-    # Save to temporary file
-    np.savez(
-        tmp_path / f"{subjid}.npz",
-        data=fakedata,
-        freq_amp_table=fakefreq_amp_table,
-        latency=np.array([0]),
-        channel_keys=np.array(fake_channels)
-    )
-    
-    return str(tmp_path), subjid
     
 # 1. Smoke test
 # Author: Aoi Hunsaker

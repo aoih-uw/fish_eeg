@@ -1,3 +1,8 @@
+"""
+This file contains fixtures for our testing methods to use as datasets, 
+instead of having to load real data everytime.
+"""
+
 import pytest
 import numpy as np
 from fish_eeg.data import EEGDataset
@@ -125,31 +130,6 @@ def small_clean_dict(fake_channels):
     return {ch: np.random.randn(2, 5) for ch in fake_channels}
 
 
-@pytest.fixture
-def fake_ica_output(fake_dataset):
-    """Create a minimal ICA-output-like object derived from the dataset."""
-
-    ds = fake_dataset()   # contains channels, trials, etc.
-
-    class FakeICA:
-        pass
-
-    obj = FakeICA()
-    obj.channel_keys = ds.channel_keys
-    obj.period_keys = ds.period_keys
-
-    # ICA components: same shape as EEG data
-    obj.reconstructed_ica_data = {
-        period: {
-            ch: np.copy(ds.data.item()["data"][ch])
-            for ch in ds.channel_keys
-        }
-        for period in ds.period_keys
-    }
-
-    obj.ica_output = None  # if your code expects this attribute
-
-    return obj
 
 @pytest.fixture
 def sinusoid_dataset(fake_dataset):
@@ -178,13 +158,13 @@ def sinusoid_dataset(fake_dataset):
 
             for trial in range(n_trials):
 
-                if different_trials:
-                    # EXAMPLE variation: frequency changes per trial
+                if different_trials: #Define our signal parameters
+                    # Frequency changes per trial
                     freq = base_freq * (ch_idx + trial)
                     phase = np.random.uniform(0, 2*np.pi)
                     amplitude = 1.0 + 0.1 * trial
                 else:
-                    # SAME signal every trial
+                    # Same signal every trial
                     freq = base_freq * (ch_idx + 1)
                     phase = 0
                     amplitude = 1.0
@@ -202,3 +182,32 @@ def sinusoid_dataset(fake_dataset):
         return ds
 
     return _make
+
+
+@pytest.fixture
+def temp_eeg_data(tmp_path, fake_channels):
+    """
+    Creates a temporary .npz file with fake EEG data for testing load_data.
+    Returns (path, subjid) tuple.
+    """
+    # Create fake data matching the structure load_data expects
+    data_dict = {}
+    for ch in fake_channels:
+        data_dict[ch] = np.random.randn(2, 50)
+    
+    fakedata = np.array({"data": data_dict}, dtype=object)
+    fakefreq_amp_table = np.random.randn(2, 5)
+    
+    # Subject ID
+    subjid = "test_subject"
+    file_path = tmp_path / f"{subjid}_data.npz"
+    # Save to temporary file
+    np.savez(
+        file_path,
+        data=fakedata,
+        freq_amp_table=fakefreq_amp_table,
+        latency=np.array([0]),
+        channel_keys=np.array(fake_channels)
+    )
+    
+    return str(tmp_path), subjid
