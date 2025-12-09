@@ -48,10 +48,16 @@ period_keys = ['prestim_sig','stimresp_sig','poststimresp_sig']
 		fish01.mat
 ```
 3. Run the analysis pipeline
-   You may run it directly by:
+   You may run it directly by:  
 ```
    python pipeline.py --input data/'fish01.mat' --output results/
 ```
+or for beginners run this tutorial jupyter notebook:  
+```
+end_to_end_analysis.ipynb
+```
+This notebook is in /examples
+
 4. Edit the html files as needed to display results from analysis pipeline
 ```
 index.html (must stay at top level for github web host to detect it)
