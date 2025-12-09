@@ -34,12 +34,13 @@ pip install .
 These commands will build and install the package from `pyproject.toml`
 
 # Example of use
-1. Ensure your dataset is in the right format. This package expects .mat file containing the following structure:  
+1. Ensure your dataset is in the right format. This package expects `.npz` file containing the following structure:  
 ```
-f = h5py.File('fish01.mat', 'r')
-ex_data = f['ex']
-channel_keys = ['ch1','ch2','ch3','ch4']
-period_keys = ['prestim_sig','stimresp_sig','poststimresp_sig']
+loaded = np.load(f"{path}/{subjid}_data.npz", allow_pickle=True)
+    data = loaded["data"]
+    freq_amp_table = loaded["freq_amp_table"]
+    latency = loaded["latency"].item()
+    channel_keys = loaded["channel_keys"].tolist()
 ```
 2. Place your dataset in the `data/` directory
 ```
