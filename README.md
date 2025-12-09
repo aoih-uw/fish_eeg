@@ -109,9 +109,10 @@ Location for users to store their data used in this repo.
 "documentation"
 Location of pdfs and other documents which provide contextual information to the repository. 
 
-## analysis
-"analysis"
-Location of jupyter notebooks which explore different analysis methods (not to be used in production)
+## tools/passive_acoustic
+"tools" "passive acoustic data"
+Auxillary folder for loading in public acoustic data to compare to audiogram. 
 
 ## results
+"results"
 Final location of src products and project deliverables
