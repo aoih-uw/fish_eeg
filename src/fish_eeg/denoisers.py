@@ -7,6 +7,16 @@ from sklearn.decomposition import FastICA
 
 
 class Denoiser:
+    """
+    Apply denoising methods to an EEGDataset.
+
+    Parameters
+    ----------
+    eegdataset : EEGDataset
+        Object containing bandpass-filtered data and metadata.
+    cfg : ConfigAccessor, optional
+        Provides method selection and ICA parameter overrides.
+    """
     def __init__(self, eegdataset: EEGDataset, cfg: ConfigAccessor | None = None):
         self.eegdataset = eegdataset
         self.data = self.eegdataset.bandpass_data
@@ -17,6 +27,23 @@ class Denoiser:
         self.cfg = cfg.get("denoiser", "params", default=ConfigAccessor(None))
 
     def ICA(self, dictionary: dict):
+        """
+        Run Independent Component Analysis on multichannel trial data.
+
+        Parameters
+        ----------
+        dictionary : dict
+            Mapping channel -> array of shape (trials, samples).
+
+        Returns
+        -------
+        dict
+            Contains:
+            - 'S': Independent components (samples × components).
+            - 'A': Mixing matrix.
+            - 'n_iter': Number of ICA iterations.
+            - 'elapsed_time': Runtime in seconds.
+        """
         def reshape_the_data(data, bootstrapped=False):
             # Reshape to (trials * samples) x channels
             reshaped_list = []
@@ -83,6 +110,20 @@ class Denoiser:
         pass
 
     def pipeline(self):
+        """
+        Execute the selected denoising method on all stimulus combinations.
+
+        Returns
+        -------
+        EEGDataset
+            Same object with an added attribute `ica_output`
+            containing ICA results for each coordinate.
+
+        Raises
+        ------
+        ValueError
+            If an unsupported method is requested.
+        """
         method = self.method
         if method == "ICA":
             ica_data = {}

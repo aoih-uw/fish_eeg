@@ -24,6 +24,12 @@ class EEGDataset:
 
 @dataclass
 class PipelineConfig:
+    """
+    Container for all configuration sections loaded from a YAML file.
+    
+    Each top-level YAML section (preprocess, filters, denoiser, reconstruct,
+    statistics) is stored as a dictionary and accessed by other classes.
+    """
     def __init__(self, yaml_loaded: dict):
         self.preprocess: dict = yaml_loaded["preprocess"]
         self.filters: dict = yaml_loaded["filters"]
@@ -191,6 +197,19 @@ def subset_stimulus(data, myfreq, myamp):
 
 
 def separate_periods(data, period_len, period_keys, channel_keys, latency):
+    """
+    Split each channel’s time series into stimulus ON and stimulus OFF periods.
+
+    Args:
+        data: Dict-like structure: data[channel] is an array of shape (trials, time).
+        period_len: Number of samples in each period.
+        period_keys: List containing period names, e.g. ["prestim", "stimresp"].
+        channel_keys: List of channel IDs.
+        latency: Starting index of prestim.
+
+    Returns:
+        A nested dict: separated_data[period][channel] -> array of shape (trials, period_len).
+    """
     separated_data = {"prestim": {}, "stimresp": {}}
 
     for period in period_keys:
@@ -208,6 +227,18 @@ def separate_periods(data, period_len, period_keys, channel_keys, latency):
 
 
 def collapse_channels(data, period_keys, channel_keys):
+    """
+    Stack all channels vertically for each period.
+
+    Args:
+        data: Nested dict produced by separate_periods:
+              data[period][channel] -> array(trials, samples)
+        period_keys: Period names.
+        channel_keys: Channel names.
+
+    Returns:
+        Dict mapping each period to a (num_channels × trials, samples) array.
+    """
     collapsed_dict = {"prestim": None, "stimresp": None}
     for period in period_keys:
         tmp = []
