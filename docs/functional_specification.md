@@ -20,11 +20,11 @@ A **generally curious friend of the analyst** has no background knowledge of the
 
 ### 1. Analyzing EEG data
 Actors: Primary experimenter, collaborator  
-Goal: To run custom pipeline of analysis scripts on fish EEG datasets  
+Goal: To run custom pipeline of analysis scripts on fish EEG datasets to identify audible frequencies of fish
 Stakeholder: Primary experimenter, PI, collaborators, general audience  
 Precondition: Access to the compatible datasets and data analysis pipeline  
 Triggers: A need to process a new eeg dataset to determine the hearing thresholds of a given fish  
-Expected interactions: Install .toml package onto computer, load data, denoise and filter data, conduct data/statistical analysis on dataset to identify which sound frequencies the fish can hear  
+Expected interactions:Install fish_eeg repo, load data and process data via pipeline.py on a dev.  environment (VS Code)
 Exceptions: Script errors, corrupted datasets, python incompatability issues  
 Assumptions: User has coding experience and is fully familiar with the data and analysis procedures  
 
