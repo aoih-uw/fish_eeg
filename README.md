@@ -83,7 +83,11 @@ www.sisneroslab.org
 Role:
 
 Civil and Environmental Engineering - PhD Student  - adv. Jim Thomson; Kristin Zeiden
+
+[Swift Lab](https://www.apl.washington.edu/project/project.php?id=swift)
+
 [Environmental Fluid Mechanics Group](http://depts.washington.edu/uwefm/wordpress/)
+
 [mkj29@uw.edu](mailto:mkj29@uw.edu)
 
 ### **Yash Sonthalia**
@@ -94,34 +98,66 @@ Civil and Environmental Engineering - PhD Student  - adv. Jim Thomson; Kristin Z
 
 # Repository Folder Structure
 
-## src 
-"source code" 
-Contains all code for running programs. Each subdir represents a different process and contains a README for functions specific to that process. 
+Here is your list with the **section headers sorted alphabetically** while keeping all descriptions exactly as-is:
 
-## deps
-"dependencies" (.gitignored)
-Storage location for auxillary programs that are not contained within conda or python. 
-
-## data 
-"data" (.gitignored)
-Location for users to store their data used in this repo. 
-
-## docs 
-"documentation"
-Location of pdfs and other documents which provide contextual information to the repository. 
-
-## tools/passive_acoustic
-"tools" "passive acoustic data"
-Auxillary folder for loading in public acoustic data to compare to audiogram. 
-
-## pages 
-"Webpages"
-Webpage structure for fisheeg project information
+---
 
 ## assets
+
 "Assets"
+
 Everything that website uses as a resource for showing data
 
+## data
+
+"data" (.gitignored)
+
+Location for users to store their data used in this repo.
+
+## docs
+
+"documentation"
+
+Location of pdfs and other documents which provide contextual information to the repository.
+
+## examples
+
+"examples"
+
+Examples of using the pipeline 
+
+## pages
+
+"webpages"
+
+Webpage structure for fisheeg project information
+
 ## results
+
 "results"
+
 Final location of src products and project deliverables
+
+## src
+
+"source code"
+
+Contains all code for running programs. Each subdir represents a different process and contains a README for functions specific to that process.
+
+## test_data
+
+"test data"
+
+Example dataset used for testing
+
+## tests
+
+"tests"
+
+List of tests used for pipeline.
+
+## tools/passive_acoustic
+
+"tools" "passive acoustic data"
+
+Auxillary folder for loading in public acoustic data to compare to audiogram.
