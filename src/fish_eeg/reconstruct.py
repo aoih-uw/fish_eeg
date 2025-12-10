@@ -1,19 +1,23 @@
 import numpy as np
 from fish_eeg.utils import get_channels
-from fish_eeg.data import EEGDataset, ConfigAccessor
+from fish_eeg.data import EEGDataset
 from fish_eeg.constants import sampling_frequency
 from fish_eeg.constants import baseline_artifact_freqs
+from fish_eeg.utils import dotdict
 
 
 class Reconstructor:
-    def __init__(self, eegdataset: EEGDataset, cfg: ConfigAccessor | None = None):
+    def __init__(self, eegdataset: EEGDataset, cfg: dict | None = None):
         self.eegdataset = eegdataset
         self.fft_data = eegdataset.ica_fft_output
         self.ica_data = eegdataset.ica_output
         self.channel_keys = get_channels(self.eegdataset)
-        cfg = cfg or ConfigAccessor(None)
-        self.method = cfg.get("reconstruct", "method", default="ICA")
-        self.cfg = cfg.get("reconstruct", "params", default=ConfigAccessor(None))
+        cfg = cfg or dotdict({})  # if None, use empty
+        if not isinstance(cfg, dotdict):
+            cfg = dotdict(cfg)
+        reconstruct_cfg = cfg.get("reconstruct", dotdict({}))
+        self.method = reconstruct_cfg.get("method", "ICA")
+        self.cfg = reconstruct_cfg.get("params", dotdict({}))
 
     def select_doub_freq_bin(
         self,
@@ -261,7 +265,7 @@ class Reconstructor:
 
                 recon_restruct_data = self.reconstruct_ICA(
                     self.eegdataset.ica_output[coord],
-                    self.eegdataset.rms_subsampled_data.item()[coord],
+                    self.eegdataset.rms_subsampled_data[coord],
                     self.channel_keys,
                     [0, 1, 2, 3],
                     component_weights=weights,
@@ -269,7 +273,7 @@ class Reconstructor:
                 reconstructed_ica_data[coord] = recon_restruct_data
 
                 comparison_results = self.compare_denoised_waveform(
-                    self.eegdataset.bandpass_data.item()[coord],
+                    self.eegdataset.bandpass_data[coord],
                     recon_restruct_data,
                     self.channel_keys,
                     coord[0],
@@ -289,8 +293,9 @@ class Reconstructor:
                     comparison_results[3]
                 )
                 reconstructed_ica_data[coord]["fft_freq_vecs"] = comparison_results[4]
-
-            self.eegdataset.reconstructed_ica_data = reconstructed_ica_data
-            return self.eegdataset
-        else:
-            raise ValueError(f"Unknown reconstruct method: {method!r}. Must be 'ICA'.")
+            else:
+                raise ValueError(
+                    f"Unknown reconstruct method: {method!r}. Must be 'ICA'."
+                )
+        self.eegdataset.reconstructed_ica_data = reconstructed_ica_data
+        return self.eegdataset

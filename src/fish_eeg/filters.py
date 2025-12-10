@@ -1,17 +1,21 @@
-from fish_eeg.data import EEGDataset, ConfigAccessor
+from fish_eeg.data import EEGDataset
 from fish_eeg.utils import get_channels
 from scipy.signal import butter, filtfilt
 import numpy as np
+from fish_eeg.utils import dotdict
 
 
 class Filter:
-    def __init__(self, eegdataset: EEGDataset, cfg: ConfigAccessor | None = None):
+    def __init__(self, eegdataset: EEGDataset, cfg: dict | None = None):
         self.eegdataset = eegdataset
         self.data = self.eegdataset.rms_subsampled_data
         self.channels = get_channels(eegdataset)
-        cfg = cfg or ConfigAccessor(None)
-        self.method = cfg.get("filters", "method", "bandpass")
-        self.cfg = cfg.get("filters", "params", default=ConfigAccessor(None))
+        cfg = cfg or dotdict({})  # if None, use empty
+        if not isinstance(cfg, dotdict):
+            cfg = dotdict(cfg)
+        filter_cfg = cfg.get("filters", dotdict({}))
+        self.method = filter_cfg.get("method", "bandpass")
+        self.cfg = filter_cfg.get("params", dotdict({}))
 
     def bandpass(
         self, dictionary: dict, low=70, high=1400, fs=22050, order=4, ny_fs_ratio=0.5

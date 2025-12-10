@@ -315,13 +315,6 @@ def plot_fft(
     fig.suptitle(f"{subjid} {myfreq} Hz {myamp} dB: {title}")
     fig.tight_layout()
 
-    # Save
-    fig.savefig(
-        f"plots/{subjid}/{subjid}_{myfreq}Hz_{myamp}dB_{title}_{dataset_index}.png",
-        dpi=600,
-        bbox_inches="tight",
-    )
-
     return None
 
 
@@ -964,7 +957,7 @@ class Plotter:
             save_path = save_path + "/waveforms"
             os.makedirs(save_path, exist_ok=True)
             fig.savefig(
-                os.path.join(save_path, f"{attr}_{num_samples}.png"),
+                os.path.join(save_path, f"{attr}_{num_samples}samples_grid.png"),
                 dpi=300,
                 bbox_inches="tight",
             )
@@ -1064,7 +1057,7 @@ class Plotter:
             save_path = save_path + "/ffts"
             os.makedirs(save_path, exist_ok=True)
             fig.savefig(
-                os.path.join(save_path, f"{attr}_{num_samples}.png"),
+                os.path.join(save_path, f"{attr}_{num_samples}samples.png"),
                 dpi=300,
                 bbox_inches="tight",
             )

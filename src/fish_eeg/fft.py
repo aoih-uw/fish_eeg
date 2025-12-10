@@ -1,13 +1,14 @@
-from fish_eeg.data import EEGDataset, ConfigAccessor
+from fish_eeg.data import EEGDataset
 from fish_eeg.utils import get_channels
 import numpy as np
+from fish_eeg.utils import dotdict
 
 
 class FFT:
     def __init__(
         self,
         eegdataset: EEGDataset,
-        cfg: ConfigAccessor | None = None,
+        cfg: dict | None = None,
     ):
         self.eegdataset = eegdataset
         self.data = self.eegdataset.ica_output
@@ -17,8 +18,11 @@ class FFT:
         except:
             pass
 
-        cfg = cfg or ConfigAccessor(None)
-        self.cfg = cfg
+        cfg = cfg or dotdict({})  # if None, use empty
+        if not isinstance(cfg, dotdict):
+            cfg = dotdict(cfg)
+        fft_cfg = cfg.get("fft", dotdict({}))
+        self.cfg = fft_cfg.get("params", dotdict({}))
 
     def compute_fft(
         self, data, sampling_frequency, period_keys=[], channel_keys=[], smallest_dim=1
