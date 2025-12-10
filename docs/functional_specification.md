@@ -28,6 +28,12 @@ Expected interactions: Install .toml package onto computer, load data, denoise a
 Exceptions: Script errors, corrupted datasets, python incompatability issues  
 Assumptions: User has coding experience and is fully familiar with the data and analysis procedures  
 
+User story:
+Aoi is a graduate PhD student in Psychology at University of Washington.
+Aoi will use this code base to publish research on a spotted ratfish.
+Aoi wants a code base that is clear for the audience and shows scientific achievement.
+Aoi is pretty technical and has been coding for this project prior to this class.
+
 ### 2. Verifying analytical choices and monitoring results
 Actors: PI  
 Goal: To review dataset structure, analytical decisions, and results to stay aligned with the project and provide input  
@@ -38,6 +44,12 @@ Triggers: Invitation from the experimenter to review progress or prepare for joi
 Expected interactions: Read documentation describing the data and analysis workflow, open the visualization website to explore interactive summaries, examine plots and metrics to verify analysis decisions, provide feedback to the experimenter to refine next steps  
 Exceptions: Incomplete documentation, website issues, or outdated information  
 Assumptions: User does not have general coding knoweldge but is deeply familiar with the scientific context  
+
+User story:
+Joseph is the PI of Aoi. 
+They want to use the site to learn better what their PhD student is doing for their work. 
+They need to have the data shown and the methods used to be understandable but also includes all the details necessary to see if Aoi has made any errors in their work. 
+Joseph is a neuroethologist.
 
 ### 3. Curious friend exploring results of data analysis
 Actors: Curious friend  
