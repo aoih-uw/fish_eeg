@@ -51,7 +51,7 @@ loaded = np.load(f"{path}/{subjid}_data.npz", allow_pickle=True)
 3. Run the analysis pipeline
    You may run it directly by:  
 ```
-   python pipeline.py --input data/'fish01.mat' --output results/
+   python pipeline.py --config_path path/to/config.yaml
 ```
 or for beginners run this tutorial jupyter notebook:  
 ```
