@@ -24,7 +24,7 @@ Goal: To run custom pipeline of analysis scripts on fish EEG datasets to identif
 Stakeholder: Primary experimenter, PI, collaborators, general audience  
 Precondition: Access to the compatible datasets and data analysis pipeline  
 Triggers: A need to process a new eeg dataset to determine the hearing thresholds of a given fish  
-Expected interactions:Install fish_eeg repo, load data and process data via pipeline.py on a dev.  environment (e.g.,VS Code)  
+Expected interactions: Install fish_eeg repo, load data and process data via pipeline.py on a development environment (e.g., VS Code)  
 Exceptions: Script errors, corrupted datasets, python incompatability issues  
 Assumptions: User has coding experience and is fully familiar with the data and analysis procedures  
 
@@ -37,7 +37,6 @@ Aoi is pretty technical and has been coding for this project prior to this class
 ### 2. Verifying analytical choices and monitoring results
 Actors: PI  
 Goal: To review dataset structure, analytical decisions, and results to stay aligned with the project and provide input  
-System: Documentation of analysis scripts and the visualization website  
 Stakeholder: Collaborator, primary experimenter, research team  
 Precondition: Access to the documentation, website, and any shared datasets or code  
 Triggers: Invitation from the experimenter to review progress or prepare for joint work  
@@ -54,7 +53,6 @@ Joseph is a neuroethologist.
 ### 3. Curious friend exploring results of data analysis
 Actors: Curious friend  
 Goal: To understand the main results of the study without needing deep knowledge of the dataset or analytical methods  
-System: The internet (website hosted online)  
 Stakeholder: Friend, experimenter  
 Precondition: Computer or mobile device with internet access  
 Triggers: The experimenter shares the link to the friend  
