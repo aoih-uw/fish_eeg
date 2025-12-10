@@ -80,7 +80,7 @@ www.sisneroslab.org
 [aoih@uw.edu](mailto:aoih@uw.edu)
 
 ### **Michael James**  
-Role:
+Role: Added tools/passive_acoustic, wrote continuous integration, set up .toml and env.yml files for dependency coverage. 
 
 Civil and Environmental Engineering - PhD Student  - adv. Jim Thomson; Kristin Zeiden
 
@@ -101,6 +101,31 @@ Civil and Environmental Engineering - PhD Student  - adv. Jim Thomson; Kristin Z
 Here is your list with the **section headers sorted alphabetically** while keeping all descriptions exactly as-is:
 
 ---
+├── assets
+│   ├── css
+│   ├── downloads
+│   └── images
+├── data
+│   ├── PAcoustic
+│   └── google-cloud-sdk
+├── docs
+├── examples
+│   ├── JupyterNotebook
+│   └── PipelineScript
+├── pages
+├── results
+│   ├── aoi
+│   ├── christopher
+│   ├── jeff
+│   ├── mike
+│   └── yash
+├── src
+│   └── fish_eeg
+├── test_data
+├── tests
+│   └── __pycache__
+└── tools
+    └── passive_acoustic
 
 ## assets
 
