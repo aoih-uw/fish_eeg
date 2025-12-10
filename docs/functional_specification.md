@@ -24,7 +24,7 @@ Goal: To run custom pipeline of analysis scripts on fish EEG datasets to identif
 Stakeholder: Primary experimenter, PI, collaborators, general audience  
 Precondition: Access to the compatible datasets and data analysis pipeline  
 Triggers: A need to process a new eeg dataset to determine the hearing thresholds of a given fish  
-Expected interactions: Install .toml package, load data and process data via pipeline.py
+Expected interactions:Install fish_eeg repo, load data and process data via pipeline.py on a dev.  environment (VS Code)
 Exceptions: Script errors, corrupted datasets, python incompatability issues  
 Assumptions: User has coding experience and is fully familiar with the data and analysis procedures  
 
