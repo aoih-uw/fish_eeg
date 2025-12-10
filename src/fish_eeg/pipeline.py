@@ -17,8 +17,60 @@ import pickle
 from fish_eeg.utils import collapse_channels
 import os
 
+"""
+Main pipeline script for EEG data processing and analysis.
+
+This script orchestrates the complete EEG analysis workflow including:
+preprocessing, filtering, denoising with ICA, FFT analysis, signal
+reconstruction, period separation, and statistical bootstrapping.
+
+Usage:
+    python main.py --config_path path/to/config.yaml
+"""
 
 def main(config_path: str):
+    """
+    Execute the complete EEG processing pipeline.
+
+    Orchestrates the full analysis workflow from raw data loading through
+    preprocessing, filtering, ICA denoising, FFT analysis, reconstruction,
+    period separation, and bootstrap statistics. Generates diagnostic plots
+    at each major stage.
+
+    Parameters
+    ----------
+    config_path : str
+        Path to the YAML configuration file containing pipeline parameters,
+        dataset paths, and processing options.
+
+    Returns
+    -------
+    None
+        Results are saved to disk and plotted according to configuration.
+
+    Pipeline Steps
+    --------------
+    1. Load configuration and dataset
+    2. Artefact rejection
+    3. Bandpass filter
+    4. ICA denoising
+    5. FFT analysis on ICA components
+    6. Reconstruct signals from ICA
+    7. Separate into prestim/stimresp periods
+    8. FFT analysis on reconstructed data
+    9. Collapse channels and compute bootstrap statistics
+
+    Notes
+    -----
+    Plots are saved to subdirectories under the configured save_path for each
+    processing stage. The final eegdataset can optionally be pickled (currently
+    commented out).
+
+    Raises
+    ------
+    Exception
+        Any errors during pipeline execution are logged and re-raised.
+    """
     logging.info(f"Starting pipeline with config path: {config_path}")
 
     # read the config file
@@ -115,6 +167,21 @@ def main(config_path: str):
 
 
 def parse_args():
+    """
+    Parse command-line arguments for the pipeline script.
+
+    Returns
+    -------
+    argparse.Namespace
+        Parsed arguments containing:
+        - config_path : str
+            Path to the YAML configuration file.
+
+    Examples
+    --------
+    Run the pipeline with a config file:
+        python main.py --config_path configs/experiment1.yaml
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--config_path", type=str, required=True)
     return parser.parse_args()
