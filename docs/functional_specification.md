@@ -20,7 +20,7 @@ A **generally curious friend of the analyst** has no background knowledge of the
 
 ### 1. Analyzing EEG data
 Actors: Primary experimenter, collaborator  
-Goal: To run custom pipeline of analysis scripts on fish EEG datasets  
+Goal: To run custom pipeline of analysis scripts on fish EEG datasets to identify audible frequencies of fish
 Stakeholder: Primary experimenter, PI, collaborators, general audience  
 Precondition: Access to the compatible datasets and data analysis pipeline  
 Triggers: A need to process a new eeg dataset to determine the hearing thresholds of a given fish  
