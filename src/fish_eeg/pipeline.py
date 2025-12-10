@@ -15,6 +15,7 @@ import logging
 import argparse
 import pickle
 from fish_eeg.utils import collapse_channels
+import os
 
 
 def main(config_path: str):
@@ -103,9 +104,12 @@ def main(config_path: str):
     eegdataset = statistics.pipeline()
     logging.info("Statistics calculated successfully")
 
-    pickle.dump(
-        eegdataset, pipeline_config.save_path + f"/{subjid}/final_eegdataset.pkl", "wb"
+    save_path = os.path.join(
+        pipeline_config.save_path, f"{subjid}/final_eegdataset.pkl"
     )
+
+    # with open(save_path, "wb") as f:
+    #     pickle.dump(eegdataset, f, protocol=pickle.HIGHEST_PROTOCOL)
 
     return None
 
