@@ -46,4 +46,4 @@ jobs:
 
       - name: Run Tests
         run: |
-          python -m pytest
+          python -m pytest --cov=fish_eeg --cov-report=term-missing
