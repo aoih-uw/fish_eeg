@@ -23,6 +23,7 @@ dependencies = [
     "scikit-learn",
     "PyWavelets",
     "h5py",
+    "pyyaml",
 ]
 
 classifiers = [
