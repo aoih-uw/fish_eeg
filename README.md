@@ -73,7 +73,7 @@ You may edit these files to adjust labels, formatting, or visual elements before
 # Authors
 
 ### **Aoi Hunsaker**  
-Role: Designed the data analysis pipeline, wrote project documentation (Functional specification, design specification, README.md), and lead coordination of project 
+Role: Designed data analysis pipeline, wrote project documentation (Functional and design specification, docstrings, README.md), and lead coordination of project 
 
 Psychology - PhD Student  - adv. Joseph Sisneros; Andrew Brown  
 www.sisneroslab.org  
@@ -97,10 +97,8 @@ Civil and Environmental Engineering - PhD Student  - adv. Jim Thomson; Kristin Z
 ### **Christopher Tritt**
 
 # Repository Folder Structure
-
-Here is your list with the **section headers sorted alphabetically** while keeping all descriptions exactly as-is:
-
 ---
+```
 ├── assets
 │   ├── css
 │   ├── downloads
@@ -126,7 +124,7 @@ Here is your list with the **section headers sorted alphabetically** while keepi
 │   └── __pycache__
 └── tools
     └── passive_acoustic
-
+```
 ## assets
 
 "Assets"
