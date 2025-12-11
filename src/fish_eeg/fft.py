@@ -5,6 +5,16 @@ from fish_eeg.utils import dotdict
 
 
 class FFT:
+    """
+    Compute frequency-domain representations from EEG data.
+
+    Parameters
+    ----------
+    eegdataset : EEGDataset
+        Dataset containing ICA output or reconstructed data.
+    cfg : ConfigAccessor, optional
+        Optional configuration object.
+    """
     def __init__(
         self,
         eegdataset: EEGDataset,
@@ -27,6 +37,32 @@ class FFT:
     def compute_fft(
         self, data, sampling_frequency, period_keys=[], channel_keys=[], smallest_dim=1
     ):
+        """
+        Compute magnitude spectra using the real-valued FFT.
+
+        Parameters
+        ----------
+        data : array or dict
+            Trial data arranged as:
+            - array(trials, samples) when no channel/period keys are given,
+            - dict[channel] -> array(trials, samples),
+            - dict[period][channel] -> array(trials, samples) when both keys provided.
+        sampling_frequency : int
+            Zero-padding length used for the FFT and denominator for rfftfreq.
+        period_keys : list, optional
+            List of period identifiers defining nested data structure.
+        channel_keys : list, optional
+            List of channel identifiers defining nested data structure.
+        smallest_dim : int, optional
+            Axis index containing trials when using raw arrays.
+
+        Returns
+        -------
+        fft_magnitudes : dict or array
+            Magnitude spectra for each trial, arranged to match the input structure.
+        fft_freq_vecs : dict or array
+            Corresponding frequency vectors.
+        """
         if len(period_keys) == 0 and len(channel_keys) == 0:
             fft_magnitudes = {}
             fft_freq_vecs = {}
@@ -119,6 +155,22 @@ class FFT:
         return fft_magnitudes, fft_freq_vecs
 
     def pipeline(self, sampling_frequency):
+        """
+        Run FFT on all stimulus combinations in the dataset.
+
+        Parameters
+        ----------
+        sampling_frequency : int
+            Zero-padding length used for the FFT.
+
+        Returns
+        -------
+        EEGDataset
+            Dataset updated with one of:
+            - `ica_fft_output`
+            - `reconstructed_ica_fft_output`
+            depending on which data are present.
+        """
         fft_out = {}
         for coord, array in self.data.items():
             if self.data != self.eegdataset.ica_output:

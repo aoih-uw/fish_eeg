@@ -869,6 +869,30 @@ def plot_doub_freq_hist(
 
 
 class Plotter:
+    """
+    High-level class for plotting waveforms, FFTs, and denoising comparisons
+    from an EEG dataset object.
+
+    Attributes
+    ----------
+    eegdataset : object
+        EEG dataset containing waveform and FFT data.
+    save_path : str
+        Default directory for saving plots.
+
+    Methods
+    -------
+    plot_waveforms_by_frequency_rows(...)
+        Plot waveforms grouped by frequency and amplitude.
+    plot_fft_all_ica(...)
+        Plot FFTs for all ICA components in a grid.
+    plot_compare_denoised_by_frequency_rows(...)
+        Plot denoising comparisons for all frequencies/amplitudes.
+    plot_compare_denoised_fft_by_frequency_rows(...)
+        Plot FFT denoising comparisons in grid.
+    plot_doub_freq_hist_by_frequency_rows(...)
+        Plot 2x-response histograms for all frequencies/amplitudes.
+    """
     def __init__(self, eegdataset):
         self.eegdataset = eegdataset
         self.save_path = (

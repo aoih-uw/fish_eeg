@@ -5,7 +5,17 @@ from fish_eeg.utils import dotdict
 
 
 class Filter:
-    def __init__(self, eegdataset: EEGDataset, cfg: dict | None = None):
+    """
+    Apply signal filtering to EEG dataset.
+
+    Parameters
+    ----------
+    eegdataset : EEGDataset
+        Dataset containing RMS-subsampled EEG data.
+    cfg : ConfigAccessor, optional
+        Configuration object specifying filter type and parameters.
+    """
+    def __init__(self, eegdataset: EEGDataset, cfg: ConfigAccessor | None = None):
         self.eegdataset = eegdataset
         self.data = self.eegdataset.rms_subsampled_data
         self.channels = get_channels(eegdataset)
@@ -19,6 +29,30 @@ class Filter:
     def bandpass(
         self, dictionary: dict, low=70, high=1400, fs=22050, order=4, ny_fs_ratio=0.5
     ):
+        """
+        Apply a Butterworth bandpass filter to each channel in the input dictionary.
+
+        Parameters
+        ----------
+        dictionary : dict
+            Channel-wise trial data to filter.
+        low : float, optional
+            Low cutoff frequency in Hz.
+        high : float, optional
+            High cutoff frequency in Hz.
+        fs : float, optional
+            Sampling frequency in Hz.
+        order : int, optional
+            Filter order.
+        ny_fs_ratio : float, optional
+            Ratio of Nyquist frequency used for normalization.
+
+        Returns
+        -------
+        dict
+            Filtered data with the same keys as the input dictionary.
+        """
+        
         low = self.cfg.get("low", low)
         high = self.cfg.get("high", high)
         fs = self.cfg.get("sampling_frequency", fs)
@@ -37,6 +71,14 @@ class Filter:
         return bandpass_dict
 
     def pipeline(self):
+        """
+        Run the configured filter across all stimulus combinations in the dataset.
+
+        Returns
+        -------
+        EEGDataset
+            Dataset updated with `bandpass_data` containing filtered signals.
+        """
         method = self.method
         if method == "bandpass":
             bandpass_data = {}

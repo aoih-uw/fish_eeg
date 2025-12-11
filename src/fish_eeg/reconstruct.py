@@ -7,7 +7,29 @@ from fish_eeg.utils import dotdict
 
 
 class Reconstructor:
-    def __init__(self, eegdataset: EEGDataset, cfg: dict | None = None):
+    def __init__(self, eegdataset: EEGDataset, cfg: ConfigAccessor | None = None):
+        """
+        Initialize the Reconstructor with EEG dataset and configuration.
+
+        Parameters
+        ----------
+        eegdataset : EEGDataset
+            The EEG dataset containing ICA and FFT outputs to be reconstructed.
+        cfg : ConfigAccessor | None, optional
+            Configuration accessor for reconstruction parameters. If None, uses default
+            configuration with method='ICA'.
+
+        Attributes
+        ----------
+        fft_data : dict
+            FFT output data from the EEG dataset.
+        ica_data : dict
+            ICA output data from the EEG dataset.
+        channel_keys : list
+            List of channel identifiers.
+        method : str
+            Reconstruction method to use (default: 'ICA').
+        """
         self.eegdataset = eegdataset
         self.fft_data = eegdataset.ica_fft_output
         self.ica_data = eegdataset.ica_output
@@ -31,6 +53,41 @@ class Reconstructor:
         art_mask_tolerance=3,
         snr_scaler=10,
     ):
+        """
+        Calculate double frequency magnitude and SNR for ICA components.
+
+        Identifies the signal magnitude at double the stimulation frequency and computes
+        the signal-to-noise ratio by comparing it to surrounding frequency bins.
+
+        Parameters
+        ----------
+        magnitudes : np.ndarray or dict
+            Magnitude data from FFT analysis. Can be array or dict with period keys.
+        frequencies : np.ndarray or dict
+            Frequency vectors corresponding to magnitudes.
+        period_keys : list, optional
+            List of period identifiers (e.g., ['prestim', 'stimresp']). Empty list
+            processes single period (default: []).
+        myfreq : float, optional
+            Stimulation frequency in Hz (default: 55).
+        window_size : float, optional
+            Frequency window size around target frequency in Hz (default: 100).
+        double_freq_mask_tolerance : float, optional
+            Tolerance in Hz for double frequency mask (default: 3).
+        artifact_freqs : list, optional
+            List of artifact frequencies to exclude (default: baseline_artifact_freqs).
+        art_mask_tolerance : float, optional
+            Tolerance in Hz for artifact frequency masking (default: 3).
+        snr_scaler : float, optional
+            Scaling factor for SNR calculation in dB (default: 10).
+
+        Returns
+        -------
+        dict
+            If period_keys is empty: Dictionary with 'doub_freq_mag' and 'SNR' arrays.
+            If period_keys provided: Nested dictionary with period keys containing
+            'doub_freq_mag' and 'SNR' for each period.
+        """
         if len(period_keys) == 0:
             doub_freq_dict = {}
 
@@ -139,6 +196,22 @@ class Reconstructor:
         return doub_freq_dict
 
     def create_ICA_weights(self, doub_freq_dict):
+        """
+        Convert SNR values to normalized weights for ICA component weighting.
+
+        Transforms SNR from dB scale to linear scale and normalizes to sum to 1.
+
+        Parameters
+        ----------
+        doub_freq_dict : dict
+            Dictionary containing 'SNR' key with SNR values in dB.
+
+        Returns
+        -------
+        np.ndarray
+            Normalized weights that sum to 1, with higher weights for components
+            with higher SNR.
+        """
         weights = []
         snr_db = doub_freq_dict["SNR"]
         linear_snr = 10 ** (snr_db / 10)  # take the inverse log to calculate linear_snr
@@ -153,6 +226,38 @@ class Reconstructor:
         components_to_keep,
         component_weights=None,
     ):
+        """
+        Reconstruct EEG signals from selected ICA components with optional weighting.
+
+        Performs weighted reconstruction by filtering ICA components and combining
+        them back into channel space.
+
+        Parameters
+        ----------
+        ica_results : dict
+            Dictionary containing ICA decomposition with keys:
+            - 'S': Independent component time courses (samples x components)
+            - 'A': Mixing matrix (channels x components)
+        current_cond : dict
+            Current condition data with channel keys, used to determine trial structure.
+        channel_keys : list
+            List of channel identifiers for output organization.
+        components_to_keep : list
+            Indices of ICA components to include in reconstruction.
+        component_weights : np.ndarray | None, optional
+            Weights for each component. If None, uses equal weighting (default: None).
+
+        Returns
+        -------
+        dict
+            Dictionary mapping channel keys to reconstructed data arrays with shape
+            (n_trials, n_samples_per_trial).
+
+        Raises
+        ------
+        AssertionError
+            If number of weights doesn't match number of components to keep.
+        """
         recon_restruct_data = {}
 
         # Extract ICA results
@@ -190,6 +295,42 @@ class Reconstructor:
     def compare_denoised_waveform(
         self, filt_data, recon_restruct_data, channel_keys, myfreq, myamp, fs
     ):
+        """
+        Compare original and denoised signals in time and frequency domains.
+
+        Computes means, standard deviations, and FFT analysis for both original
+        filtered data and reconstructed denoised data.
+
+        Parameters
+        ----------
+        filt_data : dict
+            Original filtered data with channel keys mapping to trial arrays.
+        recon_restruct_data : dict
+            Reconstructed denoised data with channel keys mapping to trial arrays.
+        channel_keys : list
+            List of channel identifiers.
+        myfreq : float
+            Stimulation frequency in Hz.
+        myamp : float
+            Stimulation amplitude (not used in current implementation).
+        fs : int
+            Sampling frequency in Hz.
+
+        Returns
+        -------
+        tuple
+            Five-element tuple containing:
+            - compare_denoising_mean : dict
+                Mean waveforms for 'original' and 'denoised' by channel.
+            - compare_denoising_std : dict
+                Standard deviation waveforms for 'original' and 'denoised' by channel.
+            - fft_magnitudes_mean : dict
+                FFT magnitudes of mean waveforms by data type and channel.
+            - fft_magnitudes_std : dict
+                FFT magnitudes of std waveforms by data type and channel.
+            - fft_freq_vecs : dict
+                Frequency vectors for FFT analysis by data type and channel.
+        """
         data_type = ["original", "denoised"]
         # Calculate grand mean
         compare_denoising_mean = {
@@ -248,6 +389,30 @@ class Reconstructor:
         )
 
     def pipeline(self, weighted: bool = False):
+        """
+        Execute the full reconstruction pipeline for all conditions in the dataset.
+
+        Processes each coordinate (frequency, amplitude pair) by computing SNR-based
+        weights, reconstructing signals from ICA components, and comparing original
+        vs denoised waveforms.
+
+        Parameters
+        ----------
+        weighted : bool, optional
+            If True, uses SNR-based weighting for component reconstruction.
+            If False, uses equal weighting (default: False).
+
+        Returns
+        -------
+        EEGDataset
+            The input dataset with added 'reconstructed_ica_data' attribute containing
+            reconstruction results for all coordinates.
+
+        Raises
+        ------
+        ValueError
+            If reconstruction method is not 'ICA'.
+        """
         reconstructed_ica_data = {}
         method = self.method
         for coord, ffts in self.fft_data.items():

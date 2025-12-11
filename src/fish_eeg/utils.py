@@ -23,6 +23,37 @@ def get_channels(eegdataset: EEGDataset) -> list[str]:
 
 
 def separate_periods(eegdataset, data_attr: str = "reconstructed_ica_data"):
+    """
+    Separate trial data into prestim (Stim OFF) and stimresp (Stim ON) periods for each channel.
+
+    Splits the continuous trial data into two time windows based on the dataset's
+    period length and latency parameters.
+
+    Parameters
+    ----------
+    eegdataset : EEGDataset
+        The EEG dataset containing trial data to be separated.
+    data_attr : str, optional
+        Name of the dataset attribute containing the data to separate
+        (default: "reconstructed_ica_data").
+
+    Returns
+    -------
+    EEGDataset
+        The input dataset with added "separated_by_period" key in the specified
+        data attribute, containing period-separated data for each coordinate.
+
+    Raises
+    ------
+    ValueError
+        If the specified data_attr does not exist in the dataset.
+
+    Notes
+    -----
+    The separation uses:
+    - prestim period: data[:, latency : latency + period_len]
+    - stimresp period: data[:, latency + period_len : latency + period_len * 2]
+    """
     try:
         data = getattr(eegdataset, data_attr)  # <–– dynamically fetch attribute
     except AttributeError:
@@ -53,6 +84,32 @@ def separate_periods(eegdataset, data_attr: str = "reconstructed_ica_data"):
 
 
 def collapse_channels(eegdataset, attr: str = "reconstructed_ica_fft_output"):
+    """
+    Collapse channel data by vertically stacking all channels for each period.
+
+    Combines data from all channels into a single array for each experimental
+    period, facilitating cross-channel analysis.
+
+    Parameters
+    ----------
+    eegdataset : EEGDataset
+        The EEG dataset containing channel data to collapse.
+    attr : str, optional
+        Name of the dataset attribute containing the data to collapse
+        (default: "reconstructed_ica_fft_output").
+
+    Returns
+    -------
+    EEGDataset
+        The input dataset with added "collapsed_channels" key in the specified
+        attribute, containing vertically stacked channel data for each coordinate
+        and period.
+
+    Notes
+    -----
+    The collapsed data shape is (n_channels * n_samples, ...) where channels
+    are stacked vertically using np.vstack.
+    """
     data = getattr(eegdataset, attr)
 
     for coord in data.keys():
@@ -68,6 +125,43 @@ def collapse_channels(eegdataset, attr: str = "reconstructed_ica_fft_output"):
 
 
 def select_doub_freq_bin(data, frequencies, period_keys, myfreq, window_size=100):
+    """
+    Calculate double frequency magnitude and SNR from FFT data.
+
+    Identifies the signal power at double the stimulation frequency and computes
+    the signal-to-noise ratio by comparing it to surrounding frequency bins while
+    excluding artifact frequencies (particularly 60 Hz and its harmonics).
+
+    Parameters
+    ----------
+    data : np.ndarray or dict
+        FFT magnitude data. Can be array (single period) or dict with period keys.
+    frequencies : np.ndarray or dict
+        Frequency vectors corresponding to the data.
+    period_keys : list
+        List of period identifiers (e.g., ['prestim', 'stimresp']). Empty list
+        indicates single-period processing.
+    myfreq : float
+        Sound stimulus frequency in Hz.
+    window_size : float, optional
+        Frequency window size around target frequency in Hz (default: 100).
+
+    Returns
+    -------
+    dict
+        If period_keys is empty: Dictionary with 'doub_freq_mag' and 'SNR' arrays.
+        If period_keys provided: Nested dictionary with period keys, each containing
+        'doub_freq_mag' and 'SNR' arrays.
+
+    Notes
+    -----
+    - Target frequency is 2 * myfreq
+    - Double frequency mask uses ±3 Hz tolerance
+    - Artifact frequencies (60 Hz harmonics and stimulation frequencies) are
+    excluded from the background window with ±3 Hz tolerance
+    - SNR is calculated as: 10 * log10(doub_mag / remain_mag)
+    - Includes debug print statements for frequency masking verification
+    """
     if len(period_keys) == 0:
         doub_freq_dict = {}
 
