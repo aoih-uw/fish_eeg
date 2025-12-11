@@ -20,18 +20,23 @@ A **generally curious friend of the analyst** has no background knowledge of the
 
 ### 1. Analyzing EEG data
 Actors: Primary experimenter, collaborator  
-Goal: To run custom pipeline of analysis scripts on fish EEG datasets  
+Goal: To run custom pipeline of analysis scripts on fish EEG datasets to identify audible frequencies of own fish
 Stakeholder: Primary experimenter, PI, collaborators, general audience  
 Precondition: Access to the compatible datasets and data analysis pipeline  
 Triggers: A need to process a new eeg dataset to determine the hearing thresholds of a given fish  
-Expected interactions: Install .toml package onto computer, load data, denoise and filter data, conduct data/statistical analysis on dataset to identify which sound frequencies the fish can hear  
+Expected interactions: Install fish_eeg repo, load data and process data via pipeline.py on a development environment (e.g., VS Code)  
 Exceptions: Script errors, corrupted datasets, python incompatability issues  
 Assumptions: User has coding experience and is fully familiar with the data and analysis procedures  
+
+User story:
+Aoi is a graduate PhD student in Psychology at University of Washington.
+Aoi will use this code base to publish research on a spotted ratfish.
+Aoi wants a code base that is clear for the audience and shows scientific achievement.
+Aoi is pretty technical and has been coding for this project prior to this class.
 
 ### 2. Verifying analytical choices and monitoring results
 Actors: PI  
 Goal: To review dataset structure, analytical decisions, and results to stay aligned with the project and provide input  
-System: Documentation of analysis scripts and the visualization website  
 Stakeholder: Collaborator, primary experimenter, research team  
 Precondition: Access to the documentation, website, and any shared datasets or code  
 Triggers: Invitation from the experimenter to review progress or prepare for joint work  
@@ -39,10 +44,15 @@ Expected interactions: Read documentation describing the data and analysis workf
 Exceptions: Incomplete documentation, website issues, or outdated information  
 Assumptions: User does not have general coding knoweldge but is deeply familiar with the scientific context  
 
+User story:
+Joseph is the PI of Aoi. 
+They want to use the site to learn better what their PhD student is doing for their work. 
+They need to have the data shown and the methods used to be understandable but also includes all the details necessary to see if Aoi has made any errors in their work. 
+Joseph is a neuroethologist.
+
 ### 3. Curious friend exploring results of data analysis
 Actors: Curious friend  
 Goal: To understand the main results of the study without needing deep knowledge of the dataset or analytical methods  
-System: The internet (website hosted online)  
 Stakeholder: Friend, experimenter  
 Precondition: Computer or mobile device with internet access  
 Triggers: The experimenter shares the link to the friend  

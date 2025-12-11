@@ -1,5 +1,6 @@
 import numpy as np
-from fish_eeg.data import ConfigAccessor, EEGDataset
+from fish_eeg.data import EEGDataset
+from fish_eeg.utils import dotdict
 
 
 class Bootstrap:
@@ -38,7 +39,11 @@ class Bootstrap:
         self.data = eegdataset.reconstructed_ica_fft_output
         self.period_keys = eegdataset.period_keys
         self.channel_keys = eegdataset.channel_keys
-        self.cfg = cfg.get("statistics", "params", default=ConfigAccessor(None))
+        cfg = cfg or dotdict({})  # if None, use empty
+        if not isinstance(cfg, dotdict):
+            cfg = dotdict(cfg)
+        statistics_cfg = cfg.get("statistics", dotdict({}))
+        self.cfg = statistics_cfg.get("params", dotdict({}))
 
     def calculate_bootstrap(
         self, data, period_keys, channel_keys, n_iterations=100, seed=42
@@ -82,7 +87,7 @@ class Bootstrap:
         """
         # Ensure consistent random sampling across iterations
         rng = np.random.default_rng(
-            self.cfg.get("statistics", "seed", default=seed)
+            self.cfg.get("seed", seed)
         )  # create a standalone random number generator object
         # Determine the maximum number of samples across periods
         max_samples = max(len(data[period]) for period in period_keys)
@@ -90,9 +95,7 @@ class Bootstrap:
         boot_means = {period: [] for period in period_keys}
         boot_std = {period: [] for period in period_keys}
 
-        for _ in range(
-            self.cfg.get("statistics", "n_iterations", default=n_iterations)
-        ):
+        for _ in range(self.cfg.get("n_iterations", n_iterations)):
             # Generate a single set of indices to use for all periods (i.e., paired bootstrap)
             sample_indices = rng.choice(max_samples, size=max_samples, replace=True)
 

@@ -94,7 +94,7 @@
       <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
         <p class="text-slate-700 mb-3">Listen to an example of the auditory stimulus used in the experiments: "70 Hz Tone" (make sure you have bass!)</p>
         <audio controls class="w-full">
-          <source src="../tools/analysis/sample_70Hz_tone.wav" type="audio/wav">
+          <source src="../assets/downloads/sample_70Hz_tone.wav" type="audio/wav">
         </audio>
       </div>
     </section>
@@ -105,7 +105,7 @@
           Those who are musically inclined with notice there's an octave in there (A double frequency response)!
         </p>
         <audio controls class="w-full">
-          <source src="../tools/analysis/response_70Hz_115db_tone.wav" type="audio/wav">
+          <source src="../assets/downloads/response_70Hz_115db_tone.wav" type="audio/wav">
         </audio>
       </div>
     </section>
@@ -122,7 +122,7 @@
             In interactive mode, you can highlight each point, and zoom in and out using scroll.</p>
         </div>
         <div class="relative">
-          <iframe id="iframeAll" src="../tools/analysis/plots/summary_plots/95CI_all.html"
+          <iframe id="iframeAll" src="../assets/downloads/plots/summary_plots/95CI_all.html"
                   class="w-full h-[460px] rounded-lg border border-slate-200 locked-chart"
                   style="pointer-events:auto;"></iframe>
           <div class="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">🔓 Interactive</div>
@@ -135,7 +135,7 @@
           <h3 class="text-lg font-semibold" style="color:#32006e">Median 95% Confidence Intervals</h3>
         </div>
         <div class="relative">
-          <iframe id="iframeMedian" src="../tools/analysis/plots/summary_plots/95CI_median.html"
+          <iframe id="iframeMedian" src="../assets/downloads/plots/summary_plots/95CI_median.html"
                   class="w-full h-[460px] rounded-lg border border-slate-200 locked-chart"
                   style="pointer-events:auto;"></iframe>
           <div class="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">🔓 Interactive</div>
@@ -148,7 +148,7 @@
           <h3 class="text-lg font-semibold" style="color:#32006e">ICA Component Weights</h3>
         </div>
         <div class="relative">
-          <iframe id="iframeIca" src="../tools/analysis/plots/summary_plots/ICAweights.html"
+          <iframe id="iframeIca" src="../assets/downloads/plots/summary_plots/ICAweights.html"
                   class="w-full h-[460px] rounded-lg border border-slate-200 locked-chart"
                   style="pointer-events:auto;"></iframe>
           <div class="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">🔓 Interactive</div>
@@ -186,12 +186,12 @@
     });
 
     function exportChartData() {
-      window.open('https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/tools/analysis/CI_csv');
-      window.open('https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/tools/analysis/weights_csv');
+      window.open('https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/assets/downloads/CI_csv');
+      window.open('https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/assets/downloads/weights_csv');
     }
 
     function downloadChartImage() {
-      window.open('https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/tools/analysis/plots/summary_plots/');
+      window.open('https://download-directory.github.io/?url=https://github.com/aoih-uw/fish_eeg/tree/main/assets/downloads/plots/summary_plots/');
     }
 
     // Mobile menu toggle

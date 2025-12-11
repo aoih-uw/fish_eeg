@@ -1,9 +1,10 @@
-from fish_eeg.data import EEGDataset, ConfigAccessor
+from fish_eeg.data import EEGDataset
 from fish_eeg.utils import get_channels
 import numpy as np
 import time
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import FastICA
+from fish_eeg.utils import dotdict
 
 
 class Denoiser:
@@ -22,9 +23,13 @@ class Denoiser:
         self.data = self.eegdataset.bandpass_data
         self.channels = get_channels(eegdataset)
         self.period_keys = eegdataset.period_keys
-        cfg = cfg or ConfigAccessor(None)
-        self.method = cfg.get("denoiser", "method", default="ICA")
-        self.cfg = cfg.get("denoiser", "params", default=ConfigAccessor(None))
+
+        cfg = cfg or dotdict({})  # if None, use empty
+        if not isinstance(cfg, dotdict):
+            cfg = dotdict(cfg)
+        denoiser_cfg = cfg.get("denoiser", dotdict({}))
+        self.method = denoiser_cfg.get("method", "ICA")
+        self.cfg = denoiser_cfg.get("params", dotdict({}))
 
     def ICA(self, dictionary: dict):
         """

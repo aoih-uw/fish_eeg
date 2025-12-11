@@ -1,13 +1,14 @@
 import numpy as np
 from fish_eeg.utils import get_channels
-from fish_eeg.data import EEGDataset, ConfigAccessor
+from fish_eeg.data import EEGDataset
+from fish_eeg.utils import dotdict
 
 
 class Preprocessor:
     def __init__(
         self,
         eegdataset: EEGDataset,
-        cfg: ConfigAccessor | None = None,
+        cfg: dict | None = None,
     ):
         """
         Initialize the Preprocessor.
@@ -15,9 +16,13 @@ class Preprocessor:
         self.eegdataset = eegdataset
         self.data = self.eegdataset.data
         self.channels = get_channels(eegdataset)
-        cfg = cfg or ConfigAccessor(None)
-        self.method = cfg.get("preprocess", "method", "rms_subsampled")
-        self.cfg = cfg.get("preprocess", "params", default=ConfigAccessor(None))
+
+        cfg = cfg or dotdict({})  # if None, use empty
+        if not isinstance(cfg, dotdict):
+            cfg = dotdict(cfg)
+        preprocess_cfg = cfg.get("preprocess", dotdict({}))
+        self.method = preprocess_cfg.get("method", "rms_subsampled")
+        self.cfg = preprocess_cfg.get("params", dotdict({}))
 
     def FilterHighRMSTrials(self, dictionary: dict) -> np.ndarray:
         """
@@ -46,15 +51,16 @@ class Preprocessor:
 
             # MAD checks for outliers, of course since we divide by mad we need to account for if MAD = 0
             if (
-                mad < self.cfg.get("mad", 1e-6)
-            ):  # Protect for numerical stability, we conside values below 1e-6 to be small enough to have no outliers
+                mad
+                < (
+                    self.cfg.get("mad", 1e-6)
+                )  # Protect for numerical stability, we consider values below 1e-6 to be small enough to have no outliers
+            ):
                 median_rms = np.median(rms_per_row)
                 max_rms = np.max(rms_per_row)
 
                 # Remove only if the max is clearly abnormal, (5 times the median)
-                if max_rms > median_rms * self.cfg.get(
-                    "max_rms_median_ratio", 5
-                ):  # 3 is a common threshold, We use 5 to be less strict
+                if max_rms > median_rms * (self.cfg.get("max_rms_median_ratio", 5)):
                     keep_rows = np.where(rms_per_row == max_rms, False, True)
                 else:
                     keep_rows = np.ones_like(rms_per_row, dtype=bool)
@@ -64,9 +70,9 @@ class Preprocessor:
                     * (rms_per_row - median)
                     / mad
                 )
-                keep_rows = np.abs(modified_z) <= self.cfg.get(
-                    "modified_z_threshold", 3.5
-                )  # Jeffrey: 3.5 is the standard threshold value
+                keep_rows = np.abs(modified_z) <= (
+                    self.cfg.get("modified_z_threshold", 3.5)
+                )
 
             keep_rows_list.append(
                 keep_rows
@@ -130,7 +136,7 @@ class Preprocessor:
         subsampled_data = {}
         method = self.method
 
-        for coord, dictionary in self.data.item().items():
+        for coord, dictionary in self.data.items():
             if method == "rms_subsampled":
                 filtered = self.FilterHighRMSTrials(dictionary)
                 subsampled = self.SubsampleTrialsPerChannel(

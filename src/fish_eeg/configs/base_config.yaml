@@ -1,4 +1,10 @@
 # pipeline_config.yaml
+dataset:
+  path: "/path/to/data"
+  subjid: "hydrolagusColliei_8"
+
+save_path: "/path/to/save/results"
+
 preprocess:
   method: "rms_subsampled"
   params:

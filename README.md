@@ -51,7 +51,7 @@ loaded = np.load(f"{path}/{subjid}_data.npz", allow_pickle=True)
 3. Run the analysis pipeline
    You may run it directly by:  
 ```
-   python pipeline.py --input data/'fish01.mat' --output results/
+   python pipeline.py --config_path path/to/config.yaml
 ```
 or for beginners run this tutorial jupyter notebook:  
 ```
@@ -73,17 +73,21 @@ You may edit these files to adjust labels, formatting, or visual elements before
 # Authors
 
 ### **Aoi Hunsaker**  
-Role: Designed the data analysis pipeline, wrote project documentation (Functional specification, design specification, README.md), and lead coordination of project 
+Role: Designed data analysis pipeline, wrote project documentation (Functional and design specification, docstrings, README.md), and lead coordination of project 
 
 Psychology - PhD Student  - adv. Joseph Sisneros; Andrew Brown  
 www.sisneroslab.org  
 [aoih@uw.edu](mailto:aoih@uw.edu)
 
 ### **Michael James**  
-Role:
+Role: Added tools/passive_acoustic, wrote continuous integration, set up .toml and env.yml files for dependency coverage. 
 
 Civil and Environmental Engineering - PhD Student  - adv. Jim Thomson; Kristin Zeiden
+
+[Swift Lab](https://www.apl.washington.edu/project/project.php?id=swift)
+
 [Environmental Fluid Mechanics Group](http://depts.washington.edu/uwefm/wordpress/)
+
 [mkj29@uw.edu](mailto:mkj29@uw.edu)
 
 ### **Yash Sonthalia**
@@ -93,26 +97,90 @@ Civil and Environmental Engineering - PhD Student  - adv. Jim Thomson; Kristin Z
 ### **Christopher Tritt**
 
 # Repository Folder Structure
+---
+```
+├── assets
+│   ├── css
+│   ├── downloads
+│   └── images
+├── data
+│   ├── PAcoustic
+│   └── google-cloud-sdk
+├── docs
+├── examples
+│   ├── JupyterNotebook
+│   └── PipelineScript
+├── pages
+├── results
+│   ├── aoi
+│   ├── christopher
+│   ├── jeff
+│   ├── mike
+│   └── yash
+├── src
+│   └── fish_eeg
+├── test_data
+├── tests
+│   └── __pycache__
+└── tools
+    └── passive_acoustic
+```
+## assets
 
-## src 
-"source code" 
-Contains all code for running programs. Each subdir represents a different process and contains a README for functions specific to that process. 
+"Assets"
 
-## deps
-"dependencies" (.gitignored)
-Storage location for auxillary programs that are not contained within conda or python. 
+Everything that website uses as a resource for showing data
 
-## data 
+## data
+
 "data" (.gitignored)
-Location for users to store their data used in this repo. 
 
-## docs 
+Location for users to store their data used in this repo.
+
+## docs
+
 "documentation"
-Location of pdfs and other documents which provide contextual information to the repository. 
 
-## analysis
-"analysis"
-Location of jupyter notebooks which explore different analysis methods (not to be used in production)
+Location of pdfs and other documents which provide contextual information to the repository.
+
+## examples
+
+"examples"
+
+Examples of using the pipeline 
+
+## pages
+
+"webpages"
+
+Webpage structure for fisheeg project information
 
 ## results
+
+"results"
+
 Final location of src products and project deliverables
+
+## src
+
+"source code"
+
+Contains all code for running programs. Each subdir represents a different process and contains a README for functions specific to that process.
+
+## test_data
+
+"test data"
+
+Example dataset used for testing
+
+## tests
+
+"tests"
+
+List of tests used for pipeline.
+
+## tools/passive_acoustic
+
+"tools" "passive acoustic data"
+
+Auxillary folder for loading in public acoustic data to compare to audiogram.

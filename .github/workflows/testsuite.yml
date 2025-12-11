@@ -11,13 +11,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     defaults:
       run:
-        # Adding -l {0} helps ensure conda can be found properly.
         shell: bash -l {0}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]  # it's a great idea to also include: macos-latest, windows-latest
-        python-version: ["3.14"]  # it's a great idea to also include: "3.11", "3.13"
+        os: [ubuntu-latest] 
+        python-version: ["3.14"]  
     steps:
       - uses: actions/checkout@main
         with:
@@ -42,8 +41,8 @@ jobs:
           fi
 
       - name: Install
-        run: pip install --no-deps .
+        run: pip install .
 
       - name: Run Tests
         run: |
-          python -m pytest
+          python -m pytest --cov=fish_eeg --cov-report=term-missing

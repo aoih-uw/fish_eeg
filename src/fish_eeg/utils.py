@@ -15,7 +15,7 @@ def get_channels(eegdataset: EEGDataset) -> list[str]:
         get_channels(eegdataset) -> ["ch1", "ch2", "ch3", "ch4"]
     """
     unique_channels = set()
-    for coord, dictionary in eegdataset.data.item().items():
+    for coord, dictionary in eegdataset.data.items():
         for key in list(dictionary.keys()):
             if key.startswith("ch") and key[-1].isdigit():
                 unique_channels.add(key)
@@ -295,17 +295,70 @@ def select_doub_freq_bin(data, frequencies, period_keys, myfreq, window_size=100
 
 
 class dotdict(dict):
-    """dot.notation access to dictionary attributes
+    """
+    dict with attribute-style access that also
+    recursively converts nested dicts to dotdict.
+
     Example:
-    >>> my_dict = dotdict({"key1": "value1", "key2": "value2"})
-    >>> my_dict.key1
-    'value1'
-    >>> my_dict.key2
-    'value2'
-    >>> my_dict.key3
-    None
+        cfg = dotdict({
+            "preprocess": {
+                "method": "rms_subsampled",
+                "params": {"seed": 42}
+            }
+        })
+
+        cfg.preprocess.method        # 'rms_subsampled'
+        cfg.preprocess.params.seed   # 42
     """
 
-    __getattr__ = dict.get
-    __setattr__ = dict.__setitem__
-    __delattr__ = dict.__delitem__
+    # ---- core init / conversion ----
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+        self.update(*args, **kwargs)
+
+    @staticmethod
+    def _convert(value):
+        """Recursively convert dicts (and containers of dicts) to dotdict."""
+        if isinstance(value, dict):
+            return dotdict(value)
+        if isinstance(value, list):
+            return [dotdict._convert(v) for v in value]
+        if isinstance(value, tuple):
+            return tuple(dotdict._convert(v) for v in value)
+        return value
+
+    def __setitem__(self, key, value):
+        super().__setitem__(key, self._convert(value))
+
+    def update(self, *args, **kwargs):
+        # Ensure everything goes through __setitem__ so it gets converted
+        other = dict(*args, **kwargs)
+        for k, v in other.items():
+            self[k] = v
+
+    # ---- attribute access ----
+    def __getattr__(self, name):
+        """
+        Attribute-style access:
+            cfg.preprocess  -> cfg['preprocess']
+
+        Missing keys raise AttributeError so that:
+            getattr(cfg, "preprocess", default)
+        correctly returns `default`.
+        """
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(name)
+
+    def __setattr__(self, name, value):
+        # Allow normal attributes starting with '_' (if you ever need them)
+        if name.startswith("_"):
+            return super().__setattr__(name, value)
+        self[name] = value
+
+    def __delattr__(self, name):
+        try:
+            del self[name]
+        except KeyError:
+            raise AttributeError(name)
