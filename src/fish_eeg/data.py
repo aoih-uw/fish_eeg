@@ -1,7 +1,6 @@
 import numpy as np
 from dataclasses import dataclass
 from fish_eeg.constants import PERIOD_KEYS, METRIC_KEYS, SUBMETRIC_KEYS
-from typing import Optional, Any, Mapping
 import yaml
 
 

@@ -13,7 +13,6 @@ from fish_eeg.utils import (
 from fish_eeg.statistics import Bootstrap
 import logging
 import argparse
-import pickle
 from fish_eeg.utils import collapse_channels
 import os
 
@@ -156,7 +155,7 @@ def main(config_path: str):
     eegdataset = statistics.pipeline()
     logging.info("Statistics calculated successfully")
 
-    save_path = os.path.join(
+    save_path = os.path.join(  # noqa: F841
         pipeline_config.save_path, f"{subjid}/final_eegdataset.pkl"
     )
 

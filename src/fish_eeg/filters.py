@@ -1,7 +1,6 @@
 from fish_eeg.data import EEGDataset
 from fish_eeg.utils import get_channels
 from scipy.signal import butter, filtfilt
-import numpy as np
 from fish_eeg.utils import dotdict
 
 
