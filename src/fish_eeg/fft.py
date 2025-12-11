@@ -15,7 +15,7 @@ class FFT:
         self.channels = get_channels(eegdataset)
         try:
             self.data = self.eegdataset.reconstructed_ica_data["separated_by_period"]
-        except:
+        except:  # noqa: E722
             pass
 
         cfg = cfg or dotdict({})  # if None, use empty
