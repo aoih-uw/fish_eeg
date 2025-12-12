@@ -3,6 +3,15 @@ import numpy as np
 from fish_eeg.data import EEGDataset
 from fish_eeg.preprocess import Preprocessor
 
+# Stub for ConfigAccessor so tests using Filter can import without errors
+class ConfigAccessor:
+    def __init__(self, cfg=None):
+        self.cfg = cfg or {}
+    def get(self, key, default=None):
+        return self.cfg.get(key, default)
+
+
+
 @pytest.fixture
 def fake_channels(monkeypatch):
     def _fake_get_channels(_):
@@ -122,3 +131,33 @@ def sinusoid_dataset(fake_dataset):
         return ds
 
     return _make
+
+
+
+@pytest.fixture
+def temp_eeg_data(tmp_path, fake_channels):
+    """
+    Creates a temporary .npz file with fake EEG data for testing load_data.
+    Returns (path, subjid) tuple.
+    """
+    # Create fake data matching the structure load_data expects
+    data_dict = {}
+    for ch in fake_channels:
+        data_dict[ch] = np.random.randn(2, 50)
+
+    fakedata = np.array({"data": data_dict}, dtype=object)
+    fakefreq_amp_table = np.random.randn(2, 5)
+
+    # Subject ID
+    subjid = "test_subject"
+    file_path = tmp_path / f"{subjid}_data.npz"
+    # Save to temporary file
+    np.savez(
+        file_path,
+        data=fakedata,
+        freq_amp_table=fakefreq_amp_table,
+        latency=np.array([0]),
+        channel_keys=np.array(fake_channels)
+    )
+
+    return str(tmp_path), subjid
