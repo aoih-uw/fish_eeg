@@ -1,3 +1,7 @@
+"""
+conftest.py
+Create pytest fixtures to use in our testing methods.
+"""
 import pytest
 import numpy as np
 from fish_eeg.data import EEGDataset
@@ -89,10 +93,10 @@ def sinusoid_dataset(fake_dataset):
 
             data_dict[ch] = np.array(trials)
 
-        # Pack into the wrapped format that fake_dataset expects
-        wrapped = np.array({"data": data_dict}, dtype=object)
+        # Pack into the wrapped format that pipeline expects
+        wrapped_data = {(0, 0): data_dict}
 
-        ds = fake_dataset(wrapped_data=wrapped)
+        ds = fake_dataset(wrapped_data=wrapped_data)
 
         return ds
 
