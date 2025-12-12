@@ -93,6 +93,7 @@ Civil and Environmental Engineering - PhD Student  - adv. Jim Thomson; Kristin Z
 ### **Yash Sonthalia**
 
 ### **Jeffrey Jackson**
+Role: Look over underlying statistical methods to ensure effective statistical methodology. Lead in testing, ensure tests function during continuous integration. Writeing docstrings and comments.
 
 ### **Christopher Tritt**
 
