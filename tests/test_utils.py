@@ -35,7 +35,7 @@ def test_get_channels_smoke():
     }
     
     eegdataset = EEGDataset(
-        data=np.array(test_data, dtype=object),
+        data=test_data,
         freq_amp_table=np.array([[100, 110]]),
         latency=2118,
         channel_keys=["ch1", "ch2"],
@@ -74,7 +74,7 @@ def test_get_channels_one_shot():
     }
     
     eegdataset = EEGDataset(
-        data=np.array(test_data, dtype=object),
+        data=test_data,
         freq_amp_table=np.array([[220, 130]]),
         latency=2118,
         channel_keys=["ch1", "ch2", "ch3", "ch4"],
@@ -105,7 +105,7 @@ def test_get_channels_edge_empty_data():
     test_data = {}
     
     eegdataset = EEGDataset(
-        data=np.array(test_data, dtype=object),
+        data=test_data,
         freq_amp_table=np.array([]),
         latency=2118,
         channel_keys=[],
@@ -141,7 +141,7 @@ def test_get_channels_edge_no_channels():
     }
     
     eegdataset = EEGDataset(
-        data=np.array(test_data, dtype=object),
+        data=test_data,
         freq_amp_table=np.array([[100, 110]]),
         latency=2118,
         channel_keys=[],
@@ -179,7 +179,7 @@ def test_get_channels_edge_mixed_keys():
     }
     
     eegdataset = EEGDataset(
-        data=np.array(test_data, dtype=object),
+        data=test_data,
         freq_amp_table=np.array([[100, 110]]),
         latency=2118,
         channel_keys=["ch1", "ch2"],
@@ -226,7 +226,7 @@ def test_get_channels_pattern_multiple_stimuli():
     }
     
     eegdataset = EEGDataset(
-        data=np.array(test_data, dtype=object),
+        data=test_data,
         freq_amp_table=np.array([[55, 130], [100, 105], [220, 125]]),
         latency=2118,
         channel_keys=["ch1", "ch2", "ch3", "ch4"],
@@ -264,7 +264,7 @@ def test_get_channels_pattern_large_channel_numbers():
     }
     
     eegdataset = EEGDataset(
-        data=np.array(test_data, dtype=object),
+        data=test_data,
         freq_amp_table=np.array([[100, 110]]),
         latency=2118,
         channel_keys=["ch1", "ch10", "ch99", "ch123"],

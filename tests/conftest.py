@@ -3,6 +3,15 @@ import numpy as np
 from fish_eeg.data import EEGDataset
 from fish_eeg.preprocess import Preprocessor
 
+# Stub for ConfigAccessor so tests using Filter can import without errors
+class ConfigAccessor:
+    def __init__(self, cfg=None):
+        self.cfg = cfg or {}
+    def get(self, key, default=None):
+        return self.cfg.get(key, default)
+
+
+
 @pytest.fixture
 def fake_channels(monkeypatch):
     def _fake_get_channels(_):
@@ -11,111 +20,31 @@ def fake_channels(monkeypatch):
     monkeypatch.setattr("fish_eeg.preprocess.get_channels", _fake_get_channels)
     return ["ch1", "ch2", "ch3", "ch4"]
 
-
-# @pytest.fixture
-# def fake_dataset(fake_channels):
-#     """
-#     Returns a minimal EEGDataset-like object for testing.
-#     """
-    
-#     # Create dummy data
-#     data_dict = {}
-#     for ch in fake_channels:
-#         # 2 trials, 50 samples per channel
-#         data_dict[ch] = np.random.randn(2, 50)
-    
-#     # Wrap in 0-d object array for using Filter
-#     fakedata = np.array({"data": data_dict}, dtype=object)
-
-#     # Minimal freq_amp_table (please change if testing this aspect)
-#     fakefreq_amp_table = np.random.randn(2, 5)
-
-#     # Create EEGDataset instance
-#     ds = EEGDataset(
-#         data=fakedata,
-#         freq_amp_table=fakefreq_amp_table,
-#         latency=0,
-#         channel_keys=fake_channels,
-#         period_keys=["prestim", "stimresp"],
-#         metric_keys=["rms", "fft"],
-#         submetric_keys=["mean", "std"]
-#     )
-
-#     # Say the rms subsample is just data (no significant change to testing methods)
-#     ds.rms_subsampled_data = fakedata
-
-#     # ADD ANY OTHER STRUCTURAL COMPONENTS HERE
-
-#     return ds
-
 @pytest.fixture
 def fake_dataset(fake_channels):
     """
     Factory fixture: returns an EEGDataset-like object.
-    Can be called with or without custom wrapped data.
+    Can accept either a dict (ch -> 2D array) or a numpy array.
+    Ensures that ds.data and ds.rms_subsampled_data are always dicts.
     """
-
     def _make(wrapped_data=None):
-        #No data provided
+        # If no wrapped_data provided, create minimal structure
         if wrapped_data is None:
-            data_dict = {ch: np.random.randn(2, 50) for ch in fake_channels}
-            wrapped_data = np.array({"data": data_dict}, dtype=object)
+            wrapped_data = {
+                (0, 0): {ch: np.random.randn(5, 10) for ch in fake_channels}
+            }
 
-        # Minimal freq_amp_table
-        fakefreq_amp_table = np.random.randn(2, 5)
-
-                # ---- Normalize wrapped_data into raw dict ----
-        if isinstance(wrapped_data, dict):
-            raw = wrapped_data
-
-        elif isinstance(wrapped_data, np.ndarray):
-            # CASE 1: 0-dim object array → contains a dict
-            if wrapped_data.ndim == 0:
-                raw = wrapped_data.item()
-
-            # CASE 2: Multi-dimensional ndarray → this *is* the data
-            else:
-                # Wrap into dict for consistency
-                raw = {ch: wrapped_data for ch in fake_channels}
-
-        else:
-            raise TypeError(f"wrapped_data must be dict or ndarray, got {type(wrapped_data)}")
-
-        # ---- Extract the actual data dict ----
-        if "data" in raw:
-            data_dict = raw["data"]
-        else:
-            # Either { (freq,amp): {...} } OR {ch: array}
-            first_key = next(iter(raw.keys()))
-            val = raw[first_key]
-
-            # If mapping channels → array
-            if isinstance(val, np.ndarray):
-                # raw is {ch: array}
-                data_dict = raw
-            else:
-                # raw is { (freq,amp): {ch: array} }
-                data_dict = val
-        # Period length (# time points)
-        period_len = data_dict[fake_channels[0]].shape[1]
-
-        # Build dataset
         ds = EEGDataset(
             data=wrapped_data,
-            freq_amp_table=fakefreq_amp_table,
+            freq_amp_table=np.random.randn(2, 3),
             latency=0,
             channel_keys=fake_channels,
             period_keys=["prestim", "stimresp"],
             metric_keys=["rms", "fft"],
             submetric_keys=["mean", "std"],
-            period_len= period_len
+            period_len=10
         )
-
-        # Keep this for compatibility
-        ds.rms_subsampled_data = wrapped_data
-
         return ds
-
     return _make
 
 
@@ -202,3 +131,32 @@ def sinusoid_dataset(fake_dataset):
         return ds
 
     return _make
+
+
+
+@pytest.fixture
+def temp_eeg_data(tmp_path, fake_channels):
+    """
+    Creates a temporary .npz file with fake EEG data for testing load_data.
+    Returns (path, subjid) tuple.
+    """
+    # Create fake data
+    data_dict = {}
+    for ch in fake_channels:
+        data_dict[ch] = np.random.randn(2, 50)
+
+    fakefreq_amp_table = np.random.randn(2, 5)
+
+    # Subject ID
+    subjid = "test_subject"
+    file_path = tmp_path / f"{subjid}_data.npz"
+    # Save to temporary file
+    np.savez(
+        file_path,
+        data=data_dict,
+        freq_amp_table=fakefreq_amp_table,
+        latency=np.array([0]),
+        channel_keys=np.array(fake_channels)
+    )
+
+    return str(tmp_path), subjid

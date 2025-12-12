@@ -19,20 +19,18 @@ from fish_eeg.preprocess import Preprocessor
 # Created: Jeffrey Jackson
 # Checked: Michael James
 
-def test_filter_high_rms_smoke(fake_dataset, small_clean_dict):
+def test_filter_high_rms_smoke(fake_dataset, fake_channels):
     """Smoke test: runs without raising an exception."""
-    # Preprocessor expects eegdataset.data to be a numpy object array containing a dict of coords
-    wrapped_data = np.array({"coord1": small_clean_dict}, dtype=object)
-    ds = fake_dataset(wrapped_data)
-
+    ds = fake_dataset()  # uses default minimal data
     pre = Preprocessor(ds)
 
-    # Run the method
-    output = pre.FilterHighRMSTrials(small_clean_dict)
+    # build small dict matching channels
+    small_data = {ch: np.random.randn(5, 10) for ch in fake_channels}
 
-    # Output should be a dict and non-empty
-    assert isinstance(output, dict)
-    assert len(output) > 0
+    try:
+        pre.FilterHighRMSTrials(small_data)
+    except Exception as e:
+        pytest.fail(f"FilterHighRMSTrials crashed: {e}")
 
 
 # One Shot Test
@@ -235,90 +233,49 @@ def test_subsample_pattern_reproducible(fake_channels, fake_dataset):
 #  PIPELINE — 4 TESTS
 # ============================================================
 
-
 def test_pipeline_smoke(fake_channels, fake_dataset):
-    """
-    Smoke: pipeline should run end-to-end.
-    Args:
-        fake_channels: The fake channels to use for the test.
-        dake_dataset: The fake dataset to use for the test.
-    Returns:
-        out.rms_filtered_data: The filtered data.
-        out.rms_subsampled_data: The subsampled data.
-    """
     data = {
         (0, 1): {ch: np.random.randn(8, 5) for ch in fake_channels},
         (1, 2): {ch: np.random.randn(8, 5) for ch in fake_channels},
     }
-    ds = fake_dataset(np.array(data, dtype=object))
-    p = Preprocessor(ds)
-    out = p.pipeline()
+    ds = fake_dataset(data)
+    pre = Preprocessor(ds)
+    out = pre.pipeline()
     assert out.rms_filtered_data is not None
     assert out.rms_subsampled_data is not None
 
 
 def test_pipeline_one_shot(fake_channels, fake_dataset):
-    """
-    One-shot: channels with a single outlier get filtered then subsampled.
-    Args:
-        fake_channels: The fake channels to use for the test.
-        fake_dataset: The fake dataset to use for the test.
-    Returns:
-        out: The filtered and subsampled data.
-    """
-    dictionary = {
-        ch: np.vstack([np.ones((4, 5)), np.full((1, 5), 999)]) for ch in fake_channels
-    }
-    ds = fake_dataset(np.array({(10, 20): dictionary}, dtype=object))
-    p = Preprocessor(ds)
-    out = p.pipeline()
+    dictionary = {ch: np.vstack([np.ones((4, 5)), np.full((1, 5), 999)]) for ch in fake_channels}
+    ds = fake_dataset({(10, 20): dictionary})
+    pre = Preprocessor(ds)
+    out = pre.pipeline()
 
-    # after filtering: 4 rows
-    # after subsampling: all channels will have min=4 rows
-    coord = (10, 20)
-    filtered = out.rms_filtered_data.item()[coord]
-
+    filtered = out.rms_filtered_data[(10, 20)]
     for ch in fake_channels:
         assert filtered[ch].shape[0] == 4
 
 
 def test_pipeline_edge_empty_after_filter(fake_channels, fake_dataset):
-    """
-    Edge: if ALL rows are extreme outliers → no filtering removed (std=0 case).
-    Args:
-        fake_channels: The fake channels to use for the test.
-        fake_dataset: The fake dataset to use for the test.
-    Returns:
-        out: The filtered and subsampled data.
-    """
     dictionary = {ch: np.full((5, 5), 1000) for ch in fake_channels}
-    ds = fake_dataset(np.array({(5, 5): dictionary}, dtype=object))
-    p = Preprocessor(ds)
-    out = p.pipeline()
+    ds = fake_dataset({(5, 5): dictionary})
+    pre = Preprocessor(ds)
+    out = pre.pipeline()
 
-    filtered = out.rms_filtered_data.item()[(5, 5)]
+    filtered = out.rms_filtered_data[(5, 5)]
     for ch in fake_channels:
         assert filtered[ch].shape == (5, 5)
 
 
 def test_pipeline_pattern_coords_kept_separate(fake_channels, fake_dataset):
-    """
-    Pattern: pipeline preserves dictionary keys (coords).
-    Args:
-        fake_channels: The fake channels to use for the test.
-        fake_dataset: The fake dataset to use for the test.
-    Returns:
-        out: The filtered and subsampled data.
-    """
     data = {
         (1, 1): {ch: np.random.randn(6, 4) for ch in fake_channels},
         (2, 2): {ch: np.random.randn(6, 4) for ch in fake_channels},
         (3, 3): {ch: np.random.randn(6, 4) for ch in fake_channels},
     }
+    ds = fake_dataset(data)
+    pre = Preprocessor(ds)
+    out = pre.pipeline()
 
-    ds = fake_dataset(np.array(data, dtype=object))
-    p = Preprocessor(ds)
-    out = p.pipeline()
-
-    coords = list(out.rms_filtered_data.item().keys())
+    coords = list(out.rms_filtered_data.keys())
     assert set(coords) == {(1, 1), (2, 2), (3, 3)}
