@@ -3,14 +3,6 @@ import numpy as np
 from fish_eeg.data import EEGDataset
 from fish_eeg.preprocess import Preprocessor
 
-# Stub for ConfigAccessor so tests using Filter can import without errors
-class ConfigAccessor:
-    def __init__(self, cfg=None):
-        self.cfg = cfg or {}
-    def get(self, key, default=None):
-        return self.cfg.get(key, default)
-
-
 
 @pytest.fixture
 def fake_channels(monkeypatch):
@@ -53,32 +45,6 @@ def small_clean_dict(fake_channels):
     """2 rows per channel, clean distribution."""
     return {ch: np.random.randn(2, 5) for ch in fake_channels}
 
-
-@pytest.fixture
-def fake_ica_output(fake_dataset):
-    """Create a minimal ICA-output-like object derived from the dataset."""
-
-    ds = fake_dataset()   # contains channels, trials, etc.
-
-    class FakeICA:
-        pass
-
-    obj = FakeICA()
-    obj.channel_keys = ds.channel_keys
-    obj.period_keys = ds.period_keys
-
-    # ICA components: same shape as EEG data
-    obj.reconstructed_ica_data = {
-        period: {
-            ch: np.copy(ds.data.item()["data"][ch])
-            for ch in ds.channel_keys
-        }
-        for period in ds.period_keys
-    }
-
-    obj.ica_output = None  # if your code expects this attribute
-
-    return obj
 
 @pytest.fixture
 def sinusoid_dataset(fake_dataset):
