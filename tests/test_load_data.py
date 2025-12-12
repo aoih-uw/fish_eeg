@@ -27,8 +27,9 @@ def test_load_data_one_shot(temp_eeg_data):
     data_dict = eegdataset.data
     for ch, arr in data_dict.items():
         n_trials = len(arr)
-        assert n_trials == 4, f"Channel {ch} expected 4 trials, got {n_trials}"
-
+        n_samples = len(arr[0])
+        assert n_trials == 2, f"Channel {ch} expected 2 trials, got {n_trials}"
+        assert n_samples == 50, f"Channel {ch} expected 50 samples, got {n_samples}"
     
 # 3. Edge test
 # Purpose: Properly find empty files
