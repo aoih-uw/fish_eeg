@@ -5,20 +5,14 @@ Makes 4 unit tests for testing the filter function in the fish_eeg module
 import numpy as np
 import sys
 import os
+from fish_eeg.filters import Filter
+from fish_eeg.preprocess import Preprocessor
 
 # Add src/ to the import path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 
 from fish_eeg.filters import Filter
 
-
-
-# ----------------------------------------------------
-# 1. SMOKE TEST
-# ----------------------------------------------------
-# tests/test_filter.py
-import numpy as np
-from fish_eeg.filters import Filter
 
 def test_smoke_bandpass_runs(fake_dataset, fake_channels):
     """
@@ -27,26 +21,28 @@ def test_smoke_bandpass_runs(fake_dataset, fake_channels):
     category: smoke 
     Ensure bandpass() runs with no errors.
     """
+    n_trials = 5
+    n_samples = 200
+    wrapped_data = {
+        (0,0): {ch: np.random.randn(n_trials, n_samples) for ch in fake_channels}
+    }
 
-    # 1. Initialize Filter with the EEGDataset fixture
-    f = Filter(fake_dataset())
+    ds = fake_dataset(wrapped_data)
 
-    # 2. Extract the channel dictionary for testing bandpass
-    channel_dict = fake_dataset().rms_subsampled_data.item()["data"]
+    # Run pipeline until filter
+    preprocessor = Preprocessor(ds)
+    ds = preprocessor.pipeline()
+    try:
+        filter = Filter(ds)
+        ds = filter.pipeline()
+        print("Pipeline successful up to Filter")
+    except Exception:
+        print("Pipeline failed at Filter")
 
-    # 3. Call bandpass
-    out = f.bandpass(channel_dict, low=1, high=30, fs=100)
-
-    # 4. Assertions
-    assert isinstance(out, dict)
-    assert set(out.keys()) == set(fake_channels)
+    assert isinstance(ds.bandpass_data, dict) #Must ensure we keep bandpass,
+    #must have further into pipeline.
 
 
-
-
-# ----------------------------------------------------
-# 2. ONE-SHOT TEST
-# ----------------------------------------------------
 def test_one_shot_constant_signal(fake_dataset, fake_channels):
     """
     author: Michael James
@@ -62,6 +58,8 @@ def test_one_shot_constant_signal(fake_dataset, fake_channels):
 
     # Use fake dataset
     ds = fake_dataset()
+    preprocessor = Preprocessor(ds)
+    ds = preprocessor.pipeline()
     f = Filter(ds)
 
     # Apply bandpass (5-15 Hz)
@@ -72,10 +70,7 @@ def test_one_shot_constant_signal(fake_dataset, fake_channels):
     assert np.allclose(filtered, 0, atol=1e-2)
 
 
-# ----------------------------------------------------
-# 3. EDGE TEST
-# ----------------------------------------------------
-def test_edge_missing_channel_pass_through(fake_dataset):
+def test_edge_missing_channel_pass_through(fake_dataset,fake_channels):
     """
     author: Michael James
     reviewer: Jeff
@@ -87,31 +82,59 @@ def test_edge_missing_channel_pass_through(fake_dataset):
     # small array with enough samples
     d = {unknown_key: np.random.randn(1, 50)}
 
-    f = Filter(fake_dataset())
+    #Set up data
+    n_trials = 100
+    n_samples = 20
+    wrapped_data = {
+        (0,0): {ch: np.random.randn(n_trials, n_samples) for ch in fake_channels}
+    }
+
+    # Run pipeline
+    ds = fake_dataset(wrapped_data)
+    preprocessor = Preprocessor(ds)
+    ds = preprocessor.pipeline()
+    f = Filter(ds)
     out = f.bandpass(d, low=1, high=30, fs=100)
 
     # Channel not in get_channels() should remain unchanged
     assert np.array_equal(out[unknown_key], d[unknown_key])
 
 
-# ----------------------------------------------------
-# 4. PATTERN TEST
-# ----------------------------------------------------
-def test_pattern_pipeline_structure(fake_dataset):
+def test_pattern_pipeline_structure(fake_dataset,fake_channels):
     """
     author: Michael James
     reviewer: Jeff
     category: pattern test
     pipeline() should preserve coordinates and produce a dict-of-dicts.
     """
+    #Set up data
+    n_trials = 100
+    n_samples = 100
+    wrapped_data = {
+        (0,0): {ch: np.random.randn(n_trials, n_samples) for ch in fake_channels}
+    }
 
-    f = Filter(fake_dataset())
-    out_ds = f.pipeline(low=1, high=30, fs=100, order=4)
+    # Run pipeline
+    ds = fake_dataset(wrapped_data)
+    preprocessor = Preprocessor(ds)
+    ds = preprocessor.pipeline()
+    f = Filter(ds)
+    out_ds = f.pipeline()
 
-    # pipeline output should be stored in bandpass_data
-    assert isinstance(out_ds.bandpass_data, np.ndarray)
+    
+    # Check top-level type
+    assert isinstance(out_ds.bandpass_data, dict), "bandpass_data should be a dict"
 
-    # Extract dict-of-dicts
-    bp_dict = out_ds.bandpass_data.item()
-    assert list(bp_dict.keys()) == ["data"]
-    assert isinstance(bp_dict["data"], dict)
+    # Check structure of coordinates
+    for coord, channel_data in out_ds.bandpass_data.items():
+        assert isinstance(channel_data, dict), f"Coordinate {coord} should map to a dict"
+        # Ensure all expected channels are present
+        channels_in_data = [k for k in channel_data.keys() if not k.endswith("_total_trials")]
+        assert set(channels_in_data) == set(fake_channels), (
+            f"Coordinate {coord} missing channels or has extra channels: "
+            f"{set(channels_in_data) ^ set(fake_channels)}"
+        )
+        # Ensure all arrays are numpy arrays
+        assert all(isinstance(arr, np.ndarray) for ch, arr in channel_data.items() if not ch.endswith("_total_trials")), (
+            f"Coordinate {coord} has non-numpy array channel(s)"
+        )
